@@ -1,0 +1,421 @@
+body {
+    background-image: url('/assets/fondoClinica.jpg'); /* Ruta de tu imagen */
+    background-size: cover; /* Hace que la imagen cubra todo el fondo */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    height: auto;
+    font-family: "Euclid Circular A", "Poppins";
+  }
+
+  .container {
+    max-width: 915px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.575);
+    margin-top: 20px;
+    overflow: auto;
+    transition: all 0.5s ease-in-out;
+
+  }
+  
+  header {
+    text-align: center;
+    background-color: #dddbdb;
+    color: #000000;
+    font-size: 24px;
+  }
+
+  nav {
+    background-color: #dddbdb;
+    padding: 5px;
+    text-align: center;
+  }
+  
+  nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: bold;
+    transition: color 0.3s;
+  }
+  
+  nav a:hover {
+    color: #c696fd;
+  }
+  
+  .user-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .user {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #ccc;
+    margin: 10px 0;
+    padding: 10px;
+  }
+  
+  .user-info {
+    flex: 1;
+  }
+  
+  .user-actions {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .add-user-form {
+    max-width: 100%; 
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 10px; 
+    background-color: #f5f5f5;
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+  }
+  
+  .add-user-form label {
+    font-weight: bold;
+  }
+
+  .add-user-form input,
+  .add-user-form select {
+  width: 100%; 
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+  
+  .add-user-button {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .add-user-button:hover {
+    background-color: #0056b3;
+  }
+  
+  footer {
+    text-align: center;
+    /* padding: 10px; */
+    background-color: #dddbdb;
+    color: #fff;
+  }
+
+  button {
+    background-color: #28A745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px; 
+    font-weight: bold;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+    transition: background-color 0.2s;
+  }
+  
+  button:hover {
+    background-color: #04d454;
+  }
+
+  .disable-access{
+    background-color: #d31c1c;
+  }
+
+  .disable-access:hover {
+    background-color: #ff0000;
+  }
+
+  .edit-user{
+    background-color: #a7a7a7;
+  }
+
+  .edit-user:hover {
+    background-color: #7c7c7c;
+  }
+
+  .btn-success {
+    background-color: #a72892;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 28px;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-success:hover {
+    background-color: #7f196e;
+  }
+
+  .center-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* margin-top: 5px; */
+  }
+
+  .centered-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: 9999;
+  }
+  
+  .navbar-custom {
+    position: fixed;
+    top: 0; 
+    right: 0; 
+    padding: 10px 20px;
+    z-index: 1000;
+    margin-right: 250px;
+    display: flex;
+    align-items: center;
+    font-family: "Euclid Circular A", "Poppins";
+  }
+
+  .navbar-custom a{
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    display: flex; 
+    align-items: center;
+  }
+
+  .user-photo{
+    width: 2rem;
+    min-width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+  }
+
+  .fa-solid fa-power-off{
+    color: #000;
+    width: 5rem;
+    min-width: 5rem;
+    height: 5rem;
+  }
+
+  .logout-button{
+    margin-left: auto;
+    cursor: pointer;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: transparent;
+    border: none;
+    color: #000;
+    display: flex; 
+    align-items: center;
+    position: relative;
+    font-family: "Euclid Circular A", "Poppins";
+
+    i.fa {
+        font-size: 1.5rem; 
+        margin-right: 0.5rem; 
+
+      }
+  }
+
+  .dropdown-content {
+    position: absolute;
+    top: calc(65% + 10px);
+    right: 0;
+    text-align: center;
+    border-radius: 0.313rem; 
+    padding: 0.2rem; 
+    min-width: 10rem; 
+  
+    button {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: #000;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 0.5rem 0;
+      transition: background-color 0.3s;
+    }
+
+  }
+
+  .logout-button:hover + .dropdown-content {
+    display: block;
+  }
+
+  .site-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .site-footer p {
+    margin: 0;
+    font-size: 14px; 
+  }
+
+  h2{
+    text-align: center;
+  }
+
+  .users-column {
+    max-height: 400px;
+    overflow-y: auto; 
+  }
+
+  .sticky-header {
+    position: sticky;
+    top: 0;
+    background-color: white; 
+    z-index: 100; 
+  }
+
+  img{
+    border: 2px solid #ccc;
+    width: 80px; 
+    height: 80px;
+    object-fit: cover;
+  }
+  
+  .btn-reg {
+
+    cursor: pointer;
+    width: 200px;
+  }
+  
+  .errorMessage {
+    color: red;
+    text-align: center;
+  }
+  input.campo-con-error {
+    border: 1px solid red;
+  }
+
+  .site-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    color:#000;
+  }
+  
+  .site-footer p {
+    margin: 0;
+    font-size: 14px; 
+  }
+
+  #crearUsuarioForm {
+    transition: max-height 0.3s ease-out;
+    max-height: 500px;
+    overflow: hidden;
+  }
+  
+  .collapsing {
+    max-height: 0 !important;
+    transition: max-height 0.3s ease-in;
+  }
+
+  .slide-in-bottom {
+    animation: slide-in-bottom 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+  
+  @keyframes slide-in-bottom {
+    0% {
+      transform: translateY(1000px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .btn-user {
+    background-color: #28A745;
+    color: #fff;
+    border: none;
+    width: 300px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 20px;
+  }
+  
+  .btn-user:hover {
+    background-color: #04d454;
+  }
+
+  /* Fondo desenfocado */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(5px);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Contenedor del spinner y mensaje */
+.spinner-container {
+  text-align: center;
+}
+
+/* Spinner */
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top: 4px solid #000;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+  margin-left: 40px;
+}
+
+.loading-text {
+  font-size: 17px; /* Tamaño más grande */
+  font-weight: bold;
+  color: #000;
+  margin-top: 15px; /* Espacio adicional debajo del spinner */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

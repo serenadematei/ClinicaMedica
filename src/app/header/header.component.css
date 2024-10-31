@@ -1,0 +1,36 @@
+#topbar {
+    background-color: #202c38;
+    color: #fff;
+    height: 40px;
+    font-size: 16px;
+    font-weight: 600;
+    z-index: 996;
+    transition: all 0.5s;
+  }
+  
+  #topbar.topbar-scrolled {
+    top: -40px;
+  }
+  
+  #topbar i {
+    padding-right: 6px;
+    line-height: 0;
+  }
+
+  #topbar .container {
+    padding-left: 10 !important;
+    margin-left: 0 !important;
+  }
+
+  .medical-clinic-link {
+    font-size: 20px;         /* Aumenta el tamaño de la fuente */
+    font-style: italic;      /* Aplica cursiva */
+    font-weight: 700;        /* Aplica un peso de fuente más alto */
+    color: #ffffff;          /* Color de texto blanco */
+    text-decoration: none;   /* Sin subrayado */
+    transition: color 0.3s;  /* Suaviza la transición de color */
+  }
+  
+  .medical-clinic-link:hover {
+    color: #a2f2f5; /* Cambia de color al pasar el cursor */
+  }

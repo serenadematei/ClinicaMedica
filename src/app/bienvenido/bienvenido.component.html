@@ -1,0 +1,23 @@
+<body> 
+<div class="welcome-container">
+   
+    <div class="cuerpo-welcome">
+      <img src="assets/logo.jpeg" alt="Logo de la Clínica" class="logo">
+      <div class="titulos"><br>
+        <h1>Bienvenido</h1>
+        <p>Accede a nuestros servicios o regístrate para obtener una cuenta.</p>
+      </div>
+  
+        <div class="buttons">
+          <input type="button" class="btn btn-primary botones-color mr-2" value="Iniciar sesión" (click)="goTo('/login')"/>
+          <input type="button" class="btn btn-primary botones-color ml-2" value="Registrarse" (click)="goTo('/registrarse')"/>
+         
+        </div>
+        
+        <div class="fab-container"> 
+        <input *ngIf="isLoggedIn" type="button" class="fab" value="Ir a inicio" (click)="goTo('/home')"/>
+        </div>
+      </div>
+    
+  </div>
+</body>

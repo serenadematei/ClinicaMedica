@@ -1,0 +1,56 @@
+<h2>Lista de Usuarios</h2>
+
+
+<div class="filter-container mb-3 text-center">
+  <button class="btn btn-primary m-2" (click)="filterUsers('all')">Todos</button>
+  <button class="btn btn-secondary m-2" (click)="filterUsers('admin')">Administradores</button>
+  <button class="btn btn-success m-2" (click)="filterUsers('especialista')">Especialistas</button>
+  <button class="btn btn-info m-2" (click)="filterUsers('paciente')">Pacientes</button>
+</div>
+
+
+<div class="user-cards-container">
+  <div *ngFor="let user of  filteredUsuarios" class="card user-card">
+    <img
+    [src]="user.role === 'admin' && user.imagenPerfil ? user.imagenPerfil : (user.role === 'paciente' ? user.imagenPerfil1 : user.imagenPerfil)"
+    class="card-img-top user-img"
+    alt="Imagen de {{ user.nombre }}"
+  />
+    <div class="card-body">
+      <h5 class="card-title">{{ user.nombre }} {{ user.apellido }}</h5>
+      <p class="card-text"><strong>DNI:</strong> {{ user.dni }}</p>
+      <p class="card-text"><strong>Edad:</strong> {{ user.edad }}</p>
+      <p class="card-text"><strong>Email:</strong> {{ user.mail }}</p>
+      
+   
+      <p *ngIf="user.role === 'especialista' && user.especialidad !== 'otra'" class="card-text">
+        <strong>Especialidad:</strong> {{ user.especialidad }}
+      </p>
+      <p *ngIf="user.role === 'especialista' && user.especialidad === 'otra'" class="card-text">
+        <strong>Especialidad:</strong> {{ user.otraEspecialidad }}
+      </p>
+      
+    
+      <p *ngIf="user.role === 'paciente'" class="card-text">
+        <strong>Obra Social:</strong> {{ user.obrasocial }}
+      </p>
+
+      <div *ngIf="user.role === 'especialista'">
+        <button
+          class="btn btn-success"
+          *ngIf="!user.aprobadoPorAdmin"
+          (click)="aprobarUsuario(user.id)"
+        >
+          Habilitar
+        </button>
+        <button
+          class="btn btn-danger"
+          *ngIf="user.aprobadoPorAdmin"
+          (click)="inhabilitarUsuario(user.id)"
+        >
+          Inhabilitar
+        </button>
+      </div>
+    </div>
+  </div>
+</div> 

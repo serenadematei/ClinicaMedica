@@ -1,0 +1,212 @@
+<body>
+  <div class="login-container" *ngIf="formReg">
+    <h1 class="form-title">Registro</h1>
+    <label for="selectedRole" class="form-label">___________________________________________________________________<br></label>
+    <label for="selectedRole" class="form-label"><br>Selecciona tu perfil:<br></label><br>
+   
+    <br>
+    <div class="profile-buttons-container">
+      <button type="button" id="paciente" name="selectedRole" 
+        [value]="'paciente'" 
+        [class.selected]="selectedRole === 'paciente'" 
+        (click)="selectRole('paciente')">
+        <img src="assets/paciente1.png" alt="Paciente" class="profile-image">
+        <span>Paciente</span>
+      </button>
+      <button type="button" id="especialista" name="selectedRole" 
+        [value]="'especialista'" 
+        [class.selected]="selectedRole === 'especialista'" 
+        (click)="selectRole('especialista')">
+        <img src="assets/especialista.png" alt="Especialista" class="profile-image">
+        <span>Especialista</span>
+      </button>
+    </div>  
+   
+    
+       <div *ngIf="showLoadingUser" class="loading-overlay">
+        <div class="spinner-container">
+          <div class="spinner"></div>
+          <p class="loading-text">Creando usuario...</p>
+        </div>
+      </div>
+    
+    <form [formGroup]="formReg" (ngSubmit)="onSubmit()" class="registration-form">
+      <div *ngIf="formReg.get('selectedRole')?.value === 'paciente' || formReg.get('selectedRole')?.value === 'especialista'">
+        <div class="form-row">
+          <div class="col campoForm">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" formControlName="nombre" id="nombre" placeholder="Nombre" lettersOnly required
+                   [class.campo-con-error]="getValue('nombre').invalid && (getValue('nombre').touched || getValue('nombre').dirty)">
+            <div class="errorMessage" *ngIf="getValue('nombre').invalid && (getValue('nombre').touched || getValue('nombre').dirty)">
+              Válidos solo caracteres alfabéticos.
+            </div>
+          </div>
+          
+          <div class="col campoForm">
+            <label for="apellido" class="form-label">Apellido</label>
+            <input type="text" class="form-control" formControlName="apellido" id="apellido" placeholder="Apellido" lettersOnly required
+                   [class.campo-con-error]="getValue('apellido').invalid && (getValue('apellido').touched || getValue('apellido').dirty)">
+            <div class="errorMessage" *ngIf="getValue('apellido').invalid && (getValue('apellido').touched || getValue('apellido').dirty)">
+              Válidos solo caracteres alfabéticos.
+            </div>
+          </div>
+        </div>
+    
+        <div class="form-row">
+          <div class="col campoForm">
+            <label for="edad" class="form-label">Edad</label>
+            <input type="text" class="form-control" formControlName="edad" id="edad" placeholder="Edad" numbersOnly required
+                   [class.campo-con-error]="getValue('edad').invalid && (getValue('edad').touched || getValue('edad').dirty)">
+            <div class="errorMessage" *ngIf="getValue('edad').invalid && (getValue('edad').touched || getValue('edad').dirty)">
+              Válidos solo caracteres numéricos.
+            </div>
+          </div>
+    
+          <div class="col campoForm">
+            <label for="dni" class="form-label">DNI</label>
+            <input type="text" class="form-control" formControlName="dni" id="dni" placeholder="DNI" numbersOnly required
+                   [class.campo-con-error]="getValue('dni').invalid && (getValue('dni').touched || getValue('dni').dirty)">
+            <div class="errorMessage" *ngIf="getValue('dni').invalid && (getValue('dni').touched || getValue('dni').dirty)">
+              Válidos solo caracteres numéricos sin punto.
+            </div>
+          </div>
+        </div>
+    
+        <div class="form-row">
+          <div class="col campoForm">
+            <label for="email" class="form-label">Correo Electrónico</label>
+            <input type="email" class="form-control" formControlName="email" id="email" placeholder="Email" required
+                   [class.campo-con-error]="getValue('email').invalid && (getValue('email').touched || getValue('email').dirty)">
+            <div class="errorMessage" *ngIf="getValue('email').invalid && (getValue('email').touched || getValue('email').dirty)">
+              Por favor, complete su email.
+            </div>
+          </div>
+        </div>
+    
+        <div class="form-row">
+          <div class="col campoForm">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" formControlName="password" id="password" placeholder="Contraseña" required
+                   [class.campo-con-error]="getValue('password').invalid && (getValue('password').touched || getValue('password').dirty)">
+            <div class="errorMessage" *ngIf="getValue('password').invalid && (getValue('password').touched || getValue('password').dirty)">
+              Debe tener como mínimo 6 caracteres.
+            </div>
+          </div>
+    
+          <div class="col campoForm">
+            <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+            <input type="password" class="form-control" formControlName="confirmPassword" id="confirmPassword" placeholder="Reingresar contraseña" required
+                   [class.campo-con-error]="getValue('confirmPassword').invalid && (getValue('confirmPassword').touched || getValue('confirmPassword').dirty)">
+            <div class="errorMessage" *ngIf="getValue('confirmPassword').invalid && (getValue('confirmPassword').touched || getValue('confirmPassword').dirty)">
+              Por favor, reingrese su contraseña.
+            </div>
+          </div>
+        </div>
+
+
+        <!--- Datos pedidos solo para paciente OBRA SOCIAL, IMAGEN 1, IMAGEN 2 -->
+    
+        <div *ngIf="formReg.get('selectedRole')?.value === 'paciente'">
+
+          <div class="form-row">
+            <div class="col campoForm">
+            <label for="obraSocial" class="form-label">Obra Social</label>
+            <input type="text" id="obraSocial" class="form-control" formControlName="obraSocial" placeholder="Obra Social" required 
+            [class.campo-con-error]="getValue('obraSocial').invalid && (getValue('obraSocial').touched || getValue('obraSocial').dirty)">
+            <div class="errorMessage" *ngIf=" getValue('obraSocial').invalid && (getValue('obraSocial').touched || getValue('obraSocial').dirty)">
+            Por favor, ingrese su obra social. Válido solo caracteres alfabéticos.
+            </div>
+          </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="col campoForm">
+              <label for="imagenPerfil1" class="form-label">Imagen de Perfil 1 </label>
+              <input type="file" class="form-control-file" id="imagenPerfil1" formControlName="imagenPerfil1" accept="image/*" required (change)="onFileSelected1($event)">
+              <div class="errorMessage" *ngIf="formReg.get('imagenPerfil1')?.hasError('required')">
+                Debes cargar una imagen.
+              </div>
+              <div *ngIf="formReg.get('imagenPerfil1')?.hasError('invalidImage')">
+                Debes cargar una imagen válida.
+              </div>
+              <div *ngIf="formReg.get('imagenPerfil1')?.hasError('invalidSize')">
+                La imagen tiene un tamaño incorrecto.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="col campoForm">
+              <label for="imagenPerfil2" class="form-label">Imagen de Perfil 2 </label>
+              <input type="file" id="imagenPerfil2" formControlName="imagenPerfil2" accept="image/*" required (change)="onFileSelected2($event)">
+              <div class="errorMessage" *ngIf="formReg.get('imagenPerfil2')?.hasError('required')">
+                Debes cargar una imagen.
+              </div>
+              <div *ngIf="formReg.get('imagenPerfil2')?.hasError('invalidImage')">
+                Debes cargar una imagen válida.
+              </div>
+              <div *ngIf="formReg.get('imagenPerfil2')?.hasError('invalidSize')">
+                La imagen tiene un tamaño incorrecto.
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      <!--- Datos pedidos solo para Especialista ESPECIALIDAD, OTRA ESPECIALIDAD, IMAGEN 1 -->
+    
+        <div *ngIf="formReg.get('selectedRole')?.value === 'especialista'">
+          <div class="form-row">
+            <div class="col campoForm">
+              <label for="imagenPerfil" class="form-label">Imagen de Perfil </label>
+              <input type="file" class="form-control-file" id="imagenPerfil" formControlName="imagenPerfil" accept="image/*" required (change)="onFileSelected($event)">
+              <div class="errorMessage" *ngIf="formReg.get('imagenPerfil')?.hasError('required')">
+                Debes cargar una imagen.
+              </div>
+              <div *ngIf="formReg.get('imagenPerfil')?.hasError('invalidImage')">
+                Debes cargar una imagen válida.
+              </div>
+              <div *ngIf="formReg.get('imagenPerfil')?.hasError('invalidSize')">
+                La imagen tiene un tamaño incorrecto.
+              </div>
+            </div>
+          </div>
+
+          <div class="col campoForm">
+              <label for="especialidad" class="form-label">Especialidad</label>
+              <select class="form-control"  id="especialidad" formControlName="especialidad" required (change)="onEspecialidadChange($event)">
+                <option value="Ginecología">Ginecología</option>
+                <option value="Cardiología">Cardiología</option>
+                <option value="Kinesiología">Kinesiología</option>
+                <option value="Nutricionista">Nutricionista</option>
+                <option value="otra">Otra</option>
+              </select>
+              <div class="errorMessage" *ngIf=" getValue('especialidad').invalid && (getValue('especialidad').touched || getValue('especialidad').dirty)">
+                Debe seleccionar una opción.
+               </div>
+          </div>
+            
+            
+          
+
+            
+            <div class="form-group" *ngIf="showOtraEspecialidad && formReg.get('selectedRole')?.value === 'especialista'">
+                <label for="otraEspecialidad" class="form-label">Otra especialidad</label>
+                <input class="form-control" type="text" id="otraEspecialidad" formControlName="otraEspecialidad" minlength="4" maxlength="25" placeholder="Especialidad personalizada" lettersOnly required          
+                [class.campo-con-error]="getValue('otraEspecialidad').invalid && (getValue('otraEspecialidad').touched || getValue('otraEspecialidad').dirty)">
+                <div class="errorMessage" *ngIf="getValue('otraEspecialidad').invalid && (getValue('otraEspecialidad').touched || getValue('otraEspecialidad').dirty)">
+                  Válido solo caracteres alfabéticos.
+                </div>
+              </div>
+            </div>
+        </div>
+
+      
+      <div *ngIf="formReg.get('selectedRole')?.value === 'paciente' || formReg.get('selectedRole')?.value === 'especialista'"> 
+        <button type="submit" class="btn-submit">Registrarse</button>
+      </div>
+      <button type="button" (click)="onClickWel($event)" class="back-button">Volver a inicio</button>
+   </form>
+  </div>
+</body>
+

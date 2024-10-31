@@ -1,0 +1,117 @@
+<body>
+  <div class="contenido1">
+    <div class="login-container">
+      <img src="assets/logo.jpeg" alt="Logo de la Clínica" class="logo">
+      <h2>Iniciar sesión</h2>
+      <form [formGroup]="formLogin" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="email" class="form-label">Nombre de usuario:</label>
+          <input type="text" class="form-control" id="email" formControlName="email" placeholder="Email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="clave" class="form-label">Contraseña:</label>
+          <input type="password" class="form-control" id="password" formControlName="password" placeholder="Contraseña" required>
+        </div>
+
+        <div class="button-container">
+          <button type="submit" class="submit-button">Iniciar sesión</button>
+        </div>
+        <button type="button" (click)="onClickWel($event)" class="back-button">Volver a inicio</button>
+
+        <div class="register">
+          <p>No tienes una cuenta? <a (click)="goTo('/registrarse')" style="cursor: pointer;">Registrate</a></p>
+        </div>
+      </form>
+
+      <div class="error">
+        <p>{{ errorMensaje }}</p>
+      </div>
+      
+      <div class="profile-buttons-container">
+        <label>Ingresar con perfiles genéricos:</label>
+
+        <div class="item">
+          <button type="button" class="profile-button" (click)="loginLoadAdmin()">
+            <img src="assets/administrador.png"  alt="Admin" class="fotoPerfil"> <!--defaultEmailAdmin [src]="fotoPerfilUrls[defaultEmailEspecialista1]"-->
+          </button>
+        </div>
+  
+        <div class="item">
+          <button type="button" class="profile-button" (click)="loginLoadEspecialista1()">
+            <img [src]="fotoPerfilUrls[defaultEmailEspecialista1]" alt="Especialista" class="fotoPerfil">
+          </button>
+        </div>
+  
+        <div class="item">
+          <button type="button" class="profile-button" (click)="loginLoadPaciente1()">
+            <img [src]="fotoPerfilUrls[defaultEmailPaciente1]" alt="Paciente" class="fotoPerfil">
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+
+    </div>
+
+   
+</body>
+
+<!--<body>
+    <div class="contenido1">
+  
+      <div class="login-container">
+        <img src="assets/logo.jpeg" alt="Logo de la Clínica">
+        <h2>Iniciar sesión</h2>
+        <form [formGroup]="formLogin" (ngSubmit)="onSubmit()">
+  
+          <div class="form-group">
+            <label for="email">Nombre de usuario:</label>
+            <input type="text" id="email" formControlName="email" placeholder="Email" required>
+          </div>
+  
+          <div class="form-group">
+            <label for="clave">Contraseña:</label>
+            <input type="password" id="password" formControlName="password" placeholder="Contraseña" required>
+          </div>
+  
+          <div class="button-container">
+            <button type="submit">Iniciar sesión</button>
+          </div>
+          <button type="button" (click)="onClickWel($event)">Volver a inicio</button>
+  
+          <div class="register">
+            <p>No tenes una cuenta<span class="icon icon--info">?</span><a (click)="goTo('/registrarse')"
+                style="cursor: pointer;">Registrate !</a></p>
+          </div>
+        </form>
+  
+        <div class="error">
+          <p>{{ errorMensaje }}</p>
+        </div>
+  
+      </div>
+    </div>
+  
+    <div class=".profile-buttons-container">
+      <div class="item">
+        <button type="button" class="btnDerecha1" (click)="loginLoadAdmin()">
+          <img [src]="fotoPerfilUrls[defaultEmailAdmin]" class="fotoPerfil" alt="Foto de perfil">
+        </button>
+      </div>
+
+      <div class="item">
+        <button type="button" class="btnDerecha1" (click)="loginLoadEspecialista1()">
+          <img [src]="fotoPerfilUrls[defaultEmailEspecialista1]" class="fotoPerfil" alt="Foto de perfil">
+        </button>
+      </div>
+        <div class="item">
+          <button type="button" class="btnDerecha1" (click)="loginLoadPaciente1()">
+            <img [src]="fotoPerfilUrls[defaultEmailPaciente1]" class="fotoPerfil" alt="Foto de perfil">
+          </button>
+        </div>
+    </div>
+  
+  </body>
+-->

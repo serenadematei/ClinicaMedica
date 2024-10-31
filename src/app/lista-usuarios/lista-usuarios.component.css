@@ -1,0 +1,38 @@
+
+.user-cards-container {
+  height: 440px;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 10px;
+}
+
+.user-card {
+  flex: 0 0 auto;
+  height: 420px;
+  width: 300px; 
+  margin-right: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.user-img {
+  height: 150px; 
+  object-fit: cover;
+}
+
+.card-body {
+  text-align: center;
+}
+
+.filter-container .btn {
+  background-color: #a72892 !important; /* Aplicar el color a todos los botones */
+  border-color: #a72892 !important; /* Asegurar que el borde coincida */
+  color: #ffffff; /* Texto en blanco para mejor visibilidad */
+}
+
+.filter-container .btn:hover {
+  background-color: #871f72 !important; /* Color ligeramente más oscuro al pasar el cursor */
+  border-color: #871f72 !important;
+}
