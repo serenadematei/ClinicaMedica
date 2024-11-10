@@ -98,7 +98,13 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  //raros
+  
+  turnos()
+  {
+    this.router.navigate(['home/turnos']);
+  }
+
+
   toggleCollapse(): void{
     this.collapsed = !this.collapsed;
     this.onToggleSideNav.emit({collapsed: this.collapsed, screenWidth: this.screenWidth});
@@ -118,6 +124,21 @@ export class HomeComponent implements OnInit {
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
     this.showLogoutButton = this.isDropdownOpen; 
+  }
+
+  misTurnos()
+  {
+    this.router.navigate(['home/mis-turnos']);
+  }
+
+  solicitarTurno()
+  {
+    this.router.navigate(['home/solicitar-turno']);
+  }
+
+  disponibilidadHoraria()
+  {
+    this.router.navigate(['disponibilidad-horaria']);
   }
 
 }

@@ -1,0 +1,131 @@
+/* Fondo de pantalla completa con imagen */
+.background {
+    background-image: url('/assets/fondoClinica.jpg'); /* Cambia 'path-to-your-image.jpg' por la ruta de tu imagen */
+    background-size: cover;
+    background-position: center;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Contenedor del formulario centrado */
+  .form-container {
+    background-color: rgba(255, 255, 255, 0.85); /* Fondo blanco con opacidad */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Sombra suave */
+    width: 300px;
+    text-align: center;
+  }
+  
+  /* Ajustes de los elementos del formulario */
+  .form-container label {
+    font-weight: 600;
+    margin-top: 10px;
+    display: block;
+    text-align: left;
+  }
+  
+  .form-container .form-control {
+    margin-top: 5px;
+    margin-bottom: 15px;
+  }
+  
+  .form-container button[type="submit"] {
+    background-color: #202c38;
+    color: #ffffff;
+    font-weight: 600;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .form-container button[type="submit"]:hover {
+    background-color: #a2f2f5;
+  }
+
+  .snackbar {
+    visibility: visible;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #4CAF50; /* Color de fondo */
+    color: #fff; /* Color del texto */
+    text-align: center;
+    border-radius: 4px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+    opacity: 0;
+    transition: opacity 0.5s ease, bottom 0.5s ease;
+  }
+  
+  .snackbar.show {
+    visibility: visible;
+    opacity: 1;
+    bottom: 50px; /* Ajusta la posición de la animación */
+  }
+  
+
+  .floating-logout-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ff5b62;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  /* Hover y efecto de clic */
+  .floating-logout-button:hover {
+    background-color: #d9534f;
+  }
+  
+  .floating-logout-button:active {
+    transform: scale(0.95);
+  }
+  
+  /* Ícono dentro del botón */
+  .floating-logout-button i {
+    font-size: 1.2rem;
+  }
+
+
+  .center-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* margin-top: 5px; */
+  }
+
+  .btn-success {
+    background-color: #a72892;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 28px;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-success:hover {
+    background-color: #7f196e;
+  }

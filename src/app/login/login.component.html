@@ -1,5 +1,73 @@
 <body>
   <div class="contenido1">
+    <!-- Botones de Acceso Rápido -->
+    <div class="quick-access-container">
+      <button type="button" class="quick-access-button" (click)="loginLoadAdmin()">
+        <img src="assets/administrador.png" alt="Admin" class="quick-access-image">
+        <span>Admin</span>
+      </button>
+      <button type="button" class="quick-access-button" (click)="loginLoadEspecialista1()">
+        <img [src]="fotoPerfilUrls['josecito@cj.MintEmail.com'] || 'assets/especialista2.png'" alt="Especialista" class="quick-access-image">
+        <span>Especialista 1</span>
+      </button>
+      <button type="button" class="quick-access-button" (click)="loginLoadEspecialista2()">
+        <img [src]="fotoPerfilUrls['guido@cj.MintEmail.com'] || 'assets/especialista2.png'" alt="Especialista" class="quick-access-image">
+        <span>Especialista 2</span>
+      </button>
+      <button type="button" class="quick-access-button" (click)="loginLoadPaciente1()">
+        <img src="assets/paciente1.png" alt="Paciente" class="quick-access-image">
+        <span>Paciente 1</span>
+      </button>
+      <button type="button" class="quick-access-button" (click)="loginLoadPaciente2()">
+        <img [src]="fotoPerfilUrls['paloma@cj.MintEmail.com'] || 'assets/paciente2.png'" alt="Paciente" class="quick-access-image">
+        <span>Paciente 2</span>
+      </button>
+      
+      <button type="button" class="quick-access-button" (click)="loginLoadPaciente3()">
+        <img [src]="fotoPerfilUrls['melanie@cj.MintEmail.com'] || 'assets/paciente3.png'" alt="Paciente" class="quick-access-image">
+        <span>Paciente 3</span>
+      </button>
+    </div>
+
+    <!-- Resto del login -->
+    <div class="login-container">
+      <img src="assets/logo.jpeg" alt="Logo de la Clínica" class="logo">
+      <h4>Iniciar sesión</h4>
+      <form [formGroup]="formLogin" (ngSubmit)="onSubmit()">
+        <!-- Inputs de email y contraseña -->
+        <div class="form-group">
+          
+          <input type="text" class="form-control" id="email" formControlName="email" placeholder="Email" required>
+        </div>
+
+        <div class="form-group">
+          <br>
+          <input type="password" class="form-control" id="password" formControlName="password" placeholder="Contraseña" required>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="button-container">
+          <button type="submit" class="submit-button">Iniciar sesión</button>
+        </div>
+        <button type="button" (click)="onClickWel($event)" class="back-button">Volver a inicio</button>
+        
+        <div class="register">
+          <br>
+          <p>¿No tienes una cuenta? <a (click)="goTo('/registrarse')" style="cursor: pointer;">Registrate</a></p>
+        </div>
+      </form>
+
+      <div class="error">
+        <p>{{ errorMensaje }}</p>
+      </div>
+    </div>
+  </div>
+</body>
+
+
+
+<!-- <body>
+  <div class="contenido1">
     <div class="login-container">
       <img src="assets/logo.jpeg" alt="Logo de la Clínica" class="logo">
       <h2>Iniciar sesión</h2>
@@ -33,7 +101,7 @@
 
         <div class="item">
           <button type="button" class="profile-button" (click)="loginLoadAdmin()">
-            <img src="assets/administrador.png"  alt="Admin" class="fotoPerfil"> <!--defaultEmailAdmin [src]="fotoPerfilUrls[defaultEmailEspecialista1]"-->
+            <img src="assets/administrador.png"  alt="Admin" class="fotoPerfil"> 
           </button>
         </div>
   
@@ -58,60 +126,4 @@
    
 </body>
 
-<!--<body>
-    <div class="contenido1">
-  
-      <div class="login-container">
-        <img src="assets/logo.jpeg" alt="Logo de la Clínica">
-        <h2>Iniciar sesión</h2>
-        <form [formGroup]="formLogin" (ngSubmit)="onSubmit()">
-  
-          <div class="form-group">
-            <label for="email">Nombre de usuario:</label>
-            <input type="text" id="email" formControlName="email" placeholder="Email" required>
-          </div>
-  
-          <div class="form-group">
-            <label for="clave">Contraseña:</label>
-            <input type="password" id="password" formControlName="password" placeholder="Contraseña" required>
-          </div>
-  
-          <div class="button-container">
-            <button type="submit">Iniciar sesión</button>
-          </div>
-          <button type="button" (click)="onClickWel($event)">Volver a inicio</button>
-  
-          <div class="register">
-            <p>No tenes una cuenta<span class="icon icon--info">?</span><a (click)="goTo('/registrarse')"
-                style="cursor: pointer;">Registrate !</a></p>
-          </div>
-        </form>
-  
-        <div class="error">
-          <p>{{ errorMensaje }}</p>
-        </div>
-  
-      </div>
-    </div>
-  
-    <div class=".profile-buttons-container">
-      <div class="item">
-        <button type="button" class="btnDerecha1" (click)="loginLoadAdmin()">
-          <img [src]="fotoPerfilUrls[defaultEmailAdmin]" class="fotoPerfil" alt="Foto de perfil">
-        </button>
-      </div>
-
-      <div class="item">
-        <button type="button" class="btnDerecha1" (click)="loginLoadEspecialista1()">
-          <img [src]="fotoPerfilUrls[defaultEmailEspecialista1]" class="fotoPerfil" alt="Foto de perfil">
-        </button>
-      </div>
-        <div class="item">
-          <button type="button" class="btnDerecha1" (click)="loginLoadPaciente1()">
-            <img [src]="fotoPerfilUrls[defaultEmailPaciente1]" class="fotoPerfil" alt="Foto de perfil">
-          </button>
-        </div>
-    </div>
-  
-  </body>
 -->

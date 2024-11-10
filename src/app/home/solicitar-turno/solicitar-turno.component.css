@@ -1,0 +1,323 @@
+body {
+    background-color: #dddbdb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    height: auto;
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+  }
+
+  .centered-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: 9999;
+  }
+
+
+.center-button {
+    position: fixed;
+    bottom: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+    gap: 10px;
+    z-index: 1000;
+}
+
+.centered-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 20px; 
+  }
+
+  .center-button button, .center-button input[type="button"] {
+    margin: 0; /* Asegúrate de que no haya márgenes adicionales */
+    white-space: nowrap;
+  }
+
+  
+
+  button[type="submit"] {
+    background-color: #a72892;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 20px auto;
+    display: block;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #7f196e;
+  }
+
+  .btn-success {
+    background-color: #a72892;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+  }
+  
+  .btn-success:hover {
+    background-color: #7f196e;
+  }
+
+  .site-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .site-footer p {
+    margin: 0;
+    font-size: 14px; 
+  }
+
+  label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 18px; 
+    padding: 5px;
+  }
+  
+  select,
+  input[type="time"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    font-size: 18px; 
+  }
+
+  img{
+    height: 6.1em;
+    width: 6.1em;
+    display: flex; 
+    align-items: center;
+    padding: 15px;
+    cursor: pointer;
+    margin-left: 50px;
+  }
+
+  .especialidades-container {
+    display: flex;
+    
+  }
+
+  .especialistas-boton-cuadrado{
+    width: 150px;
+    height: 150px;
+  }
+
+  .especialidad-button {
+    /* object-fit: cover; */
+    margin-top: -50px;
+    margin-left: 25px;
+  }
+
+  .especialidad-button1 {
+    object-fit: cover;
+    margin-top: -30px;
+  }
+
+  button.selected {
+  border: 2px solid #3498db;
+  background-color: #3498db;
+  color: #fff;
+}
+  
+  button{
+    margin: 10px;
+    width: 200px; 
+    height: 100px; 
+
+  }
+
+  .fecha-hora {
+    white-space: nowrap; /* Evita el corte de línea */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+  }
+
+  .especialidad-image {
+    width: 20%;
+    height: 20%; 
+  }
+
+  .btn-solicitar {
+    width: 175px;
+    height: 47px;
+    padding: 10px;
+  }
+
+  .horarios-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .horarios-container button {
+    width: 120px; 
+    height: 120px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #37d84d;
+    border: none;
+    color: white;
+    font-size: 12px;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .horarios-container button.selected-turno {
+    border: 2px solid #a32993;
+    background-color: #a32993; 
+  }
+
+  .navbar-custom {
+    position: fixed;
+    top: 0; 
+    right: 0; 
+    padding: 10px 20px;
+    z-index: 1000;
+    display: flex;
+    align-items: center; 
+  }
+
+  .navbar-custom a{
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    display: flex; 
+    align-items: center;
+  }
+
+  .user-photo{
+    width: 4rem;
+    min-width: 2rem;
+    height: 4rem;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+  }
+
+  .fa-solid fa-power-off{
+    color: #000;
+    width: 5rem;
+    min-width: 5rem;
+    height: 5rem;
+  }
+
+  .logout-button{
+    margin-left: auto;
+    cursor: pointer;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: transparent;
+    border: none;
+    color: #000;
+    display: flex; 
+    align-items: center;
+    position: relative;
+    font-family: "Euclid Circular A", "Poppins";
+
+    i.fa {
+        font-size: 1.5rem; 
+        margin-right: 0.5rem; 
+
+      }
+  }
+
+  .dropdown-content {
+    position: absolute;
+    top: calc(65% + 10px);
+    right: 0;
+    text-align: center;
+    border-radius: 0.313rem; 
+    padding: 0.2rem; 
+    min-width: 10rem; 
+  
+    button {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: #000;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 0.5rem 0;
+      transition: background-color 0.3s;
+    }
+
+  }
+
+  .logout-button:hover + .dropdown-content {
+    display: block;
+  }
+
+
+  /* Estilos para los turnos disponibles */
+.turno-disponible {
+  background-color: green;
+  color: white;
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+
+.turno-ocupado {
+  background-color: red !important;
+  color: white;
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: not-allowed;
+}
+
+/* Estilos para el turno seleccionado */
+.turno-seleccionado {
+  border: 2px solid #a32993 !important;
+  background-color: #a32993 !important; 
+  color: white;
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 5px;
+}

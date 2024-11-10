@@ -4,6 +4,7 @@ import { Firestore, collection, getDoc, doc, updateDoc, query, getDocs, QuerySna
 import { UserCredential, onAuthStateChanged, sendEmailVerification } from '@angular/fire/auth';
 import { DatabaseService } from './database.service';
 import { BehaviorSubject, Observable, Subject, from, map, switchMap } from 'rxjs';
+import { Paciente } from './turnos.service';
 
 
 @Injectable({
@@ -518,6 +519,30 @@ async obtenerInfoUsuarioActual1(): Promise<any | null> {
     }
   }
 
+  obtenerPacientes(): Observable<Paciente[]> {
+    const pacientesCollection = collection(this.firestore, 'DatosUsuarios');
+    return collectionData(pacientesCollection, { idField: 'id' }).pipe(
+      map(data => data
+        .filter(item => item['role'] === 'paciente') 
+        .map(item => ({
+          email: item['mail'],
+          nombre: item['nombre'],
+          apellido: item['apellido']
+        }) as Paciente))
+    );
+  }
+  
+  getCurrentUserEmail2(): Promise<string | null> {
+    return new Promise((resolve, reject) => {
+      onAuthStateChanged(this.auth, (user) => {
+        if (user && user.email) {
+          resolve(user.email);
+        } else {
+          resolve(null);
+        }
+      });
+    });
+  }
 
 
 }

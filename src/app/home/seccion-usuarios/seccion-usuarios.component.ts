@@ -8,7 +8,7 @@ import { Observable, map } from 'rxjs';
 import { Auth, User, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { Firestore, collection, doc, setDoc } from '@angular/fire/firestore';
+import { Firestore, collection, doc, setDoc, collectionData } from '@angular/fire/firestore';
 import { sendEmailVerification } from 'firebase/auth';
 //import { LoadingComponent } from "../../loading/loading.component";
 import { ListaUsuariosComponent } from '../../lista-usuarios/lista-usuarios.component';
@@ -31,6 +31,8 @@ interface SideNavToggle {
 
 export class SeccionUsuariosComponent {
 
+  newSpecialties: string[] = []; // Lista de especialidades existentes en Firebase
+  specialties: string[] = [];  // Array temporal para las especialidades adicionales
   formReg: FormGroup;
   selectedRole: string = '';
   showLoading: boolean = true;
@@ -65,7 +67,7 @@ export class SeccionUsuariosComponent {
 
     this.currentUser$ = this.authService.getCurrentUser();
 
-
+    this.loadSpecialties();
     this.formReg = new FormGroup({
       selectedRole: new FormControl('', [Validators.required]),
       nombre: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(20),Validators.pattern(/^[a-zA-Z\s]+$/)]),
@@ -76,8 +78,10 @@ export class SeccionUsuariosComponent {
       email: new FormControl('', [Validators.email, Validators.required]),
       password: new FormControl('', [Validators.required, Validators.minLength(6)]),
       confirmPassword: new FormControl('', [Validators.required]),
-      especialidad: new FormControl('', [Validators.required] ),
-      otraEspecialidad: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(25), Validators.pattern(/^[a-zA-Z]+$/)]),
+     // especialidad: new FormControl('', [Validators.required] ),
+      //otraEspecialidad: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(25), Validators.pattern(/^[a-zA-Z]+$/)]),
+      especialidad: new FormControl([]), // Saco Validators.required para permitir especialidades personalizadas
+      ...this.createSpecialtyControls(), //nuevas a medida que se van creando
       imagenPerfil0: new FormControl('', [Validators.required]),
       imagenPerfil: new FormControl('', [Validators.required]),
       imagenPerfil1: new FormControl('', [Validators.required]),
@@ -96,6 +100,37 @@ export class SeccionUsuariosComponent {
     }
     
   }
+
+  loadSpecialties() {
+    const specialtiesCollection = collection(this.firestore, 'Especialidades');
+    collectionData(specialtiesCollection, { idField: 'id' }).subscribe((data: any[]) => {
+      this.specialties = data.map((item: any) => item.nombre);
+    });
+  }
+
+   // Generar controles de formulario para las especialidades nuevas
+  private createSpecialtyControls(): { [key: string]: FormControl } {
+  const controls: { [key: string]: FormControl } = {}; 
+    this.newSpecialties.forEach((_, i) => {
+      controls[`newSpecialty${i}`] = new FormControl('');
+    });
+    return controls;
+  }
+
+    // Función para agregar un nuevo input de especialidad
+    addNewSpecialtyInput() {
+      this.newSpecialties.push('');  // Agrega un campo vacío que luego se llenará con el valor ingresado
+    }
+
+    trackByIndex(index: number, obj: any): any {
+      return index;
+    } //pobrando cosas
+
+
+
+
+
+
 
   ngOnInit() : void{
     this.cargarUsuarios(); 
@@ -410,8 +445,8 @@ export class SeccionUsuariosComponent {
 
       } else if (selectedRole === 'especialista') {
         if (this.imagenPerfil) {
-          const image = await this.ImagenesService.uploadFile(this.imagenPerfil);
-          additionalUserData = {
+         const image = await this.ImagenesService.uploadFile(this.imagenPerfil);
+         /* additionalUserData = {
             ...additionalUserData,
             especialidad: this.formReg.get('especialidad')?.value,
             otraEspecialidad: this.formReg.get('otraEspecialidad')?.value,
@@ -419,7 +454,34 @@ export class SeccionUsuariosComponent {
             imagenPerfil: image,
           };
         }
-        await setDoc(userDocRef, additionalUserData, { merge: true });
+        await setDoc(userDocRef, additionalUserData, { merge: true });*/
+
+
+         // Combina la especialidad seleccionada con las nuevas especialidades ingresadas manualmente
+         const especialidadSeleccionada = this.formReg.get('especialidad')?.value ? [this.formReg.get('especialidad')?.value] : [];
+         const especialidadesNuevas = this.newSpecialties.filter(especialidad => especialidad.trim() !== '');
+         const especialidades = [...especialidadSeleccionada, ...especialidadesNuevas];
+
+         // Agrega las especialidades al usuario en DatosUsuarios
+         additionalUserData = {
+           ...additionalUserData,
+           especialidades, // Guardamos todas las especialidades en el mismo array
+            aprobadoPorAdmin: false,
+            imagenPerfil: image,
+         };
+
+         await setDoc(userDocRef, additionalUserData, { merge: true });
+
+         // Guardar especialidades nuevas en la colección "Especialidades" en Firebase
+         const especialidadesCollection = collection(this.firestore, 'Especialidades');
+         console.log("num de esp nuevas: " + especialidadesNuevas.length)
+         for (const especialidad of especialidadesNuevas) {
+           await setDoc(doc(especialidadesCollection, especialidad), { nombre: especialidad });
+         }
+
+
+
+       }
       } else if (selectedRole === 'admin') {
         if (this.imagenPerfil0) {
           const image0 = await this.ImagenesService.uploadFile(this.imagenPerfil0);

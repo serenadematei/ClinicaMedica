@@ -28,6 +28,25 @@ export const routes: Routes = [
         path: 'home/seccion-usuarios',
         loadComponent: () => import('./home/seccion-usuarios/seccion-usuarios.component').then(m => m.SeccionUsuariosComponent),
         canActivate: [adminGuard]
+    },
+    {
+        path: 'home/mis-turnos',
+        loadComponent: () => import('./home/mis-turnos/mis-turnos.component').then(m => m.MisTurnosComponent)
+    },
+    {
+        path: 'home/turnos',
+        loadComponent: () => import('./home/turnos/turnos.component').then(m => m.TurnosComponent),
+        canActivate: [adminGuard]
+    },
+    {
+        path: 'home/solicitar-turno',
+        loadComponent: () => import('./home/solicitar-turno/solicitar-turno.component').then(m => m.SolicitarTurnoComponent),
+       // canActivate: [pacienteAdminGuard]
+    },
+    {
+        path: 'disponibilidad-horaria',
+        loadComponent: () => import('./disponibilidad/disponibilidad.component').then(m => m.DisponibilidadComponent),
+       // canActivate: [pacienteAdminGuard]
     }
 
 ];

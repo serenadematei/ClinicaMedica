@@ -23,13 +23,12 @@
       <p class="card-text"><strong>Email:</strong> {{ user.mail }}</p>
       
    
-      <p *ngIf="user.role === 'especialista' && user.especialidad !== 'otra'" class="card-text">
-        <strong>Especialidad:</strong> {{ user.especialidad }}
-      </p>
-      <p *ngIf="user.role === 'especialista' && user.especialidad === 'otra'" class="card-text">
-        <strong>Especialidad:</strong> {{ user.otraEspecialidad }}
-      </p>
-      
+      <div *ngIf="user.role === 'especialista' && user.especialidades?.length > 0">
+        <p class="card-text"><strong>Especialidades:</strong></p>
+        <ul class="list-unstyled">
+          <li *ngFor="let especialidad of user.especialidades">{{ especialidad }}</li>
+        </ul>
+      </div>
     
       <p *ngIf="user.role === 'paciente'" class="card-text">
         <strong>Obra Social:</strong> {{ user.obrasocial }}

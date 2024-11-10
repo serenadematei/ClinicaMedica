@@ -27,12 +27,12 @@
 }
 
 .filter-container .btn {
-  background-color: #a72892 !important; /* Aplicar el color a todos los botones */
-  border-color: #a72892 !important; /* Asegurar que el borde coincida */
-  color: #ffffff; /* Texto en blanco para mejor visibilidad */
+  background-color: #a72892 !important; 
+  border-color: #a72892 !important; 
+  color: #ffffff;
 }
 
 .filter-container .btn:hover {
-  background-color: #871f72 !important; /* Color ligeramente más oscuro al pasar el cursor */
+  background-color: #871f72 !important;
   border-color: #871f72 !important;
 }

@@ -1,0 +1,106 @@
+<html>
+<head>
+  <title></title>
+
+</head>
+<body>
+   <!--  <app-loading *ngIf="showLoading" class="centered-loading"></app-loading>-->
+  <div class="navbar-custom">
+    <a class="user-color" (click)="toggleDropdown()" *ngIf="currentUser$ | async as user" >
+      <img *ngIf="user.photoURL" src="{{user.photoURL}}" alt="Foto de perfil de usuario" class="user-photo">
+      <img *ngIf="!user.photoURL" src="https://firebasestorage.googleapis.com/v0/b/tp-sala-de-juegos-diazgiossol.appspot.com/o/guest.webp?alt=media&token=69e91e4a-832d-4439-ab69-a30e2c8d80ee"  class="user-photo">
+      {{ user.displayName?user.displayName : user.email }} 
+    </a>
+    <div class="dropdown-content" *ngIf="isDropdownOpen">
+      <button class="logout-button" *ngIf="showLogoutButton" (click)="logout()">
+        <i class="fa solid fa-power-off"></i> Cerrar Sesión
+      </button>
+    </div>
+  </div>
+
+  <header>
+    <h1></h1>
+  </header>
+
+  <nav>
+    <ul>
+    </ul>
+  </nav>
+
+  <main>
+    <h2>Turnos</h2>
+    <div class="turnos-list-container">
+    <div class="input-container">
+      <div class="mb-2 input-width">
+        <img src="assets/lupa.png" alt="Buscar" class="buscar-logo">
+        <input type="text" class="form-control input-styling" placeholder="Buscar..." [(ngModel)]="filtro">
+      </div>
+    </div> 
+    <div class="table-scroll">
+     <div class="table-responsive" *ngIf="turnosFiltrados.length > 0; else noTurnos">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Nombre Paciente</th>
+            <th>Apellido Paciente</th>
+            <th>Nombre Especialista</th>
+            <th>Apellido Especialista</th>
+            <th>Especialidad</th>
+            <th>Fecha</th>
+            <th>Horario</th>
+            <th>Estado</th>
+            <th *ngIf="tieneTurnoCancelado">Motivo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let turno of turnosFiltrados | filter: filtro">
+            <td>{{ turno.paciente.nombre }}</td>
+            <td>{{ turno.paciente.apellido }}</td>
+            <td>{{ turno.especialista.nombre }}</td>
+            <td>{{ turno.especialista.apellido }}</td>
+            <td>
+              <ng-container *ngIf="especialidadesPrecargadas.includes(turno.especialidad); else otraEspecialidad">
+                {{ turno.especialidad }}
+              </ng-container>
+              <ng-template #otraEspecialidad>
+                {{ turno.otraEspecialidad }}
+              </ng-template>
+            </td>
+            <td>{{ turno.fechaHora | date:'dd/MM/yy' }}</td>
+            <td>{{ turno.horaInicio }} - {{ turno.horaFin }}</td>
+            <td>{{ turno.estado }}</td>
+            <ng-container *ngIf="turno.estado === 'cancelado'">
+                <td>{{ turno.motivoCancelacion }}</td>
+              </ng-container>
+              <ng-container *ngIf="turno.estado !== 'cancelado' && tieneTurnoCancelado">
+                <td></td>
+              </ng-container>
+            <td>
+                <button *ngIf="turno.estado === 'pendiente'" (click)="cancelarTurnoComoAdmin(turno)">Cancelar Turno</button>
+                <button *ngIf="turno.estado === 'cancelado'" class="disabled-button" disabled>Cancelado</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+    <ng-template #noTurnos>
+      <p>No hay turnos disponibles</p>
+    </ng-template>
+  </div>
+  
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2024 Clinica Online. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <div class="center-button">
+    <input type="button" [value]="btnVolver" class="btn-success" (click)="onClickHome($event)"/>
+  </div>
+  
+</body>
+</html>

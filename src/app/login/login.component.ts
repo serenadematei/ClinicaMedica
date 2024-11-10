@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit {
     Promise.all([
       this.loginLoadAdmin(),
       this.loginLoadEspecialista1(),
-      //this.loginLoadEspecialista2(),
+      this.loginLoadEspecialista2(),
       this.loginLoadPaciente1(),
       //this.loginLoadPaciente2(),
       //this.loginLoadPaciente3()
@@ -134,16 +134,19 @@ export class LoginComponent implements OnInit {
  async cargarUsuario(email: string, password: string): Promise<void> {
     try {
       const usuarios = await this.authService.obtenerUsuariosConFotoPerfil(email);
+      
       if (usuarios.length > 0) {
         const usuario = usuarios[0];
         usuario.imagenPerfilUrl = usuario.imagenPerfilUrl;
         this.fotoPerfilUrls[email] = usuario.imagenPerfilUrl;
+
+       // console.log(`URL de imagen asignada para ${email}:`, this.fotoPerfilUrls[email]);
         if (!this.formReset) {
           this.resetLoginForm();
           this.formReset = true; // Marcar que el formulario se ha restablecido
         }
       } else {
-        console.error('Usuario no encontrado');
+       // console.error('Usuario no encontrado');
       }
     } catch (error) {
       console.error('Error al cargar el usuario:', error);
@@ -159,8 +162,15 @@ export class LoginComponent implements OnInit {
   }
 
   loginLoadEspecialista1(): void {
-    const email = this.defaultEmailEspecialista1;
-    const password = this.defaultPasswordEspecialista1;
+    const email = 'josecito@cj.MintEmail.com';
+    const password = '123456'   //this.defaultPasswordEspecialista1;
+    this.cargarUsuario(email, password);
+    this.formLogin.setValue({ email, password });
+  }
+
+  loginLoadEspecialista2(): void {
+    const email = 'guido@cj.MintEmail.com';
+    const password = '123456';
     this.cargarUsuario(email, password);
     this.formLogin.setValue({ email, password });
   }
@@ -168,6 +178,19 @@ export class LoginComponent implements OnInit {
   loginLoadPaciente1(): void {
     const email = this.defaultEmailPaciente1;
     const password = this.defaultPasswordPaciente1;
+    this.cargarUsuario(email, password);
+    this.formLogin.setValue({ email, password });
+  }
+
+  loginLoadPaciente2(): void {
+    const email = 'paloma@cj.MintEmail.com';
+    const password = '123456';
+    this.cargarUsuario(email, password);
+    this.formLogin.setValue({ email, password });
+  }
+  loginLoadPaciente3(): void {
+    const email = 'melanie@cj.MintEmail.com';
+    const password = '123456';
     this.cargarUsuario(email, password);
     this.formLogin.setValue({ email, password });
   }

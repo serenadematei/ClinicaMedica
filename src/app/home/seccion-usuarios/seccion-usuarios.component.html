@@ -140,7 +140,7 @@
         
       <div *ngIf="formReg.get('selectedRole')?.value === 'especialista'">
   
-        <label for="especialidad">Especialidad</label>
+       <!--  <label for="especialidad">Especialidad</label>
         <select id="especialidad" formControlName="especialidad" required>
           <option value="Ginecologia">Ginecologia</option>
           <option value="Traumatologia">Traumatologia</option>
@@ -160,7 +160,24 @@
             Valido solo caracteres alfabéticos.
           </div>
         
+        </div> -->
+
+        <div class="col campoForm">
+          <label for="especialidad" class="form-label">Especialidad</label>
+          <select class="form-control" id="especialidad" formControlName="especialidad">
+            <option *ngFor="let specialty of specialties" [value]="specialty">{{ specialty }}</option>
+          </select>
+          <button type="button" (click)="addNewSpecialtyInput()">+</button>
         </div>
+        
+
+
+        <div *ngFor="let specialty of newSpecialties; let i = index; trackBy: trackByIndex">
+          <input type="text" class="form-control" [(ngModel)]="newSpecialties[i]" [ngModelOptions]="{standalone: true}" placeholder="Nueva especialidad">
+        </div>
+
+
+        
   
         <label for="imagenPerfil">Imagen de perfil</label>
         <input type="file" id="imagenPerfil" formControlName="imagenPerfil" accept="image/*" required (change)="onFileSelected($event)">
