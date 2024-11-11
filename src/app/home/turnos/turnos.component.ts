@@ -9,17 +9,18 @@ import { Auth,User } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import Swal from 'sweetalert2';
 import { FilterPipe } from "../../pipes/filter.pipe";
+import { FilterEspPipe } from '../../pipes/filter-esp.pipe';
 
 @Component({
     selector: 'app-turnos',
     standalone: true,
     templateUrl: './turnos.component.html',
     styleUrl: './turnos.component.css',
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, FilterPipe]
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, FilterPipe, FilterEspPipe]
 })
 export class TurnosComponent implements OnInit{
 
-  btnVolver = 'Volver a home';
+  btnVolver = 'Volver a inicio';
   showLoading: boolean = true;
   filtro: string = '';
   selectedYear: number;

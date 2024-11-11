@@ -355,3 +355,36 @@ body {
     opacity: 0;
   }
 }
+
+.floating-logout-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #ff5b62;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+/* Hover y efecto de clic */
+.floating-logout-button:hover {
+  background-color: #d9534f;
+}
+
+.floating-logout-button:active {
+  transform: scale(0.95);
+}
+
+/* Ícono dentro del botón */
+.floating-logout-button i {
+  font-size: 1.2rem;
+}

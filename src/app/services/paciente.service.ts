@@ -184,11 +184,18 @@ export class PacienteService {
     const turnosQuery = query(turnosCollection, where('paciente.mail', '==', userEmail));
     return collectionData(turnosQuery, { idField: 'id' }) as Observable<any[]>;
   }
+  
+  obtenerPacientes(): Observable<any[]> {
+    const pacientesRef = collection(this.firestore, 'DatosUsuarios');
+    const pacientesQuery = query(pacientesRef, where('role', '==', 'paciente'));
 
-  // getUserResenas(turnoId: string): Observable<any> {
-  //   const resenaDoc = doc(this.firestore, `pacientes/${turnoId}/historiaClinica`);
-  //   return getDoc(resenaDoc).then(snapshot => {
-  //     return snapshot.data() as any;
-  //   });
-  // }
+    return from(getDocs(pacientesQuery)).pipe(
+      map(querySnapshot => {
+        return querySnapshot.docs.map(doc => {
+          return { id: doc.id, ...doc.data() };
+        });
+      })
+    );
+  }
+ 
 }

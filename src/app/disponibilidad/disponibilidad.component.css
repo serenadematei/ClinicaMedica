@@ -1,26 +1,31 @@
-/* Fondo de pantalla completa con imagen */
+
 .background {
-    background-image: url('/assets/fondoClinica.jpg'); /* Cambia 'path-to-your-image.jpg' por la ruta de tu imagen */
-    background-size: cover;
-    background-position: center;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  /* Contenedor del formulario centrado */
-  .form-container {
-    background-color: rgba(255, 255, 255, 0.85); /* Fondo blanco con opacidad */
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Sombra suave */
-    width: 300px;
-    text-align: center;
-  }
-  
-  /* Ajustes de los elementos del formulario */
+  background-image: url('/assets/fondoClinica.jpg');
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+  position: fixed; 
+  overflow: auto;
+}
+
+
+.form-container {
+  background-color: rgba(126, 206, 226, 0.85);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  width: 90%;
+  margin: auto;
+  text-align: center;
+}
+
+
   .form-container label {
     font-weight: 600;
     margin-top: 10px;
@@ -29,10 +34,11 @@
   }
   
   .form-container .form-control {
-    margin-top: 5px;
+    margin-top: 10px;
     margin-bottom: 15px;
   }
-  
+
+
   .form-container button[type="submit"] {
     background-color: #202c38;
     color: #ffffff;
@@ -51,8 +57,8 @@
     visibility: visible;
     min-width: 250px;
     margin-left: -125px;
-    background-color: #4CAF50; /* Color de fondo */
-    color: #fff; /* Color del texto */
+    background-color: #4CAF50; 
+    color: #fff;
     text-align: center;
     border-radius: 4px;
     padding: 16px;
@@ -68,7 +74,7 @@
   .snackbar.show {
     visibility: visible;
     opacity: 1;
-    bottom: 50px; /* Ajusta la posición de la animación */
+    bottom: 50px; 
   }
   
 
@@ -91,7 +97,7 @@
     transition: background-color 0.3s, transform 0.2s;
   }
   
-  /* Hover y efecto de clic */
+
   .floating-logout-button:hover {
     background-color: #d9534f;
   }
@@ -100,7 +106,7 @@
     transform: scale(0.95);
   }
   
-  /* Ícono dentro del botón */
+
   .floating-logout-button i {
     font-size: 1.2rem;
   }
@@ -110,7 +116,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* margin-top: 5px; */
+
   }
 
   .btn-success {
@@ -129,3 +135,77 @@
   .btn-success:hover {
     background-color: #7f196e;
   }
+
+  .form-title {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #202c38;
+    margin-bottom: 20px;
+  }
+
+.profile-container img {
+  width: 150px;
+  height: auto;
+  border-radius: 8px;
+  margin: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.form-title {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  color: #202c38;
+}
+
+.profile-info p {
+  margin: 8px 0;
+  font-size: 1.1em;
+}
+
+
+.fade-in {
+  opacity: 0;
+  transform: scale(0.8); 
+  animation: fadeIn 1.5s ease-out forwards; 
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8); 
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.05); 
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.btn-toggle {
+  margin-top: 15px;
+  padding: 10px;
+  font-weight: bold;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: block;
+  width: 100%; 
+  transition: background-color 0.3s;
+}
+
+.btn-toggle:hover {
+  background-color: #45a049;
+}
+
+
+.disponibilidad-container {
+  margin-top: 15px;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+}

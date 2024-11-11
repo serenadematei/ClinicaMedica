@@ -544,6 +544,38 @@ async obtenerInfoUsuarioActual1(): Promise<any | null> {
     });
   }
 
+  getCurrentUserRole(): Observable<string | null> {
+    const user = this.auth.currentUser;
+    if (!user) {
+      return from([null]); // Devuelve null si no hay usuario autenticado
+    }
+
+    const userDocRef = doc(this.firestore, `DatosUsuarios/${user.uid}`);
+    return from(getDoc(userDocRef)).pipe(
+      map(docSnap => {
+        if (docSnap.exists()) {
+          const userData = docSnap.data();
+          return userData['role'] || null;
+        }
+        return null;
+      })
+    );
+  }
+  
+
+  obtenerPacienteInfo(documentId: string): Promise<any> {
+    const pacienteDocRef = doc(this.firestore, 'DatosUsuarios', documentId);
+    return getDoc(pacienteDocRef).then(snapshot => {
+      if (snapshot.exists()) {
+        return snapshot.data();
+      } else {
+        throw new Error('Paciente no encontrado');
+      }
+    }).catch(error => {
+      console.error('Error al obtener la información del paciente:', error);
+      throw error;
+    });
+}
 
 }
 

@@ -5,152 +5,95 @@
 </head>
 <body>
    
-    
-  <div class="navbar-custom">
-    <a class="user-color" (click)="toggleDropdown()" *ngIf="currentUser$ | async as user" >
-      <img *ngIf="user.photoURL" src="{{user.photoURL}}" alt="Foto de perfil de usuario" class="user-photo">
-      <img *ngIf="!user.photoURL" src="https://firebasestorage.googleapis.com/v0/b/tp-sala-de-juegos-diazgiossol.appspot.com/o/guest.webp?alt=media&token=69e91e4a-832d-4439-ab69-a30e2c8d80ee"  class="user-photo">
-      {{ user.displayName?user.displayName : user.email }} 
-    </a>
-    <div class="dropdown-content" *ngIf="isDropdownOpen">
-      <button class="logout-button" *ngIf="showLogoutButton" (click)="logout()">
-        <i class="fa solid fa-power-off"></i> Cerrar Sesión
-      </button>
-    </div>
-  </div>
-
   <main>
     <h2>Mis Turnos</h2>
-
-     <div class="turnos-list-container" [ngClass]="{ 'slide-out-blurred-br': animate }">
+  
+    <!-- Filtro de Búsqueda -->
     <div class="input-container">
-      <div class="mb-2 input-width">
-        <img src="assets/lupa.png" alt="Buscar" class="buscar-logo">
-        <input type="text" class="form-control input-styling" placeholder="Buscar..." [(ngModel)]="filtro">
-      </div>
-    </div> 
-
-     <div class="table-responsive" *ngIf="turnos$ | async as turnos; else noTurnos">
-      <table class="table table-bordered" *ngIf="userRole === 'paciente'">
-        <thead>
-          <tr >
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Especialidad</th>
-            <th>Fecha</th>
-            <th>Horario</th>
-            <th>Estado</th>
-            <th *ngIf="tieneTurnoCancelado">Motivo</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>  
-          <tr *ngFor="let turno of turnos | filterEsp:filtro" [ngClass]="{'hidden': !turno.especialista}">
-            <td>{{ turno.especialista.nombre }}</td>
-            <td>{{ turno.especialista.apellido }}</td>
-            <td>
-              <ng-container *ngIf="especialidadesPrecargadas.includes(turno.especialidad); else otraEspecialidad">
-                {{ turno.especialidad }}
-              </ng-container>
-              <ng-template #otraEspecialidad>
-                {{ turno.otraEspecialidad }}
-              </ng-template>
-            </td>
-            <td>{{ turno.fechaHora | date:'dd/MM/yy' }}</td>
-            <td>{{ turno.horaInicio }} - {{ turno.horaFin }}</td>
-            <td>{{ turno.estado }}</td>
-            <ng-container *ngIf="turno.estado === 'cancelado'">
-              <td>{{ turno.motivoCancelacion }}</td>
-            </ng-container>
-            <ng-container *ngIf="turno.estado !== 'cancelado' && tieneTurnoCancelado">
-              <td></td>
-            </ng-container>
-            <!-- <td>
-              <ng-container *ngIf="turno.historiaClinica">
-                <p><strong>Altura:</strong> {{ turno.historiaClinica.altura }} cm</p>
-                <p><strong>Peso:</strong> {{ turno.historiaClinica.peso }} kg</p>
-                <p><strong>Temperatura:</strong> {{ turno.historiaClinica.temperatura }} °C</p>
-                <p><strong>Presión:</strong> {{ turno.historiaClinica.presion }} mm Hg</p>
-                <div *ngFor="let dato of turno.historiaClinica.datosDinamicos">
-                  <p><strong>{{ dato.clave }}:</strong> {{ dato.valor }}</p>
-                </div>
-              </ng-container>
-              <ng-container *ngIf="!turno.historiaClinica">
-                <p>No disponible</p>
-              </ng-container>
-            </td> -->
-            <td>
-                <button *ngIf="turno.estado === 'pendiente'" (click)="cancelarTurno(turno)">Cancelar Turno</button>
-                <button *ngIf="turno.estado === 'cancelado'" class="disabled-button" disabled>Cancelado</button>
-                <button *ngIf="turno.comentario" (click)="verResena(turno)">Ver Reseña</button>
-                <button *ngIf="turno.estado === 'realizado' && !turno.encuestaCompletada" (click)="completarEncuesta(turno)">Completar Encuesta</button>
-                <button *ngIf="turno.estado === 'realizado' && turno.encuestaCompletada" (click)="verEncuesta(turno)">Ver Encuesta</button>
-                <button *ngIf="turno.estado === 'realizado' && !turno.calificacionCompletada" (click)="calificarAtencion(turno)">Calificar Atención</button>
-                <button *ngIf="turno.estado === 'realizado' && turno.calificacionCompletada" (click)="verCalificacion(turno)">Ver Calificación</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table class="table table-bordered" *ngIf="userRole === 'especialista'">
-
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Apellido</th>
-              <th>Especialidad</th>
-              <th>Fecha</th>
-              <th>Horario</th>
-              <th>Estado</th>
-              <th *ngIf="tieneTurnoCancelado || tieneTurnoRechazado">Motivo</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>    
-            <tr *ngFor="let turno of turnos | filterEsp:filtro" [ngClass]="{'hidden': !turno.paciente}">
-              <td>{{ turno.paciente?.nombre }}</td>
-              <td>{{ turno.paciente?.apellido }}</td>
-              <td>{{ turno.especialidad }}</td>
-              <td>{{ turno.fechaHora | date:'dd/MM/yy' }}</td>
-              <td>{{ turno.horaInicio }} - {{ turno.horaFin }}</td>
-              <td>{{ turno.estado }}</td>
-              <ng-container *ngIf="turno.estado === 'cancelado' || turno.estado === 'rechazado' ">
-                <td>{{ turno.motivoCancelacion || turno.motivoRechazo }}</td>
-              </ng-container>
-              <ng-container *ngIf="turno.estado !== 'cancelado' && tieneTurnoCancelado || turno.estado !== 'rechazado' && tieneTurnoRechazado"></ng-container>
-              <td>
-                <button *ngIf="turno.estado === 'pendiente'" (click)="aceptarTurno(turno)">Aceptar Turno</button>
-                <button *ngIf="turno.estado === 'aceptado'" class="disabled-button" disabled>Aceptado</button>
-                <button *ngIf="turno.estado === 'pendiente'" (click)="cancelarTurno(turno)">Cancelar Turno</button>
-                <button *ngIf="turno.estado === 'cancelado'" class="disabled-button" disabled>Cancelado</button>
-                <button *ngIf="turno.estado === 'pendiente'" (click)="rechazarTurno(turno)">Rechazar Turno</button>
-                <button *ngIf="turno.estado === 'rechazado'" class="disabled-button" disabled>Rechazado</button>
-                <button *ngIf="turno.estado === 'aceptado'" (click)="finalizarTurno(turno)">Finalizar Turno</button>
-                <button *ngIf="turno.estado === 'realizado'" class="disabled-button" disabled>Finalizado</button>
-                <button *ngIf="turno.estado === 'realizado'&& !turno.historiaClinicaCargada"  (click)="cargarHistoriaClinica(turno)">Cargar historia clínica</button>
-                <button *ngIf="turno.estado === 'realizado'&& turno.historiaClinicaCargada" class="disabled-button" disabled>Historia clínica cargada</button>
-                <button *ngIf="turno.estado === 'realizado' && turno.comentario" (click)="verResena(turno)">Ver Reseña</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      
-
-    <ng-template #noTurnos>
-      <p>No hay turnos disponibles</p>
-    </ng-template>
+      <input type="text" class="form-control input-styling" 
+             placeholder="Buscar por Especialidad o {{ userRole === 'paciente' ? 'Especialista' : 'Paciente' }}" 
+             [(ngModel)]="filtro">
+    </div>
+  
+   <!-- Tabla de Turnos para Paciente -->
+<div *ngIf="userRole === 'paciente'">
+  <div *ngIf="(turnos$ | async) as turnosFiltradosPaciente">
+    <table class="table table-bordered" *ngIf="turnosFiltradosPaciente.length > 0">
+      <thead>
+        <tr>
+          <th>Especialista</th>
+          <th>Especialidad</th>
+          <th>Fecha</th>
+          <th>Hora</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let turno of turnosFiltradosPaciente | filterEsp:filtro">
+          <td>{{ turno.especialista.nombre }} {{ turno.especialista.apellido }}</td>
+          <td>{{ turno.especialidad }}</td>
+          <td>{{ turno.fechaHora | date:'dd/MM/yyyy' }}</td>
+          <td>{{ turno.horaInicio }}</td>
+          <td>{{ turno.estado }}</td>
+          <td>
+            <button *ngIf="turno.estado === 'pendiente'" (click)="cancelarTurno(turno)">Cancelar</button>
+            <button *ngIf="turno.estado === 'realizado' && !turno.encuestaCompletada" (click)="completarEncuesta(turno)">Completar Encuesta</button>
+            <button *ngIf="turno.estado === 'realizado' && turno.encuestaCompletada" (click)="verEncuesta(turno)">Ver Encuesta</button>
+            <button *ngIf="turno.estado === 'realizado' && !turno.calificacionCompletada" (click)="calificarAtencion(turno)">Calificar Atención</button>
+            <button *ngIf="turno.comentario" (click)="verResena(turno)">Ver Reseña</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
+</div>
+
+<!-- Tabla de Turnos para Especialista -->
+<div *ngIf="userRole === 'especialista'">
+  <div *ngIf="(turnos$ | async) as turnosFiltradosEspecialista">
+    <table class="table table-bordered" *ngIf="turnosFiltradosEspecialista.length > 0">
+      <thead>
+        <tr>
+          <th>Paciente</th>
+          <th>Especialidad</th>
+          <th>Fecha</th>
+          <th>Hora</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let turno of turnosFiltradosEspecialista | filterPac:filtro">
+          <td>{{ turno.paciente.nombre }} {{ turno.paciente.apellido }}</td>
+          <td>{{ turno.especialidad }}</td>
+          <td>{{ turno.fechaHora | date:'dd/MM/yyyy' }}</td>
+          <td>{{ turno.horaInicio }}</td>
+          <td>{{ turno.estado }}</td>
+          <td>
+            <button *ngIf="turno.estado === 'pendiente'" (click)="aceptarTurno(turno)">Aceptar</button>
+            <button *ngIf="turno.estado === 'pendiente'" (click)="cancelarTurno(turno)">Cancelar</button>
+            <button *ngIf="turno.estado === 'pendiente'" (click)="rechazarTurno(turno)">Rechazar</button>
+            <button *ngIf="turno.estado === 'aceptado'" (click)="finalizarTurno(turno)">Finalizar Turno</button>
+            <button *ngIf="turno.estado === 'realizado' && turno.comentario" (click)="verResena(turno)">Ver Reseña</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Mensaje de No hay Turnos -->
+<p *ngIf="(turnos$ | async)?.length === 0">No tienes turnos asignados.</p>
   </main>
 
-  <footer class="site-footer">
-    <div class="container">
-      <p>&copy; 2024 Clinica Online. Todos los derechos reservados.</p>
-    </div>
-  </footer>
+
+  <button class="floating-logout-button" (click)="logout()">
+    <i class="fa solid fa-power-off"></i> Cerrar sesión
+  </button>
 
   <div class="center-button">
-    <input type="button" [value]="btnVolver" class="btn-success" [ngClass]="{ 'slide-out-blurred-br': animate }" (click)="onClickHome($event)"/>
+    <input type="button" class="btn-success" (click)="goTo('/home')" value="Volver a inicio" />
   </div>
   
 </body>

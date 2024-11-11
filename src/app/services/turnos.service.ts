@@ -80,12 +80,270 @@ export class TurnosService implements OnInit{
 
   private turnos: any[] = [];
   private turnosCollection: CollectionReference<DocumentData>;
+
+
+  especialidades: string[] = [];
   turnos$: Observable<any[]> = of([]);
   searchControl: FormControl = new FormControl();
 
   constructor(private firestore: Firestore, private pacienteService: PacienteService, private especialistaService: EspecialistaService) {
     this.turnosCollection = collection(this.firestore, 'turnos');
    }
+
+
+
+      solicitarTurno(turnoData: {
+        especialidad: string;
+        especialistaId: string;
+        fechaSeleccionada: string;
+        horario: string;
+        paciente: { nombre: string; mail?: string; apellido?: string };
+        especialista: { nombre: string; mail: string; apellido: string };
+    }): Promise<void> {
+        try {
+            // Convierte la fecha y el horario en un solo objeto Date
+            const [horas, minutos] = turnoData.horario.split(':').map(Number);
+            const fechaSeleccionada = new Date(turnoData.fechaSeleccionada);
+            fechaSeleccionada.setHours(horas, minutos, 0, 0);
+    
+            if (isNaN(fechaSeleccionada.getTime())) {
+                throw new Error('Fecha u hora inválida.');
+            }
+    
+            // Crear el nuevo turno, incluyendo datos completos del especialista y paciente
+            const nuevoTurno: Turno = {
+                id: '',
+                especialidad: turnoData.especialidad,
+                especialistaId: turnoData.especialistaId,
+                fechaHora: Timestamp.fromDate(fechaSeleccionada),
+                horaInicio: turnoData.horario,
+                estado: 'pendiente',
+                ocupado: true,
+                paciente: {
+                    nombre: turnoData.paciente.nombre,
+                    mail: turnoData.paciente.mail || '',
+                    apellido: turnoData.paciente.apellido || ''
+                },
+                especialista: {
+                    nombre: turnoData.especialista.nombre,
+                    mail: turnoData.especialista.mail,
+                    apellido: turnoData.especialista.apellido
+                }
+            };
+    
+            // Agrega el turno a Firebase y actualiza su ID
+            return addDoc(this.turnosCollection, nuevoTurno)
+                .then(docRef => updateDoc(docRef, { id: docRef.id }))
+                .then(() => console.log('Turno reservado exitosamente'))
+                .catch(error => {
+                    console.error('Error al solicitar el turno:', error);
+                    throw error;
+                });
+    
+        } catch (error) {
+            console.error('Error al procesar la fecha y hora del turno:', error);
+            return Promise.reject(error);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Función para obtener las especialidades desde Firebase
+    obtenerEspecialidades(): Observable<string[]> {
+      const especialidadesCollection = collection(this.firestore, 'Especialidades');
+      return collectionData(especialidadesCollection).pipe(
+        map((docs) => docs.map((doc) => doc['nombre'])),
+        catchError(error => {
+          console.error('Error al obtener especialidades:', error);
+          return of([]);
+        })
+      );
+    }
+  
+    // Ejemplo de implementación de 'cargarEspecialidades' en el componente
+    cargarEspecialidades(): void {
+      this.obtenerEspecialidades().subscribe(
+        (especialidades: string[]) => {
+          this.especialidades = especialidades;
+        },
+        error => console.error('Error al cargar especialidades:', error)
+      );
+    }
+
+
+obtenerDiasDisponiblesPorEspecialista(especialistaId: string, especialidad: string): Observable<{ fechaSeleccionada: Date; especialidad: string; horarios: { horario: string; ocupado: boolean }[] }[]> {
+  const especialistaDocRef = doc(this.firestore, `DatosUsuarios/${especialistaId}`);
+  
+  return from(getDoc(especialistaDocRef)).pipe(
+      mergeMap(docSnap => {
+          if (docSnap.exists()) {
+              const disponibilidad = docSnap.data()?.['disponibilidad'] || [];
+              const diasConHorariosDisponibles: { fechaSeleccionada: Date; especialidad: string; horarios: { horario: string; ocupado: boolean }[] }[] = [];
+
+              return from(disponibilidad).pipe(
+                  mergeMap((entry: any) => {
+                      const fecha = new Date(entry.fechaSeleccionada);
+                      return this.obtenerHorariosDisponiblesConEstado(especialistaId, fecha, especialidad).pipe(
+                          map(horariosDisponibles => {
+                              if (horariosDisponibles.length > 0) {
+                                  diasConHorariosDisponibles.push({ 
+                                      fechaSeleccionada: fecha, 
+                                      especialidad, 
+                                      horarios: horariosDisponibles 
+                                  });
+                              }
+                          })
+                      );
+                  }),
+                  map(() => diasConHorariosDisponibles),
+                  catchError(error => {
+                      console.error('Error al obtener días con horarios disponibles:', error);
+                      return of([]);
+                  })
+              );
+          } else {
+              throw new Error('Especialista no encontrado');
+          }
+      }),
+      catchError(error => {
+          console.error('Error al obtener días disponibles:', error);
+          return of([]);
+      })
+  );
+}
+
+
+
+
+
+  // Función de ayuda para verificar si la fecha está dentro de los próximos 15 días
+  private esFechaEnProximos15Dias(fecha: Date): boolean {
+    const hoy = new Date();
+    const fechaLimite = new Date(hoy);
+    fechaLimite.setDate(hoy.getDate() + 15);
+    return fecha >= hoy && fecha <= fechaLimite;
+  }
+
+
+
+
+      obtenerHorariosDisponiblesPorDia(especialistaId: string, fecha: Date, especialidad: string): Observable<string[]> {
+        const turnosRef = collection(this.firestore, 'turnos');
+        const startOfDay = new Date(fecha);
+        startOfDay.setHours(0, 0, 0, 0);
+        const endOfDay = new Date(fecha);
+        endOfDay.setHours(23, 59, 59, 999);
+    
+        console.log(`Consultando horarios para especialista ID: ${especialistaId}, especialidad: ${especialidad}, fecha: ${startOfDay.toISOString()} - ${endOfDay.toISOString()}`);
+    
+        // Crear la consulta para obtener los turnos aceptados para el día y especialidad específicos
+        const q = query(
+            turnosRef,
+            where('especialistaId', '==', especialistaId),
+            where('especialidad', '==', especialidad),
+            where('estado', '==', 'pendiente'),  // Solo los turnos en estado pendiente
+            where('ocupado', '==', false),       // Solo los turnos no ocupados
+            where('fechaHora', '>=', Timestamp.fromDate(startOfDay)),
+            where('fechaHora', '<=', Timestamp.fromDate(endOfDay))
+        );
+    
+        return from(getDocs(q)).pipe(
+            map(snapshot => {
+                const horariosDisponibles: string[] = [];
+    
+                snapshot.forEach(doc => {
+                    const turnoData = doc.data() as Turno;
+                    if (turnoData.horaInicio) {
+                        horariosDisponibles.push(turnoData.horaInicio);
+                    }
+                });
+    
+                console.log(`Horarios disponibles para ${fecha.toLocaleDateString()} :`, horariosDisponibles);
+                return horariosDisponibles;
+            }),
+            catchError(error => {
+                console.error('Error al obtener horarios disponibles por día:', error);
+                return of([]);
+            })
+        );
+    }
+
+   //neuvo
+
+   obtenerHorariosDisponiblesConEstado(especialistaId: string, fecha: Date, especialidad: string): Observable<{ horario: string; ocupado: boolean }[]> {
+    const especialistaDocRef = doc(this.firestore, `DatosUsuarios/${especialistaId}`);
+    const startOfDay = new Date(fecha);
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(fecha);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    // Primero obtenemos la disponibilidad del especialista en DatosUsuarios
+    return from(getDoc(especialistaDocRef)).pipe(
+        mergeMap(especialistaDocSnap => {
+            if (!especialistaDocSnap.exists()) {
+                throw new Error('Especialista no encontrado');
+            }
+            const disponibilidad = especialistaDocSnap.data()?.['disponibilidad'] || [];
+            const horariosParaFecha = disponibilidad.find((entry: any) => 
+                entry.especialidad === especialidad && entry.fechaSeleccionada.startsWith(fecha.toISOString().split('T')[0])
+            )?.horarios || [];
+
+            // Ahora obtenemos los turnos ocupados para este día, especialidad y especialista
+            const turnosRef = collection(this.firestore, 'turnos');
+            const q = query(
+                turnosRef,
+                where('especialistaId', '==', especialistaId),
+                where('especialidad', '==', especialidad),
+                where('fechaHora', '>=', Timestamp.fromDate(startOfDay)),
+                where('fechaHora', '<=', Timestamp.fromDate(endOfDay)),
+                where('ocupado', '==', true)
+            );
+
+            return from(getDocs(q)).pipe(
+                map(snapshot => {
+                    const horariosOcupados = snapshot.docs.map(doc => (doc.data() as Turno).horaInicio);
+                    return horariosParaFecha.map((horario: string) => ({
+                        horario,
+                        ocupado: horariosOcupados.includes(horario)
+                    }));
+                })
+            );
+        }),
+        catchError(error => {
+            console.error('Error al obtener horarios con estado:', error);
+            return of([]);
+        })
+    );
+}
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
 
    ngOnInit() {
     this.searchControl.valueChanges.subscribe(searchTerm => {
@@ -192,7 +450,7 @@ export class TurnosService implements OnInit{
     }
   }
 
-  async solicitarTurno(
+  /*async solicitarTurno(
     especialidad: string,
     especialistaId: string,
     fecha: Date,
@@ -228,9 +486,9 @@ export class TurnosService implements OnInit{
   
     const docRef = await addDoc(this.turnosCollection, nuevoTurno);
     await updateDoc(docRef, { id: docRef.id });
-  }
+  }*/
 
-  obtenerTurnosPorUsuario(userEmail: string, userRole: string): Observable<Turno[]> {
+ /* obtenerTurnosPorUsuario(userEmail: string, userRole: string): Observable<Turno[]> {
     const field = userRole === 'paciente' ? 'paciente.mail' : 'especialista.mail';
     console.log(`Querying turnos for field: ${field} with userEmail: ${userEmail}`);
     
@@ -251,7 +509,42 @@ export class TurnosService implements OnInit{
         return of([]);
       })
     );
-  }
+  }*/
+
+    obtenerTurnosPorUsuario(userEmail: string, userRole: string): Observable<Turno[]> {
+      return from(getDocs(this.turnosCollection)).pipe(
+        map(snapshot => {
+          const turnos = snapshot.docs.map(doc => {
+            const data = doc.data() as Turno;
+            if (data.fechaHora instanceof Timestamp) {
+              data.fechaHora = data.fechaHora.toDate();
+            }
+           
+            return data;
+          });
+           
+          
+          // Filtrado basado en el rol
+          if (userRole === 'paciente') {
+            console.log("Filtrando para paciente:", userEmail);
+            const turnosFiltrados = turnos.filter(turno => {
+              console.log("Comparando:", turno.paciente?.mail, "con", userEmail);
+              return turno.paciente?.mail?.trim().toLowerCase() === userEmail.trim().toLowerCase();
+            });
+        console.log("Turnos filtrados:", turnosFiltrados);
+        return turnosFiltrados;
+          } else if (userRole === 'especialista') {
+            return turnos.filter(turno => turno.especialista?.mail?.trim().toLowerCase() === userEmail.trim().toLowerCase());
+          } else {
+            return [];
+          }
+        }),
+        catchError(error => {
+          console.error('Error al obtener turnos:', error);
+          return of([]);
+        })
+      );
+    }
 
   async actualizarEstadoTurno(turnoId: string, estado: string): Promise<void> {
     const turnoDocRef = doc(this.firestore, `turnos/${turnoId}`);
@@ -413,29 +706,6 @@ export class TurnosService implements OnInit{
   }
 
 
-  // async obtenerHorariosDisponiblesEspecialista(especialista: string): Promise<string[]> {
-  //   try {
-  //     const turnosQuery = query(
-  //       this.turnosCollection,
-  //       where('especialista', '==', especialista),
-  //       where('estado', '==', 'pendiente')
-  //     );
-
-  //     const querySnapshot: QuerySnapshot<any> = await getDocs(turnosQuery);
-
-  //     const horariosDisponibles: string[] = [];
-  //     querySnapshot.forEach((doc) => {
-  //       const turno = doc.data() as Turno;
-  //       horariosDisponibles.push(turno.horario);
-  //     });
-
-  //     return horariosDisponibles;
-  //   } catch (error) {
-  //     console.error('Error al obtener los horarios disponibles para el especialista:', error);
-  //     throw new Error('Error al obtener los horarios disponibles para el especialista desde Firestore.');
-  //   }
-  // }
-
   obtenerPacientePorId(pacienteId: number): Observable<any> {
     const docRef = doc(this.firestore, `pacientes/${pacienteId}`);
     return from(getDoc(docRef)).pipe(
@@ -452,20 +722,6 @@ export class TurnosService implements OnInit{
       })
     );
   }
-
-  // getPacientesAtendidosPorEspecialista(especialistaId: string): Observable<any[]> {
-  //   const turnosCollection = collection(this.firestore, 'turnos');
-  //   const turnosQuery = query(turnosCollection, where('especialistaId', '==', especialistaId));
-
-  //   return from(getDocs(turnosQuery)).pipe(
-  //     map(snapshot => {
-  //       const pacientesIds = snapshot.docs.map(doc => doc.data()['pacienteId']);
-  //       // Aquí deberías implementar la lógica para obtener los datos de los pacientes basándose en los IDs obtenidos
-  //       // Suponiendo que tienes un método getPacientesByIds que toma una lista de IDs y devuelve la información de los pacientes
-  //       return this.getPacientesByIds(pacientesIds);
-  //     })
-  //   );
-  // }
 
   
 

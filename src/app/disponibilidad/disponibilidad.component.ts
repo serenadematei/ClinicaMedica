@@ -18,97 +18,85 @@ import { Auth } from '@angular/fire/auth';
 export class DisponibilidadComponent implements OnInit{
   disponibilidadForm: FormGroup;
   proximosDias: { dia: string; fecha: Date }[] = [];
-  userId: string = ''; // Se asigna el ID del usuario autenticado
+  userId: string = ''; 
   intervalosDisponibles: string[] = [];
-  especialidades: string[] = []; // Especialidades del usuario autenticado
-  duracionTurno = 30; // Duración predeterminada del turno en minutos
+  especialidades: string[] = []; 
+  duracionTurno = 30;
   mostrarSnackbar = false;
+  usuarioActual: any = null;
+  esEspecialista: boolean = false;
+  esAdmin: boolean = false;
+  esPaciente: boolean = false;
+  mostrarDisponibilidad: boolean = false; 
 
-  constructor(private fb: FormBuilder, private firestore: Firestore, private authService:AuthService, private router:Router, private auth: Auth) {
-    this.disponibilidadForm = new FormGroup({
-      especialidadSeleccionada: new FormControl('', Validators.required),
-      fechaSeleccionada: new FormControl('', Validators.required),
-      horario: new FormControl('', Validators.required),
+  constructor(
+    private fb: FormBuilder,
+    private firestore: Firestore,
+    private authService: AuthService,
+    private router: Router,
+    private auth: Auth
+  ) {
+    this.disponibilidadForm = this.fb.group({
+      especialidadSeleccionada: ['', Validators.required],
+      fechaSeleccionada: ['', Validators.required],
+      horario: ['', Validators.required],
     });
-  
-    this.cargarEspecialidades(); // carga especialidades
   }
 
   ngOnInit(): void {
     this.cargarProximosDias();
-    this.cargarEspecialidades(); // Obtener especialidades del usuario
-    
-      this.authService.obtenerInfoUsuarioActual1().then((user) => {
-        if (user) {
-          this.userId = user.id;
-          console.log("ID de usuario obtenido:", this.userId);
-        } else {
-          console.log("Usuario no autenticado o no encontrado.");
-        }
-      });
-    
+    this.cargarUsuarioActual();
   }
+
+  toggleDisponibilidad() {
+    this.mostrarDisponibilidad = !this.mostrarDisponibilidad;
+  }
+
+
+  // Cargar la información del usuario actual y determinar el rol
+  async cargarUsuarioActual() {
+    try {
+      const user = await this.authService.obtenerInfoUsuarioActual1();
+      if (user) {
+        this.usuarioActual = user;
+        this.userId = user.id;
+        this.especialidades = user.especialidades || [];
+        this.esEspecialista = user.role === 'especialista';
+        this.esAdmin = user.role === 'admin';
+        this.esPaciente = user.role === 'paciente';
+
+        // Verificar las imágenes cargadas
+        console.log("Imagen perfil 1 del paciente:", this.usuarioActual.imagenPerfil1);
+        console.log("Imagen perfil 2 del paciente:", this.usuarioActual.imagenPerfil2);
+        console.log("Imagen perfil del especialista:", this.usuarioActual.imagenPerfil);
+        console.log("Imagen perfil del admin:", this.usuarioActual.imagenPerfil);
+      } else {
+        console.error('Usuario no autenticado o no encontrado.');
+        this.router.navigate(['/login']);
+      }
+    } catch (error) {
+      console.error("Error al cargar los datos del usuario:", error);
+    }
+  }
+
   cargarProximosDias() {
     const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
     const hoy = new Date();
-  
     for (let i = 0; i < 15; i++) {
       const fecha = new Date(hoy);
       fecha.setDate(hoy.getDate() + i);
-  
-      // Excluir domingos (donde getDay() === 0)
-      if (fecha.getDay() !== 0) { 
+      if (fecha.getDay() !== 0) { // Excluir domingos
         this.proximosDias.push({ dia: `${dias[fecha.getDay() - 1]} ${fecha.toLocaleDateString()}`, fecha });
       }
     }
   }
 
-  // Cargar especialidades desde Firebase
-  async cargarEspecialidades() {
-    try {
-      const usuarioActual = await this.authService.obtenerInfoUsuarioActual1(); // Obtener el usuario actual
-      if (usuarioActual && usuarioActual.especialidades) {
-        this.especialidades = usuarioActual.especialidades; // Llenar el array con las especialidades
-        console.log("Especialidades del usuario:", this.especialidades);
-      } else {
-        console.log("No se encontraron especialidades para el usuario actual.");
-        this.especialidades = [];
-      }
-    } catch (error) {
-      console.error("Error al cargar especialidades:", error);
-      this.especialidades = [];
-    }
-  }
-
-  // Validación de horarios permitidos según el día
-  validarHorarioPermitido(control: FormControl): { [key: string]: boolean } | null {
-    if (!this.disponibilidadForm || !this.disponibilidadForm.get('fechaSeleccionada')) {
-      return null;
-    }
-  
-    const fechaSeleccionada = new Date(this.disponibilidadForm.get('fechaSeleccionada')?.value);
-    const horario = control.value;
-  
-    // Convertir la hora y minutos del input a Date
-    const [horas, minutos] = horario.split(':').map(Number);
-    fechaSeleccionada.setHours(horas, minutos);
-  
-    const diaSemana = fechaSeleccionada.getDay();
-    const esHorarioValido =
-      (diaSemana >= 1 && diaSemana <= 5 && horas >= 8 && horas < 19) || // Lunes a viernes
-      (diaSemana === 6 && horas >= 8 && horas < 14); // Sábado
-  
-    return esHorarioValido ? null : { horarioInvalido: true };
-  }
-
-  // Generar intervalos de horario en bloques de la duración definida para el turno
+  // Generar intervalos de horario en bloques de duración definida para el turno
   generarIntervalosHorarios() {
     const fechaSeleccionada = new Date(this.disponibilidadForm.get('fechaSeleccionada')?.value);
     const dia = fechaSeleccionada.getDay();
     const esLaborable = dia >= 1 && dia <= 5;
-    const esSabado = dia === 6;
-
-    const horaInicio = esLaborable ? 8 : 8;
+    const horaInicio = 8;
     const horaFin = esLaborable ? 19 : 14;
     const intervalos = [];
 
@@ -123,48 +111,33 @@ export class DisponibilidadComponent implements OnInit{
   }
 
   async guardarDisponibilidad() {
-    console.log("user id:", this.userId);
-    console.log("Estado de disponibilidadForm:", this.disponibilidadForm.status);
-    console.log("Valor de disponibilidadForm:", this.disponibilidadForm.value);
-  
     if (this.disponibilidadForm.invalid || !this.userId) {
       console.log("Formulario inválido o ID de usuario no encontrado.");
       return;
     }
-  
+
     const fechaSeleccionada = this.disponibilidadForm.get('fechaSeleccionada')?.value;
     const horario = this.disponibilidadForm.get('horario')?.value;
     const especialidadSeleccionada = this.disponibilidadForm.get('especialidadSeleccionada')?.value;
-  
-    if (!fechaSeleccionada || !horario || !especialidadSeleccionada) {
-      console.log("Datos incompletos en el formulario.");
-      return;
-    }
-  
+
     try {
       const userDocRef = doc(this.firestore, 'DatosUsuarios', this.userId);
       const userDoc = await getDoc(userDocRef);
-  
-      // Obtener disponibilidad actual o inicializar como un array vacío
-      let disponibilidadActual = userDoc.exists() && userDoc.data()?.['disponibilidad']
-        ? userDoc.data()?.['disponibilidad']
-        : [];
-  
-      // Comprobar si ya existe la combinación de fecha y horario
+      let disponibilidadActual = userDoc.exists() && userDoc.data()?.['disponibilidad'] ? userDoc.data()?.['disponibilidad'] : [];
+      
       const existeHorario = disponibilidadActual.some(
         (disp: any) => disp.fechaSeleccionada === fechaSeleccionada && disp.horarios.includes(horario)
       );
-  
+
       if (existeHorario) {
         alert("Ya existe una disponibilidad para esta fecha y horario.");
         return;
       }
-  
-      // Actualizar o añadir la disponibilidad según la fecha
+
       const disponibilidadParaFecha = disponibilidadActual.find(
         (disp: any) => disp.fechaSeleccionada === fechaSeleccionada
       );
-  
+
       if (disponibilidadParaFecha) {
         disponibilidadParaFecha.horarios.push(horario);
       } else {
@@ -174,19 +147,12 @@ export class DisponibilidadComponent implements OnInit{
           horarios: [horario],
         });
       }
-  
-      // Actualizar el documento del usuario en Firestore
+
       await updateDoc(userDocRef, { disponibilidad: disponibilidadActual });
       this.mostrarSnackbar = true;
-
-      // Ocultar snackbar después de 3 segundos
       setTimeout(() => {
         this.mostrarSnackbar = false;
       }, 3000);
-    
-      console.log("Disponibilidad guardada exitosamente.");
-  
-      // Limpiar el campo de horario después de guardar
       this.disponibilidadForm.get('horario')?.reset();
     } catch (error) {
       console.error("Error al guardar la disponibilidad:", error);
@@ -216,8 +182,8 @@ export class DisponibilidadComponent implements OnInit{
     });
   }
 
-  public goTo(path:string): void 
-  {
+  public goTo(path: string): void {
     this.router.navigate([path]);
   }
 }
+ 

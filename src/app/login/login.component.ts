@@ -162,14 +162,14 @@ export class LoginComponent implements OnInit {
   }
 
   loginLoadEspecialista1(): void {
-    const email = 'josecito@cj.MintEmail.com';
+    const email = 'hernan@cj.MintEmail.com';
     const password = '123456'   //this.defaultPasswordEspecialista1;
     this.cargarUsuario(email, password);
     this.formLogin.setValue({ email, password });
   }
 
   loginLoadEspecialista2(): void {
-    const email = 'guido@cj.MintEmail.com';
+    const email = 'test@cj.MintEmail.com';
     const password = '123456';
     this.cargarUsuario(email, password);
     this.formLogin.setValue({ email, password });

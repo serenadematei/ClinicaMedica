@@ -1,5 +1,108 @@
-<body>
-   <!--  <app-loading *ngIf="showLoading" class="centered-loading"></app-loading>-->
+<div class="background"> 
+<div class="solicitar-turno-container">
+  <h2>Sacar un Turno</h2>
+
+  <!-- Selección de Especialidad -->
+  <div class="step-container" *ngIf="!especialidadSeleccionada">
+    <h3>Seleccione una Especialidad</h3>
+    <div class="button-grid">
+      <button
+        *ngFor="let especialidad of especialidades"
+        (click)="seleccionarEspecialidad(especialidad)"
+        class="button-rectangular"
+      >
+        <img [src]="especialidadImagenMap[especialidad]" alt="Especialidad" />
+        <span>{{ especialidad }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Selección de Especialista -->
+  <div class="step-container" *ngIf="especialidadSeleccionada && !especialistaSeleccionado">
+    <h3>Seleccione un Especialista</h3>
+    <div class="button-grid">
+      <button
+        *ngFor="let especialista of especialistas"
+        (click)="seleccionarEspecialista(especialista)"
+        class="button-rectangular2"
+      >
+      <span>{{ especialista.nombre }} {{ especialista.apellido }}</span>
+        <img
+          [src]="especialista.imagenPerfil || 'assets/images/default-profile.png'"
+          alt="{{ especialista.nombre }}"
+        />
+       
+      </button>
+    </div>
+  </div>
+
+<!-- Selección de Día -->
+<!-- Selección de Día -->
+<div class="step-container" *ngIf="especialistaSeleccionado && !diaSeleccionado">
+  <h3>Seleccione un Día</h3>
+  <div class="button-grid">
+    <button
+      *ngFor="let dia of diasDisponibles"
+      (click)="seleccionarDia(dia.fechaSeleccionada)"
+      class="button-rectangular"
+    >
+      <span>{{ dia.fechaSeleccionada | fechaCustomizada }}</span>
+    </button>
+  </div>
+</div>
+
+  <!-- Selección de Horario -->
+  <div class="step-container" *ngIf="diaSeleccionado && !horarioSeleccionado">
+    <h3>Seleccione un Horario</h3>
+    <div class="button-grid">
+      <button
+        *ngFor="let horarioObj of horariosDisponibles"
+        (click)="!horarioObj.ocupado && seleccionarHorario(horarioObj.horario)"
+        class="button-rectangular"
+        [disabled]="horarioObj.ocupado"
+      >
+        <span>{{ horarioObj.horario }}</span>
+        <span *ngIf="horarioObj.ocupado">(Ocupado)</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Selección de Paciente (solo visible para administrador) -->
+  <div *ngIf="esAdmin">
+    <label for="paciente">Seleccione Paciente</label>
+    <select [(ngModel)]="pacienteSeleccionadoUID" class="form-control">
+      <option *ngFor="let paciente of pacientes" [value]="paciente.id">
+        {{ paciente.nombre }} {{ paciente.apellido }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Botón para confirmar turno -->
+  <div class="confirmation-container" *ngIf="especialidadSeleccionada && especialistaSeleccionado && diaSeleccionado && horarioSeleccionado">
+    <h3>Confirmar Turno</h3>
+    <button (click)="confirmarTurno()" class="button-confirm">Confirmar Turno</button>
+    <button (click)="resetFormulario()" class="button-cancel">Cancelar</button>
+  </div>
+
+  <div class="center-button">
+    <input type="button" class="btn-success" (click)="goTo('/home')" value="Volver a inicio" />
+  </div>
+</div>
+
+  <button class="floating-logout-button" (click)="logout()">
+      <i class="fa solid fa-power-off"></i> Cerrar sesión
+    </button>
+
+   
+</div>
+
+
+
+
+
+
+<!-- <body>
+  
   
     <div class="navbar-custom">
       <a class="user-color" (click)="toggleDropdown()" *ngIf="currentUser$ | async as user" >
@@ -44,8 +147,9 @@
       <div class="especialidades-container">
         <button type="button"  *ngFor="let especialidad  of especialidades"  (click)="onEspecialidadButtonClick(especialidad)" [class.selected]="especialidad === especialidadActual">
           <p>{{ especialidad === 'otra' ? especialistaSeleccionado.otraEspecialidad : especialidad }}</p>
-          <!-- <img [src]="obtenerImagenEspecialidad(especialidad)" [appSinImagen] alt="{{ especialidad }}" class="especialidad-button1">-->
-          <img [src]="obtenerImagenEspecialidad(especialidad)" alt="{{ especialidad }}" class="especialidad-button1">
+          <img [src]="obtenerImagenEspecialidad(especialidad)" [appSinImagen] alt="{{ especialidad }}" class="especialidad-button1">-->
+         
+         <!--  <img [src]="obtenerImagenEspecialidad(especialidad)" alt="{{ especialidad }}" class="especialidad-button1">
         </button>
       </div>
   
@@ -88,3 +192,4 @@
       <button type="submit" class="btn-solicitar" (click)="isAdmin ? guardarTurnoAdmin() : guardarTurno()">Solicitar Turno</button>
       <input type="button" [value]="btnVolver" class="btn-success" (click)="onClickHome($event)" />
   </div>
+--->

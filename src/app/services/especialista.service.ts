@@ -24,6 +24,8 @@ export class EspecialistaService {
   disponibilidadSubject = new BehaviorSubject<Horario[]>([]);
   disponibilidad$ = this.disponibilidadSubject.asObservable();
 
+  
+
   private horariosDisponibles: Horario[] = [];
 
 
@@ -32,6 +34,66 @@ export class EspecialistaService {
     this.turnosCollection = collection(this.firestore, 'turnos');
     this.cargarDisponibilidad();
   }
+
+
+    // Obtener especialistas con una especialidad específica
+    obtenerEspecialistasPorEspecialidad(especialidad: string): Observable<any[]> {
+      const especialistasCollection = collection(this.firestore, 'DatosUsuarios');
+      const q = query(especialistasCollection, where('especialidades', 'array-contains', especialidad), where('role', '==', 'especialista'));
+  
+      return from(getDocs(q)).pipe(
+        map(querySnapshot => querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))),
+        catchError(error => {
+          console.error('Error al obtener especialistas por especialidad:', error);
+          return throwError(error);
+        })
+      );
+    }
+  
+    // Obtener días disponibles para un especialista
+    obtenerDiasDisponiblesPorEspecialista(especialistaId: string): Observable<{ fechaSeleccionada: string, especialidad: string }[]> {
+      const especialistaDocRef = doc(this.firestore, 'DatosUsuarios', especialistaId);
+      return from(getDoc(especialistaDocRef)).pipe(
+        map(docSnap => {
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            return (data['disponibilidad'] || []).map((disponibilidad: any) => ({
+              fechaSeleccionada: disponibilidad.fechaSeleccionada,
+              especialidad: disponibilidad.especialidad
+            }));
+          } else {
+            throw new Error(`No se encontró disponibilidad para el especialista con ID ${especialistaId}`);
+          }
+        }),
+        catchError(error => {
+          console.error(`Error al obtener días disponibles del especialista:`, error);
+          return throwError(error);
+        })
+      );
+    }
+  
+    // Obtener horarios disponibles para un día específico
+    obtenerHorariosDisponiblesPorDia(especialistaId: string, fechaSeleccionada: string): Observable<string[]> {
+      const especialistaDocRef = doc(this.firestore, 'DatosUsuarios', especialistaId);
+      return from(getDoc(especialistaDocRef)).pipe(
+        map(docSnap => {
+          if (docSnap.exists()) {
+            const disponibilidad = docSnap.data()?.['disponibilidad'] || [];
+            const diaSeleccionado = disponibilidad.find((dia: any) => dia.fechaSeleccionada === fechaSeleccionada);
+            return diaSeleccionado ? diaSeleccionado.horarios : [];
+          } else {
+            throw new Error(`No se encontró disponibilidad para el especialista con ID ${especialistaId}`);
+          }
+        }),
+        catchError(error => {
+          console.error(`Error al obtener horarios disponibles para el día:`, error);
+          return throwError(error);
+        })
+      );
+    }
+
+
+    /////////////////////////////
 
   obtenerEspecialistasDatos(): Observable<{ id: string, nombre: string, apellido: string, imagenPerfil: string, especialidades: string[] }[]> {
     const especialistasCollection = collection(this.firestore, 'DatosUsuarios');
@@ -81,6 +143,7 @@ export class EspecialistaService {
 
   getEspecialistaInfo(especialistaId: string): Observable<{ mail: string, nombre: string, apellido: string }> {
     if (!especialistaId) {
+      console.log("entre aca???");
       return throwError(new Error('El ID del especialista es inválido.'));
     }
     const especialistaDocRef = doc(this.firestore, `DatosUsuarios/${especialistaId}`);
@@ -88,6 +151,7 @@ export class EspecialistaService {
       map(docSnap => {
         if (docSnap.exists()) {
           const data = docSnap.data();
+          console.log("acaaaaaaa???");
           return {
             mail: data['mail'],
             nombre: data['nombre'],

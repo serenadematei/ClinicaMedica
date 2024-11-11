@@ -1,40 +1,73 @@
+
 <div class="background">
-  <div id="snackbar" *ngIf="mostrarSnackbar" class="snackbar" [class.show]="mostrarSnackbar">
-    Disponibilidad horaria cargada exitosamente
-  </div>
+<div class="form-container">
+  <h2 class="form-title">Mi Perfil</h2>
+  <div class="profile-info">
+    <p><strong>Nombre:</strong> {{ usuarioActual?.nombre }}</p>
+    <p><strong>Apellido:</strong> {{ usuarioActual?.apellido }}</p>
+    <p><strong>Email:</strong> {{ usuarioActual?.mail }}</p>
+    <p *ngIf="usuarioActual?.obrasocial"><strong>Obra Social:</strong> {{ usuarioActual.obrasocial }}</p>
+    <p *ngIf="usuarioActual?.edad"><strong>Edad:</strong> {{ usuarioActual.edad }}</p>
 
-  <div class="form-container">
-    <form [formGroup]="disponibilidadForm" (ngSubmit)="guardarDisponibilidad()">
-      <label for="especialidadSeleccionada">Seleccione una especialidad:</label>
-      <select formControlName="especialidadSeleccionada" id="especialidadSeleccionada" class="form-control">
-        <option *ngFor="let especialidad of especialidades" [value]="especialidad">{{ especialidad }}</option>
-      </select>
-
-      <label for="fechaSeleccionada">Seleccione un día:</label>
-      <select formControlName="fechaSeleccionada" id="fechaSeleccionada" class="form-control" (change)="generarIntervalosHorarios()">
-        <option *ngFor="let dia of proximosDias" [value]="dia.fecha.toISOString()">
-          {{ dia.dia }}
-        </option>
-      </select>
-
-      <label for="horario">Horario:</label>
-      <select formControlName="horario" id="horario" class="form-control">
-        <option *ngFor="let intervalo of intervalosDisponibles" [value]="intervalo">{{ intervalo }}</option>
-      </select>
-
-      <div *ngIf="disponibilidadForm.get('horario')?.hasError('horarioInvalido')">
-        Horario fuera del rango permitido
+    <div class="profile-container">
+      <div *ngIf="esPaciente">
+        <img *ngIf="usuarioActual?.imagenPerfil1" [src]="usuarioActual.imagenPerfil1" alt="Imagen de perfil 1 del paciente" />
+        <!-- <img *ngIf="usuarioActual?.imagenPerfil2" [src]="usuarioActual.imagenPerfil2" alt="Imagen de perfil 2 del paciente" />-->
       </div>
 
-      <button type="submit" [disabled]="disponibilidadForm.invalid">Guardar Disponibilidad</button>
-    </form>
+      <div *ngIf="esAdmin">
+        <img *ngIf="usuarioActual?.imagenPerfil" [src]="usuarioActual.imagenPerfil" alt="Imagen de perfil del administrador" />
+      </div>
 
-    <button class="floating-logout-button" (click)="logout()">
-      <i class="fa solid fa-power-off"></i> Cerrar sesión
+      <div *ngIf="esEspecialista">
+        <img *ngIf="usuarioActual?.imagenPerfil" [src]="usuarioActual.imagenPerfil" alt="Imagen de perfil del especialista" />
+      </div>
+    </div>
+
+    
+    <button *ngIf="esEspecialista" (click)="toggleDisponibilidad()" class="btn-toggle">
+      {{ mostrarDisponibilidad ? 'Ocultar Disponibilidad Horaria' : 'Cargar Disponibilidad Horaria' }}
     </button>
 
-    <div class="center-button">
-      <input type="button" class="btn-success" (click)="goTo('/home')" value="Volver a inicio" />
+  
+    <div class="disponibilidad-container" *ngIf="mostrarDisponibilidad">
+
+      <div id="snackbar" *ngIf="mostrarSnackbar" class="snackbar" [class.show]="mostrarSnackbar">
+        Disponibilidad horaria cargada exitosamente
+      </div>
+
+      <form [formGroup]="disponibilidadForm" (ngSubmit)="guardarDisponibilidad()" class="fade-in">
+        <label for="especialidadSeleccionada">Seleccione una especialidad:</label>
+        <select formControlName="especialidadSeleccionada" id="especialidadSeleccionada" class="form-control">
+          <option *ngFor="let especialidad of especialidades" [value]="especialidad">{{ especialidad }}</option>
+        </select>
+
+        <label for="fechaSeleccionada">Seleccione un día:</label>
+        <select formControlName="fechaSeleccionada" id="fechaSeleccionada" class="form-control" (change)="generarIntervalosHorarios()">
+          <option *ngFor="let dia of proximosDias" [value]="dia.fecha.toISOString()">
+            {{ dia.dia }}
+          </option>
+        </select>
+
+        <label for="horario">Horario:</label>
+        <select formControlName="horario" id="horario" class="form-control">
+          <option *ngFor="let intervalo of intervalosDisponibles" [value]="intervalo">{{ intervalo }}</option>
+        </select>
+
+        <div *ngIf="disponibilidadForm.get('horario')?.hasError('horarioInvalido')">
+          Horario fuera del rango permitido
+        </div>
+
+        <button type="submit" [disabled]="disponibilidadForm.invalid">Guardar Disponibilidad</button>
+      </form>
     </div>
   </div>
+  <button class="floating-logout-button" (click)="logout()">
+    <i class="fa solid fa-power-off"></i> Cerrar sesión
+  </button>
+
+  <div class="center-button">
+    <input type="button" class="btn-success" (click)="goTo('/home')" value="Volver a inicio" />
+  </div>
+</div>
 </div>
