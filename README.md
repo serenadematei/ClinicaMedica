@@ -56,14 +56,15 @@ A continuación, se detalla cada pantalla de la aplicación con una descripción
 ### Página de Registro
 **Descripción**: Permite registrar tanto a pacientes como a especialistas. Cada tipo de usuario tiene diferentes campos requeridos y se aplican validaciones.
 
-(foto)
+![registro1](https://github.com/user-attachments/assets/a2281ef8-ce83-40f7-b003-316f4ca59ce7)
+![registro2](https://github.com/user-attachments/assets/44e4a2d1-c864-4918-bd2a-b5af0c352dd4)
 
 ### Página de Login
 **Descripción**: Permite a los usuarios acceder al sistema. Las restricciones de acceso dependen del rol del usuario:
 - **Especialistas**: Solo pueden acceder si su cuenta ha sido aprobada por un administrador y su email ha sido verificado.
 - **Pacientes**: Solo pueden acceder si han verificado su email.
 
-(foto)
+![login](https://github.com/user-attachments/assets/69095afa-43dd-403d-b26f-98fc3252d619)
 
 ### Sección Usuarios (Solo Administradores)
 **Descripción**: Accesible solo para administradores, permite la gestión y control de usuarios en el sistema.
@@ -82,7 +83,8 @@ A continuación, se detalla cada pantalla de la aplicación con una descripción
   - Completar encuesta
   - Calificar atención
  
-(foto)
+![misturnos_pac](https://github.com/user-attachments/assets/56affd02-c7e7-4f07-afce-75153281816c)
+![msiturnos_reseña](https://github.com/user-attachments/assets/da166eda-2526-4023-b296-db6239827d08)
 
 **Como Especialista**: Los especialistas pueden ver los turnos asignados y gestionarlos según su estado.
 - **Filtros**: Permite filtrar por especialidad y paciente.
@@ -93,14 +95,15 @@ A continuación, se detalla cada pantalla de la aplicación con una descripción
   - Finalizar turno (una vez terminado el turno, dando espacio para cargar una reseña del mismo)
   - Ver reseña
 
-(foto)
+![misturnos_esp](https://github.com/user-attachments/assets/dc3baade-a918-4876-a32b-e5fb5805a0cf)
+![historiaclinica](https://github.com/user-attachments/assets/34ef4114-cdd7-46cb-abec-38ef0e4209f1)
 
 ### Página Turnos (Solo Administradores)
 **Descripción**: Muestra una lista completa de los turnos en la clínica, accesible únicamente para administradores.
 - **Filtros**: Permite filtrar los turnos por especialidad y especialista.
 - **Acción**: Cancelar turnos (solo si no han sido aceptados, realizados o rechazados). La cancelación requiere un comentario.
 
-(foto)
+![turnosadmin](https://github.com/user-attachments/assets/447bb1cf-f349-472c-9bfe-58b590396bcc)
 
 ### Solicitar Turno
 **Descripción**: Permite a pacientes y administradores solicitar un turno en la clínica.
