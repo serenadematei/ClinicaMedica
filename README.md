@@ -72,7 +72,7 @@ A continuación, se detalla cada pantalla de la aplicación con una descripción
 - **Habilitar/Inhabilitar Especialistas**: Control de acceso para cuentas de especialistas.
 - **Crear Nuevos Usuarios**: Mismas opciones que en la página de registro, y permite también la creación de usuarios Administradores.
 
-(foto)
+![seccionusuarios](https://github.com/user-attachments/assets/54dc11be-bf3e-42fc-9af0-2ebf316623ae)
 
 ### Mis Turnos
 **Como Paciente**: Los pacientes pueden visualizar y gestionar sus turnos solicitados.
@@ -92,7 +92,7 @@ A continuación, se detalla cada pantalla de la aplicación con una descripción
   - Cancelar turno 
   - Rechazar turno
   - Aceptar turno 
-  - Finalizar turno (una vez terminado el turno, dando espacio para cargar una reseña del mismo)
+  - Finalizar turno (una vez terminado el turno, dando espacio para cargar una reseña del mismo o historia clínica)
   - Ver reseña
 
 ![misturnos_esp](https://github.com/user-attachments/assets/dc3baade-a918-4876-a32b-e5fb5805a0cf)
@@ -113,7 +113,13 @@ A continuación, se detalla cada pantalla de la aplicación con una descripción
   - Día y horario
 - **Restricciones**: Los pacientes solo pueden elegir turnos dentro de los próximos 15 días y acorde a la disponibilidad del especialista. Los administradores deben especificar el paciente para el turno.
 
-(foto)
+![st1](https://github.com/user-attachments/assets/a95787d1-7f8b-44a5-aef1-dba31d7e6353)
+![st2](https://github.com/user-attachments/assets/abc10e50-c49c-435d-8d3e-ef5f827a1e18)
+![st3](https://github.com/user-attachments/assets/1cabe9c5-b741-4613-9621-7ad89bb08a52)
+![st4](https://github.com/user-attachments/assets/da222556-460f-42af-86c3-4b6942f38eef)
+
+Los administradores pueden elegir el paciente:
+![st5](https://github.com/user-attachments/assets/f03f95df-f481-41c5-bcfa-175e4b1e1e62)
 
 ### Mi Perfil
 **Descripción**: Página que muestra la información personal del usuario y opciones específicas según el rol.
@@ -121,8 +127,14 @@ A continuación, se detalla cada pantalla de la aplicación con una descripción
 - **Mis Horarios**: Disponible para especialistas, permite gestionar la disponibilidad horaria en sus especialidades.
 - **Exportar Historia Clínica**: Los pacientes pueden descargar su historia clínica en formato PDF, que incluye el logo de la clínica, el título del informe y la fecha de emisión.
 
-(foto)    
+**Como Paciente**: 
+![miperfil1](https://github.com/user-attachments/assets/6f8f3589-403a-4381-9161-f2331ea8ac3b)
+![miperfil2](https://github.com/user-attachments/assets/28796624-10a1-435c-ba8e-39508231b1f3)
 
 
+**Como Especialista**:
+![miperfil2esp](https://github.com/user-attachments/assets/c08e9cd6-3320-4f72-bdbb-629f03f41fff)
+![miperfil3esp](https://github.com/user-attachments/assets/b4c38793-f86b-434c-88dd-bcd64fcc9327)
 
 
+Gracias por visitar el repositorio del Proyecto de Clínica Online.
