@@ -50,7 +50,7 @@ A continuación, se detalla cada pantalla de la aplicación con una descripción
 - **Acceso al Login**: Botón para iniciar sesión en la plataforma.
 - **Acceso al Registro**: Opción para registrarse como paciente o especialista.
 
-![Bienvenida]([URL_de_la_imagen](https://github.com/user-attachments/assets/edba9ac8-bfa3-40f6-8455-63257159f648))
+![Bienvenida](https://github.com/user-attachments/assets/edba9ac8-bfa3-40f6-8455-63257159f648)
 
 
 ### Página de Registro
