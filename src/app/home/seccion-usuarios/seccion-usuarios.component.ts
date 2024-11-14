@@ -10,7 +10,6 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { Firestore, collection, doc, setDoc, collectionData } from '@angular/fire/firestore';
 import { sendEmailVerification } from 'firebase/auth';
-//import { LoadingComponent } from "../../loading/loading.component";
 import { ListaUsuariosComponent } from '../../lista-usuarios/lista-usuarios.component';
 import { ChangeDetectorRef } from '@angular/core';
 
@@ -78,8 +77,6 @@ export class SeccionUsuariosComponent {
       email: new FormControl('', [Validators.email, Validators.required]),
       password: new FormControl('', [Validators.required, Validators.minLength(6)]),
       confirmPassword: new FormControl('', [Validators.required]),
-     // especialidad: new FormControl('', [Validators.required] ),
-      //otraEspecialidad: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(25), Validators.pattern(/^[a-zA-Z]+$/)]),
       especialidad: new FormControl([]), // Saco Validators.required para permitir especialidades personalizadas
       ...this.createSpecialtyControls(), //nuevas a medida que se van creando
       imagenPerfil0: new FormControl('', [Validators.required]),
@@ -117,20 +114,13 @@ export class SeccionUsuariosComponent {
     return controls;
   }
 
-    // Función para agregar un nuevo input de especialidad
-    addNewSpecialtyInput() {
-      this.newSpecialties.push('');  // Agrega un campo vacío que luego se llenará con el valor ingresado
+   
+    addNewSpecialtyInput() {// Agrega un campo vacío que luego se llenará con el valor ingresado
     }
 
     trackByIndex(index: number, obj: any): any {
       return index;
     } //pobrando cosas
-
-
-
-
-
-
 
   ngOnInit() : void{
     this.cargarUsuarios(); 
@@ -147,7 +137,7 @@ export class SeccionUsuariosComponent {
   cargarUsuarios() {
     this.authService.obtenerUsuarios()
       .then((usuarios) => {
-        this.usuarios = usuarios; // Guardamos los usuarios en la propiedad
+        this.usuarios = usuarios; 
       })
       .catch(error => {
         console.error('Error al cargar usuarios:', error);
@@ -170,7 +160,7 @@ export class SeccionUsuariosComponent {
         if (formElement) {
           formElement.scrollIntoView({ behavior: 'smooth' });
         }
-      }, 100); // Delay to allow the form to be rendered
+      }, 100); 
     } else {
       this.animacionCrearUsuario = false;
     }
@@ -495,30 +485,27 @@ export class SeccionUsuariosComponent {
       }
 
       this.cargarUsuarios(); 
-      // Ocultar el spinner
+     
       this.showLoadingUser = false;
 
-      // Mostrar mensaje de éxito
+   
       Swal.fire({
         icon: 'success',
         title: 'Registro exitoso',
         text: '¡El usuario ha sido creado exitosamente!',
         confirmButtonText: 'OK'
       }).then(() => {
-        this.formReg.reset(); // Reiniciar el formulario
-        this.router.navigate(['/home/seccion-usuarios']); // Redirigir a la sección usuarios
+        this.formReg.reset(); 
+        this.router.navigate(['/home/seccion-usuarios']); 
         this.scrollToTop();
       });
 
       
-      
-      //window.location.reload(); 
-      // Actualizar la lista de usuarios sin recargar la página
-      //this.actualizarListaUsuarios();
+    
       this.listaUsuariosComponent.cargarUsuarios(); 
 
     } catch (error: any) {
-      // Ocultar el spinner en caso de error
+     
       this.showLoadingUser = false;
 
       if (error.message === 'Debes verificar tu correo electrónico antes de iniciar sesión.') {

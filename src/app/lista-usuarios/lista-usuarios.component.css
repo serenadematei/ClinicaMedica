@@ -36,3 +36,11 @@
   background-color: #871f72 !important;
   border-color: #871f72 !important;
 }
+
+.historia-card {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}

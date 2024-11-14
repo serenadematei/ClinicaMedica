@@ -1,16 +1,16 @@
 .solicitar-turno-container {
   text-align: center;
-  margin-top: 80px; /* Aumenta este valor según sea necesario para bajar el contenido */
+  margin-top: 80px; 
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* Centrado vertical adicional */
-  min-height: calc(100vh - 160px); /* Ajuste de altura total, menos el espacio del header */
+  justify-content: center; 
+  min-height: calc(100vh - 160px); 
 }
 
 .background {
-  background-image: url('/assets/fondoClinica.jpg'); /* Cambia 'path-to-your-image.jpg' por la ruta de tu imagen */
+  background-image: url('/assets/fondoClinica.jpg'); 
   background-size: cover;
   background-position: center;
   width: 100vw;
@@ -166,4 +166,19 @@
 
 .btn-success:hover {
   background-color: #7f196e;
+}
+.button-back {
+  background-color: #3fbbc0;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  transition: background-color 0.3s;
+}
+
+.button-back:hover {
+  background-color: #2b8a9e;
 }

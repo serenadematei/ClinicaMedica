@@ -5,7 +5,6 @@ import Swal from 'sweetalert2';
 import { Firestore, collection, doc, setDoc, getDocs, addDoc, collectionData } from '@angular/fire/firestore';
 import { FormControl, FormGroup, Validators, FormBuilder, AbstractControl, ValidationErrors, ValidatorFn, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
-//import { Auth } from '@angular/fire/auth';
 import { map } from 'rxjs';
 import { User, sendEmailVerification } from 'firebase/auth';
 import { ImagenesService } from '../services/imagenes.service';
@@ -57,7 +56,7 @@ export class RegistroComponent{
       email: new FormControl('', [Validators.email, Validators.required]),
       password: new FormControl('', [Validators.required, Validators.minLength(6)]),
       confirmPassword: new FormControl('', [Validators.required]),
-      especialidad: new FormControl([]), // Saco Validators.required para permitir especialidades personalizadas
+      especialidad: new FormControl([]),
       ...this.createSpecialtyControls(), //nuevas a medida que se van creando
       imagenPerfil: new FormControl('', [Validators.required,]),
       imagenPerfil1: new FormControl('', [Validators.required]),
@@ -74,7 +73,6 @@ export class RegistroComponent{
       ).subscribe();
     }
 
-    //this.fetchSpecialties();
   }
   
   loadSpecialties() {
@@ -84,7 +82,6 @@ export class RegistroComponent{
     });
   }
 
-   // Generar controles de formulario para las especialidades nuevas
   private createSpecialtyControls(): { [key: string]: FormControl } {
   const controls: { [key: string]: FormControl } = {}; 
     this.newSpecialties.forEach((_, i) => {
@@ -103,29 +100,11 @@ export class RegistroComponent{
     } //pobrando cosas
 
 
-  /*async fetchSpecialties() {
-    const specialtiesCollection = collection(this.firestore, 'Especialidades');
-    const specialtySnapshot = await getDocs(specialtiesCollection);
-    this.specialties = specialtySnapshot.docs.map(doc => doc.data()['nombre']);
-    console.log(this.specialties);
-  }*/
-
 
   onCaptchaResolved(response: string | null): void {
     this.captchaResolved = response !== null && response !== ''; // Se marca como true solo si hay una respuesta válida
   }
   
-
-  /*addSpecialty(): void {
-    const nuevaEspecialidad = this.formReg.get('otraEspecialidad')?.value;
-  
-    if (nuevaEspecialidad && nuevaEspecialidad.trim()) {
-      this.newSpecialties.push(nuevaEspecialidad); // Agrega la especialidad nueva al array
-      console.log("Especialidades nuevas agregadas:", this.newSpecialties); // Verificación
-      this.formReg.get('otraEspecialidad')?.reset(); // Limpia el campo de entrada
-    }
-  }*/
-
 
 
   ngOnInit(): void {
@@ -140,8 +119,6 @@ export class RegistroComponent{
       ).subscribe();
     }
   }
-
-
 
 
   onEspecialidadChange(event: Event): void {
@@ -188,11 +165,11 @@ export class RegistroComponent{
       this.formReg.get('imagenPerfil1')?.clearValidators();
       this.formReg.get('imagenPerfil2')?.clearValidators();
   
-      // Validación de edad y patrón numérico para ambos roles
+     
       const numericPatternValidator = Validators.pattern("^[0-9]+$"); // Solo números
   
       if (selectedRole === 'paciente') {
-          // Para paciente: cualquier edad entre 0 y 99
+          
           this.formReg.get('edad')?.setValidators([
               Validators.required,
               numericPatternValidator,
@@ -208,7 +185,7 @@ export class RegistroComponent{
           this.formReg.get('imagenPerfil2')?.setValidators([Validators.required]);
   
       } else if (selectedRole === 'especialista') {
-          // Para especialista: edad mínima 18
+          
           this.formReg.get('edad')?.setValidators([
               Validators.required,
               numericPatternValidator,

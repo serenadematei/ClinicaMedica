@@ -1,5 +1,92 @@
 <body>
 
+  <header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center">
+
+      <nav id="navbar" class="navbar order-last order-lg-0">
+        <ul>
+          <li><a class="nav-link scrollto shake-bottom" (click)="misTurnos()">Mis turnos</a></li>
+          <li><a class="nav-link scrollto shake-bottom" (click)="turnos()">Turnos</a></li>
+          <li><a class="nav-link scrollto shake-bottom" (click)="solicitarTurno()">Solicitar turnos</a></li>
+          <li><a class="nav-link scrollto shake-bottom" (click)="disponibilidadHoraria()">Mi Perfil</a></li>
+          <li *ngIf="rolUsuario === 'admin'"><a class="nav-link scrollto shake-bottom" (click)="seccionUsuarios()">Sección usuarios</a></li>
+          <li *ngIf="rolUsuario === 'especialista'"><a class="nav-link scrollto shake-bottom" (click)="seccionPacientes()">Sección pacientes</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav>
+
+      <button class="floating-logout-button" (click)="logout()">
+        <i class="fa solid fa-power-off"></i> Cerrar sesión
+      </button>
+
+      <div class="navbar-custom">
+        <a class="user-color" (click)="toggleDropdown()" *ngIf="currentUser$ | async as user">
+          <div *ngIf="!showLoading && user">
+            <img *ngIf="user.photoURL" src="{{user.photoURL}}" alt="Foto de perfil de usuario" class="user-photo">
+            {{ user.displayName ? user.displayName : user.email }}
+          </div>
+        </a>
+
+        <div class="dropdown-content" *ngIf="isDropdownOpen">
+          <button class="logout-button" *ngIf="showLogoutButton" (click)="logout()">
+            <i class="fa solid fa-power-off"></i> Cerrar Sesión
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <section id="about-clinic" class="container">
+      <div id="clinicCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="assets/clinic3.png" class="d-block w-100" alt="Consultorio">
+          </div>
+          <div class="carousel-item">
+            <img src="assets/clinic2.png" class="d-block w-100" alt="Laboratorio">
+          </div>
+          <div class="carousel-item">
+            <img src="assets/clinic1.png" class="d-block w-100" alt="Sala de Espera">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#clinicCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#clinicCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Siguiente</span>
+        </button>
+      </div>
+
+      <div class="clinic-description">
+        <h2>Bienvenido a la Clínica Online</h2>
+        <p>
+          La <strong>Clínica Online</strong>, especialista en salud, cuenta con seis consultorios, dos laboratorios y una sala de espera general.
+          Nuestro horario de atención es de lunes a viernes de <strong>8:00 a 19:00</strong>, y los sábados de <strong>8:00 a 14:00</strong>.
+        </p>
+        <p>
+          En nuestra clínica trabajan profesionales de diversas especialidades, recibiendo pacientes con turnos para consultas y tratamientos.
+          Los turnos pueden solicitarse desde la web, seleccionando el profesional o la especialidad deseada, y adaptándose a los horarios y duración
+          de cada especialidad. 
+        </p>
+        <p>
+          Además, contamos con un equipo que organiza y administra la clínica, asegurando la mejor experiencia para nuestros pacientes.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+</body>
+
+<!---    
+
+<body>
+
 
   <header id="header" class="fixed-top">
     <div class="container d-flex align-items-center">
@@ -12,6 +99,7 @@
           <li><a class="nav-link scrollto shake-bottom" (click)="solicitarTurno()">Solicitar turnos</a></li>
           <li><a class="nav-link scrollto shake-bottom" (click)="disponibilidadHoraria()">Mi Perfil</a></li>
           <li *ngIf="rolUsuario === 'admin'"><a class="nav-link scrollto shake-bottom" (click)="seccionUsuarios()">Sección usuarios</a></li>
+          <li *ngIf="rolUsuario === 'especialista'"><a class="nav-link scrollto shake-bottom" (click)="seccionPacientes()">Sección pacientes</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>
@@ -40,4 +128,4 @@
   </header>
 
 </body>
-
+--->

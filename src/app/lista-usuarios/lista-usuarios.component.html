@@ -34,6 +34,15 @@
         <strong>Obra Social:</strong> {{ user.obrasocial }}
       </p>
 
+      <div *ngIf="user.role === 'paciente'" class="card-body">
+        <button
+          class="btn btn-info"
+          (click)="verHistoriaClinica(user)"
+        >
+          Ver Historia Clínica
+        </button>
+      </div>
+
       <div *ngIf="user.role === 'especialista'">
         <button
           class="btn btn-success"
@@ -49,6 +58,56 @@
         >
           Inhabilitar
         </button>
+
+         <!-- Clinical History Modal -->
+<div class="modal fade" id="clinicalHistoryModal" tabindex="-1" aria-labelledby="clinicalHistoryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="clinicalHistoryModalLabel">Historia Clínica de {{ selectedUserName }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="selectedClinicalHistories && selectedClinicalHistories.length > 0">
+          <div *ngFor="let historia of selectedClinicalHistories" class="historia-card">
+            <p><strong>Fecha de Atención:</strong> {{ historia.fecha | date: 'dd/MM/yyyy, h:mm a' }}</p>
+            <p><strong>Altura:</strong> {{ historia.altura }} cm</p>
+            <p><strong>Peso:</strong> {{ historia.peso }} kg</p>
+            <p><strong>Temperatura:</strong> {{ historia.temperatura }} °C</p>
+            <p><strong>Presión:</strong> {{ historia.presion }}</p>
+            <div *ngIf="historia.datosDinamicos?.length > 0">
+              <h5>Datos Adicionales</h5>
+              <ul class="list-unstyled">
+                <li *ngFor="let dato of historia.datosDinamicos">• {{ dato.clave }}: {{ dato.valor }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!selectedClinicalHistories || selectedClinicalHistories.length === 0">
+          <p>No hay historias clínicas disponibles para este paciente.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       </div>
     </div>
   </div>

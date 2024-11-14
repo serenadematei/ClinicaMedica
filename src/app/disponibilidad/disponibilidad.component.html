@@ -23,8 +23,37 @@
         <img *ngIf="usuarioActual?.imagenPerfil" [src]="usuarioActual.imagenPerfil" alt="Imagen de perfil del especialista" />
       </div>
     </div>
+  
+    <!--Seccion solo para pacientes-->
 
+    <button *ngIf="esPaciente" (click)="toggleHistoriaClinica()" class="btn-toggle">
+      {{ mostrarHistoriaClinica ? 'Ocultar Historia Clínica' : 'Ver mi Historia Clínica' }}
+    </button>
+    <button *ngIf="esPaciente" (click)="generarPDF()" class="btn btn-primary">
+      Descargar Historia Clínica en PDF
+    </button>
+
+    <div class="historia-clinica-container" *ngIf="mostrarHistoriaClinica">
+      <h3 class="text-center">Mis Historias Clínicas</h3>
+      <div class="historia-clinicas-carrusel">
+        <div *ngFor="let historia of historiasClinicas" class="historia-card fade-in">
+          <p><strong>Fecha de Atención:</strong> {{ historia.fecha | date: 'dd/MM/yyyy, h:mm a' }}</p>
+          <p><strong>Altura:</strong> {{ historia.altura }} cm</p>
+          <p><strong>Peso:</strong> {{ historia.peso }} kg</p>
+          <p><strong>Temperatura:</strong> {{ historia.temperatura }} °C</p>
+          <p><strong>Presión:</strong> {{ historia.presion }}</p>
+          <div *ngIf="historia.datosDinamicos?.length > 0">
+            <h5>Datos Adicionales</h5>
+            <ul class="list-unstyled">
+              <li *ngFor="let dato of historia.datosDinamicos">• {{ dato.clave }}: {{ dato.valor }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
     
+
+    <!--- Seccion solo para especialistas -->
     <button *ngIf="esEspecialista" (click)="toggleDisponibilidad()" class="btn-toggle">
       {{ mostrarDisponibilidad ? 'Ocultar Disponibilidad Horaria' : 'Cargar Disponibilidad Horaria' }}
     </button>

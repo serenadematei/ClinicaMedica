@@ -4,16 +4,27 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { User, UserCredential } from 'firebase/auth';
 import { ImagenesService } from '../services/imagenes.service';
-//import { LoadingComponent } from "../loading/loading.component";
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../services/auth.service';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
+  animations: [
+    trigger('fadeAnimation', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('300ms ease-out', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('300ms ease-in', style({ opacity: 0 })),
+      ]),
+    ]),
+  ],
 })
 export class LoginComponent implements OnInit {
 
@@ -59,20 +70,13 @@ export class LoginComponent implements OnInit {
       password: ['', [Validators.required]],
     });
 
-    //this.showLoading = true; // Mostrar el indicador de carga
-
-    /* setTimeout(() => {
-       this.showLoading = false;
-     }, 2000);*/
-
-    // Llama a todas las funciones de carga de usuarios
     Promise.all([
       this.loginLoadAdmin(),
       this.loginLoadEspecialista1(),
       this.loginLoadEspecialista2(),
       this.loginLoadPaciente1(),
-      //this.loginLoadPaciente2(),
-      //this.loginLoadPaciente3()
+      this.loginLoadPaciente2(),
+      this.loginLoadPaciente3()
     ]).catch(error => {
       console.error('Error al cargar los usuarios:', error);
     });

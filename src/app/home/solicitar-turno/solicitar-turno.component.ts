@@ -3,18 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { Paciente, Turno, TurnosService } from '../../services/turnos.service';
+import { TurnosService } from '../../services/turnos.service';
 import { EspecialistaService } from '../../services/especialista.service';
 import { AuthService } from '../../services/auth.service';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { addDays, format, isValid, parse, startOfTomorrow } from 'date-fns';
-import { es } from 'date-fns/locale';
 import { PacienteService } from '../../services/paciente.service';
-//import { LoadingComponent } from "../../loading/loading.component";
 import { Observable } from 'rxjs';
 import { Auth,User } from '@angular/fire/auth';
-import { TurnoDisponible } from '../../services/turnos.service';
-import { Timestamp } from '@angular/fire/firestore';
 import { FormatoHoraPipe } from "../../pipes/formato-hora.pipe";
 import { FormatoFechaPipe } from '../../pipes/formato-fecha.pipe';
 import { FechaCustomizadaPipe } from '../../pipes/fecha-customizada.pipe';
@@ -132,7 +126,6 @@ export class SolicitarTurnoComponent implements OnInit{
       );
     }
 
-  // Seleccionar una especialidad y cargar especialistas
   seleccionarEspecialidad(especialidad: string): void {
     this.especialidadSeleccionada = especialidad;
     this.especialistaService.obtenerEspecialistasPorEspecialidad(especialidad).subscribe(
@@ -154,7 +147,7 @@ export class SolicitarTurnoComponent implements OnInit{
         if (this.especialidadSeleccionada) {
           this.turnosService.obtenerDiasDisponiblesPorEspecialista(especialista.id, this.especialidadSeleccionada).subscribe(
             (dias) => {
-              // Filtra días con al menos un horario no ocupado
+        
               this.diasDisponibles = dias.filter(dia => dia.horarios.some(horario => !horario.ocupado));
               this.horariosDisponibles = [];
               this.diaSeleccionado = null;
@@ -191,76 +184,12 @@ export class SolicitarTurnoComponent implements OnInit{
  
 
 
-  // Seleccionar un horario
+  
   seleccionarHorario(horario: string): void {
     this.horarioSeleccionado = horario;
   }
 
 
-
-    /*confirmarTurno(): void {
-      if (!this.especialidadSeleccionada || !this.especialistaSeleccionado || !this.diaSeleccionado || !this.horarioSeleccionado) {
-          console.log('Error: Por favor, complete todos los campos para confirmar el turno');
-          Swal.fire('Error', 'Por favor, complete todos los campos para confirmar el turno', 'error');
-          return;
-      }
-  
-      // Obtener la información del usuario actual (paciente)
-      this.authService.obtenerInfoUsuarioActual1().then(pacienteInfo => {
-          if (!pacienteInfo) {
-              console.log( 'No se pudo obtener la información del paciente');
-              return;
-          }
-          else
-          {
-            console.log("PACIENTE ACTUAL:" + pacienteInfo.apellido);
-          }
-  
-          
-          // Realiza la consulta a la base de datos para obtener los datos completos del especialista
-          const especialistaId = this.especialistaSeleccionado.id;
-          this.especialistaService.getEspecialistaInfo(especialistaId).subscribe(
-              especialistaData => {
-                  if (!especialistaData) {
-                    console.log( 'No se pudo obtener la información del especialasita');
-                      return;
-                  }
-                  else
-                  {
-                    console.log("ESPECIELIASTA ACTUAL:" + especialistaData.apellido);
-                  }
-  
-                  // Prepara los datos del turno con la información del paciente y del especialista
-                  const turnoData = {
-                      especialidad: this.especialidadSeleccionada,
-                      especialistaId: especialistaId,
-                      fechaSeleccionada: this.diaSeleccionado,
-                      horario: this.horarioSeleccionado,
-                      paciente: {
-                          nombre: pacienteInfo.nombre,
-                          apellido: pacienteInfo.apellido,
-                          mail: pacienteInfo.mail,
-                      },
-                      especialista: {
-                          nombre: especialistaData.nombre,
-                          apellido: especialistaData.apellido,
-                          mail: especialistaData.mail
-                      }
-                  };
-  
-                  // Guarda el turno con los datos completos
-                  this.guardarTurno(turnoData);
-              },
-              error => {
-                  console.error('Error al obtener información del especialista:', error);
-                  Swal.fire('Error', 'Hubo un problema al obtener la información del especialista', 'error');
-              }
-          );
-      }).catch(error => {
-          console.error('Error al obtener la información del paciente:', error);
-          Swal.fire('Error', 'Hubo un problema al obtener la información del paciente', 'error');
-      });
-  }*/
       confirmarTurno(): void {
         if (!this.especialidadSeleccionada || !this.especialistaSeleccionado || !this.diaSeleccionado || !this.horarioSeleccionado) {
             console.log('Error: Por favor, complete todos los campos para confirmar el turno');
@@ -272,7 +201,7 @@ export class SolicitarTurnoComponent implements OnInit{
             const esAdmin = role === 'admin';
             
             console.log("ID del paciente seleccionado:", this.pacienteSeleccionadoUID);
-            // Obtener la información del paciente según si es admin o paciente
+           
             const obtenerInfoPaciente = esAdmin
                 ? this.authService.obtenerPacienteInfo(this.pacienteSeleccionadoUID)
                 : this.authService.obtenerInfoUsuarioActual1();
@@ -396,7 +325,22 @@ export class SolicitarTurnoComponent implements OnInit{
   {
     this.router.navigate([path]);
   }
- 
+  
+  volver(): void {
+    if (this.horarioSeleccionado) {
+      this.horarioSeleccionado = null;
+    } else if (this.diaSeleccionado) {
+      this.diaSeleccionado = null;
+    } else if (this.especialistaSeleccionado) {
+      this.especialistaSeleccionado = null;
+    } else if (this.especialidadSeleccionada) {
+      this.especialidadSeleccionada = null;
+    }
+  }
+  
+  puedeVolver(): boolean {
+    return !!(this.horarioSeleccionado || this.diaSeleccionado || this.especialistaSeleccionado || this.especialidadSeleccionada);
+  }
 
 }
 

@@ -38,7 +38,7 @@ export class PacienteService {
       }
   
       const userData = userDoc.data();
-      console.log('Datos del usuario obtenidos:', userData); // Log para verificar datos
+      console.log('Datos del usuario obtenidos:', userData);
   
       return { 
         mail: userData['mail'], 
@@ -111,13 +111,13 @@ export class PacienteService {
         turnos.forEach((turno: any) => {
           const paciente = {
             ...turno.paciente,
-            uid: turno.paciente.uid, // Asegurarse de que el UID del paciente esté presente
-            fechaHora: (turno.fechaHora as Timestamp).toDate() // Convierte a Date
+            uid: turno.paciente.uid, 
+            fechaHora: (turno.fechaHora as Timestamp).toDate() 
           };
           pacientesMap.set(turno.paciente.mail, paciente);
         });
         const pacientes = Array.from(pacientesMap.values());
-        console.log('Pacientes obtenidos:', pacientes); // Debug: Verifica los datos de pacientes obtenidos
+        console.log('Pacientes obtenidos:', pacientes); 
         return pacientes;
       })
     );
@@ -134,7 +134,7 @@ export class PacienteService {
     const turnosQuery = query(turnosCollection, where('especialistaId', '==', uid), where('estado', '==', 'realizado'));
     return collectionData(turnosQuery, { idField: 'id' }).pipe(
       switchMap(turnos => {
-        console.log('Turnos obtenidos:', turnos);  // Log para verificar los turnos obtenidos
+        console.log('Turnos obtenidos:', turnos);  
         const pacientesMap = new Map();
         const pacientePromises = turnos.map(turno => {
           if (turno['paciente'] && turno['paciente']['mail']) {
@@ -155,7 +155,7 @@ export class PacienteService {
               }
               return paciente;
             });
-            console.log('Pacientes obtenidos:', pacientes);  // Log para verificar los pacientes obtenidos
+            console.log('Pacientes obtenidos:', pacientes); 
             return pacientes;
           })
         );
@@ -169,7 +169,7 @@ export class PacienteService {
     return getDocs(usuariosQuery).then(querySnapshot => {
       if (!querySnapshot.empty) {
         const data = querySnapshot.docs[0].data();
-        console.log(`Datos del paciente (${email}):`, data);  // Log para verificar los datos del paciente
+        console.log(`Datos del paciente (${email}):`, data);  
         return data;
       }
       return null;

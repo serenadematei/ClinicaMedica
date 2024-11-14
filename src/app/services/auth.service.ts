@@ -77,7 +77,6 @@ login({ email, password }: any) {
         }
       } catch (error) {
 
-        //console.error('Error al consultar Firestore:', error);
         throw error;
       }
 
@@ -121,13 +120,13 @@ getCurrentUserId(email: string): Observable<string | null> {
   const q = query(usersCollection, where('mail', '==', email));
   return from(getDocs(q)).pipe(
     map(querySnapshot => {
-      console.log('Query Snapshot:', querySnapshot); // Log para verificar los datos obtenidos
+      console.log('Query Snapshot:', querySnapshot); 
       if (!querySnapshot.empty) {
         const userId = querySnapshot.docs[0].id;
-        console.log('User ID:', userId); // Log para verificar el ID del usuario
-        return userId;  // Asumimos que el email es único y solo un documento será devuelto.
+        console.log('User ID:', userId); 
+        return userId; 
       } else {
-        console.log('No user found with email:', email); // Log para verificar cuando no se encuentra un usuario
+        console.log('No user found with email:', email); 
         return null;
       }
     })
@@ -140,10 +139,10 @@ getCurrentUserEmail(userId: string): Observable<string | null> {
     map(docSnapshot => {
       if (docSnapshot.exists()) {
         const userData = docSnapshot.data();
-        console.log('User Data:', userData); // Log para verificar los datos del usuario
-        return userData ? userData['mail'] : null; // Asegúrate de que 'mail' es el campo correcto
+        console.log('User Data:', userData); 
+        return userData ? userData['mail'] : null; 
       } else {
-        console.log('No user data found for user ID:', userId); // Log para cuando no se encuentra el documento
+        console.log('No user data found for user ID:', userId); 
         return null;
       }
     })
@@ -575,7 +574,15 @@ async obtenerInfoUsuarioActual1(): Promise<any | null> {
       console.error('Error al obtener la información del paciente:', error);
       throw error;
     });
-}
+  } 
+
+  async obtenerHistoriasClinicasPorPaciente(pacienteEmail: string): Promise<any[]> {
+    console.log("paicente: "+ pacienteEmail);
+    const historiasRef = collection(this.firestore, 'historiasClinicas');
+    const q = query(historiasRef, where('pacienteEmail', '==', pacienteEmail));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => doc.data());
+  }
 
 }
 

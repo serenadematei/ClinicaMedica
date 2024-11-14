@@ -140,27 +140,7 @@
         
       <div *ngIf="formReg.get('selectedRole')?.value === 'especialista'">
   
-       <!--  <label for="especialidad">Especialidad</label>
-        <select id="especialidad" formControlName="especialidad" required>
-          <option value="Ginecologia">Ginecologia</option>
-          <option value="Traumatologia">Traumatologia</option>
-          <option value="Kinesiologia">Kinesiologia</option>
-          <option value="Nutricionista">Nutricionista</option>
-          <option value="otra">Otra</option>
-        </select>
-        <div class="errorMessage" *ngIf=" getValue('especialidad').invalid && (getValue('especialidad').touched || getValue('especialidad').dirty)">
-          Debe seleccionar una opción.
-         </div>
-  
-        <div class="form-group" *ngIf="formReg.get('especialidad')?.value === 'otra'">
-          <label for="otraEspecialidad">Otra Especialidad</label>
-          <input type="text" id="otraEspecialidad" formControlName="otraEspecialidad" minlength="4" maxlength="25" placeholder="Especialidad personalizada" required          
-          [class.campo-con-error]="getValue('otraEspecialidad').invalid && (getValue('otraEspecialidad').touched || getValue('otraEspecialidad').dirty)">
-          <div class="errorMessage" *ngIf=" getValue('otraEspecialidad').invalid && (getValue('otraEspecialidad').touched || getValue('otraEspecialidad').dirty)">
-            Valido solo caracteres alfabéticos.
-          </div>
-        
-        </div> -->
+      
 
         <div class="col campoForm">
           <label for="especialidad" class="form-label">Especialidad</label>

@@ -72,6 +72,10 @@ export class HomeComponent implements OnInit {
   }
 
 
+  seccionPacientes()
+  {
+    this.router.navigate(['home/seccion-pacientes']);
+  }
 
 
 

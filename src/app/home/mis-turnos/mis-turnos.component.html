@@ -1,100 +1,92 @@
-<html>
-<head>
-  <title></title>
+<div class="background">
+  <div class="form-container">
+    <h2 class="form-title">Mis Turnos</h2>
 
-</head>
-<body>
-   
-  <main>
-    <h2>Mis Turnos</h2>
-  
-    <!-- Filtro de Búsqueda -->
+
     <div class="input-container">
       <input type="text" class="form-control input-styling" 
              placeholder="Buscar por Especialidad o {{ userRole === 'paciente' ? 'Especialista' : 'Paciente' }}" 
              [(ngModel)]="filtro">
     </div>
-  
-   <!-- Tabla de Turnos para Paciente -->
-<div *ngIf="userRole === 'paciente'">
-  <div *ngIf="(turnos$ | async) as turnosFiltradosPaciente">
-    <table class="table table-bordered" *ngIf="turnosFiltradosPaciente.length > 0">
-      <thead>
-        <tr>
-          <th>Especialista</th>
-          <th>Especialidad</th>
-          <th>Fecha</th>
-          <th>Hora</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let turno of turnosFiltradosPaciente | filterEsp:filtro">
-          <td>{{ turno.especialista.nombre }} {{ turno.especialista.apellido }}</td>
-          <td>{{ turno.especialidad }}</td>
-          <td>{{ turno.fechaHora | date:'dd/MM/yyyy' }}</td>
-          <td>{{ turno.horaInicio }}</td>
-          <td>{{ turno.estado }}</td>
-          <td>
-            <button *ngIf="turno.estado === 'pendiente'" (click)="cancelarTurno(turno)">Cancelar</button>
-            <button *ngIf="turno.estado === 'realizado' && !turno.encuestaCompletada" (click)="completarEncuesta(turno)">Completar Encuesta</button>
-            <button *ngIf="turno.estado === 'realizado' && turno.encuestaCompletada" (click)="verEncuesta(turno)">Ver Encuesta</button>
-            <button *ngIf="turno.estado === 'realizado' && !turno.calificacionCompletada" (click)="calificarAtencion(turno)">Calificar Atención</button>
-            <button *ngIf="turno.comentario" (click)="verResena(turno)">Ver Reseña</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+
+    <!-- Tabla de Turnos para Paciente -->
+    <div *ngIf="userRole === 'paciente'">
+      <div *ngIf="(turnos$ | async) as turnosFiltradosPaciente">
+        <table class="table turnos-table" *ngIf="turnosFiltradosPaciente.length > 0">
+          <thead>
+            <tr>
+              <th>Especialista</th>
+              <th>Especialidad</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let turno of turnosFiltradosPaciente | filterEsp:filtro">
+              <td>{{ turno.especialista.nombre }} {{ turno.especialista.apellido }}</td>
+              <td>{{ turno.especialidad }}</td>
+              <td>{{ turno.fechaHora | date:'dd/MM/yyyy' }}</td>
+              <td>{{ turno.horaInicio }}</td>
+              <td>{{ turno.estado }}</td>
+              <td>
+                <button *ngIf="turno.estado === 'pendiente'" class="btn-cancel" (click)="cancelarTurno(turno)">Cancelar</button>
+                <button *ngIf="turno.estado === 'realizado' && !turno.encuestaCompletada" class="btn-primary" (click)="completarEncuesta(turno)">Completar Encuesta</button>
+                <button *ngIf="turno.estado === 'realizado' && turno.encuestaCompletada" class="btn-view" (click)="verEncuesta(turno)">Ver Encuesta</button>
+                <button *ngIf="turno.estado === 'realizado' && !turno.calificacionCompletada" class="btn-rate" (click)="calificarAtencion(turno)">Calificar Atención</button>
+                <button *ngIf="turno.comentario" class="btn-view" (click)="verResena(turno)">Ver Reseña</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tabla de Turnos para Especialista -->
+    <div *ngIf="userRole === 'especialista'">
+      <div *ngIf="(turnos$ | async) as turnosFiltradosEspecialista">
+        <table class="table turnos-table" *ngIf="turnosFiltradosEspecialista.length > 0">
+          <thead>
+            <tr>
+              <th>Paciente</th>
+              <th>Especialidad</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let turno of turnosFiltradosEspecialista | filterPac:filtro">
+              <td>{{ turno.paciente.nombre }} {{ turno.paciente.apellido }}</td>
+              <td>{{ turno.especialidad }}</td>
+              <td>{{ turno.fechaHora | date:'dd/MM/yyyy' }}</td>
+              <td>{{ turno.horaInicio }}</td>
+              <td>{{ turno.estado }}</td>
+              <td>
+                <button *ngIf="turno.estado === 'pendiente'" class="btn-accept" (click)="aceptarTurno(turno)">Aceptar</button>
+                <button *ngIf="turno.estado === 'pendiente'" class="btn-cancel" (click)="cancelarTurno(turno)">Cancelar</button>
+                <button *ngIf="turno.estado === 'pendiente'" class="btn-reject" (click)="rechazarTurno(turno)">Rechazar</button>
+                <button *ngIf="turno.estado === 'aceptado'" class="btn-finalize" (click)="finalizarTurno(turno)">Finalizar Turno</button>
+                <button *ngIf="turno.estado === 'realizado' && turno.comentario" class="btn-view" (click)="verResena(turno)">Ver Reseña</button>
+                <button *ngIf="turno.estado === 'realizado' && !turno.historiaClinica" class="btn-add-historia" (click)="agregarHistoriaClinica(turno)">Agregar Historia Clínica</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- no hay Turnos -->
+    <p *ngIf="(turnos$ | async)?.length === 0">No tienes turnos asignados.</p>
+
+    <button class="floating-logout-button" (click)="logout()">
+      <i class="fa solid fa-power-off"></i> Cerrar sesión
+    </button>
+
+    <div class="center-button">
+      <input type="button" class="btn-success" (click)="goTo('/home')" value="Volver a inicio" />
+    </div>
   </div>
 </div>
-
-<!-- Tabla de Turnos para Especialista -->
-<div *ngIf="userRole === 'especialista'">
-  <div *ngIf="(turnos$ | async) as turnosFiltradosEspecialista">
-    <table class="table table-bordered" *ngIf="turnosFiltradosEspecialista.length > 0">
-      <thead>
-        <tr>
-          <th>Paciente</th>
-          <th>Especialidad</th>
-          <th>Fecha</th>
-          <th>Hora</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let turno of turnosFiltradosEspecialista | filterPac:filtro">
-          <td>{{ turno.paciente.nombre }} {{ turno.paciente.apellido }}</td>
-          <td>{{ turno.especialidad }}</td>
-          <td>{{ turno.fechaHora | date:'dd/MM/yyyy' }}</td>
-          <td>{{ turno.horaInicio }}</td>
-          <td>{{ turno.estado }}</td>
-          <td>
-            <button *ngIf="turno.estado === 'pendiente'" (click)="aceptarTurno(turno)">Aceptar</button>
-            <button *ngIf="turno.estado === 'pendiente'" (click)="cancelarTurno(turno)">Cancelar</button>
-            <button *ngIf="turno.estado === 'pendiente'" (click)="rechazarTurno(turno)">Rechazar</button>
-            <button *ngIf="turno.estado === 'aceptado'" (click)="finalizarTurno(turno)">Finalizar Turno</button>
-            <button *ngIf="turno.estado === 'realizado' && turno.comentario" (click)="verResena(turno)">Ver Reseña</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<!-- Mensaje de No hay Turnos -->
-<p *ngIf="(turnos$ | async)?.length === 0">No tienes turnos asignados.</p>
-  </main>
-
-
-  <button class="floating-logout-button" (click)="logout()">
-    <i class="fa solid fa-power-off"></i> Cerrar sesión
-  </button>
-
-  <div class="center-button">
-    <input type="button" class="btn-success" (click)="goTo('/home')" value="Volver a inicio" />
-  </div>
-  
-</body>
-</html>

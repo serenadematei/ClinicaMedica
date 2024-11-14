@@ -1,7 +1,12 @@
 <div class="background"> 
 <div class="solicitar-turno-container">
   <h2>Sacar un Turno</h2>
-
+   
+    <!-- Botón de Volver -->
+    <button *ngIf="puedeVolver()" (click)="volver()" class="button-back">
+      ← Volver
+    </button>
+    
   <!-- Selección de Especialidad -->
   <div class="step-container" *ngIf="!especialidadSeleccionada">
     <h3>Seleccione una Especialidad</h3>

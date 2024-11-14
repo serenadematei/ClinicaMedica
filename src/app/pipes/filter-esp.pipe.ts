@@ -1,14 +1,13 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+
 @Pipe({
   name: 'filterEsp',
   standalone: true
 })
 export class FilterEspPipe implements PipeTransform {
 
-
-
-    transform(turnos: any[], filtro: string): any[] {
+  transform(turnos: any[], filtro: string): any[] {
       if (!filtro) return turnos;
   
       const filtroLower = filtro.toLowerCase();

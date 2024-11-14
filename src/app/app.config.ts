@@ -6,7 +6,7 @@ import {provideAuth,getAuth} from '@angular/fire/auth';
 import { provideHttpClient } from '@angular/common/http';
 import { routes } from './app.routes';
 import { HttpClientModule } from '@angular/common/http';
-
+import { provideAnimations } from '@angular/platform-browser/animations'; 
 
 
 export const appConfig: ApplicationConfig = {
@@ -15,7 +15,8 @@ export const appConfig: ApplicationConfig = {
      provideFirebaseApp(()=>initializeApp(firebaseConfig)),
      provideFirestore(()=>getFirestore()),
      provideAuth(() => getAuth()),
-     importProvidersFrom(HttpClientModule)
+     importProvidersFrom(HttpClientModule),
+     provideAnimations() 
   ])]
      
 };

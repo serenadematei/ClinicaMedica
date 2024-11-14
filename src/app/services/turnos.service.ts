@@ -4,7 +4,7 @@ import { Observable, catchError, combineLatest, forkJoin, from, map, mergeMap, o
 import { PacienteService } from './paciente.service';
 import { EspecialistaService, Horario } from './especialista.service';
 import { FormControl } from '@angular/forms';
-
+import { HistoriaClinica } from '../interfaces/historiaClinica';
 
 export interface Turno {
   id: string; 
@@ -40,6 +40,7 @@ export interface Turno {
   calificacionCompletada?: boolean;
   comentarioCalificacion?: string;
   historiaClinicaCargada?: boolean;
+  historiaClinica?: HistoriaClinica; //opc
 }
 
 export interface TurnoDisponible {
@@ -57,20 +58,6 @@ export interface Paciente {
   apellido: string;
 }
 
-export interface HistoriaClinica {
-  id?: string;
-  altura: number;
-  peso: number;
-  temperatura: number;
-  presion: string;
-  datosDinamicos?: Array<{ clave: string, valor: string }>;
-  fecha: Date;
-  especialistaId: string;
-  turnoId?: string;
-  especialistaNombre?: string;
-  especialistaApellido?: string;
-  pacienteId: string;
-}
 
 
 @Injectable({
@@ -80,6 +67,7 @@ export class TurnosService implements OnInit{
 
   private turnos: any[] = [];
   private turnosCollection: CollectionReference<DocumentData>;
+  private historiasClinicasCollection: CollectionReference<DocumentData>;
 
 
   especialidades: string[] = [];
@@ -88,8 +76,54 @@ export class TurnosService implements OnInit{
 
   constructor(private firestore: Firestore, private pacienteService: PacienteService, private especialistaService: EspecialistaService) {
     this.turnosCollection = collection(this.firestore, 'turnos');
-   }
+    this.historiasClinicasCollection = collection(this.firestore, "historiasClinicas");
+  }
 
+
+  agregarHistoriaClinica(turnoId: string, historiaClinica: HistoriaClinica): Promise<void> {
+    const turnoRef = doc(this.firestore, `turnos/${turnoId}`);
+    
+    // 1. Actualizar el turno para agregar la historia clínica y marcarla como cargada
+    const updateTurnoPromise = updateDoc(turnoRef, { 
+      historiaClinica, 
+      historiaClinicaCargada: true 
+    });
+
+    // 2. Agregar la historia clínica a la colección independiente 'historiasClinicas'
+    const addHistoriaClinicaPromise = addDoc(this.historiasClinicasCollection, historiaClinica);
+
+    // Ejecutar ambas operaciones y manejar errores
+    return Promise.all([updateTurnoPromise, addHistoriaClinicaPromise])
+      .then(() => {
+        console.log('Historia clínica agregada correctamente tanto en el turno como en la colección independiente.');
+      })
+      .catch(error => {
+        console.error('Error al agregar historia clínica:', error);
+        throw error;
+      });
+  }
+  
+    async obtenerPacientesConHistoriasClinicas(especialistaEmail: string): Promise<HistoriaClinica[]> {
+      const turnosRef = collection(this.firestore, 'turnos');
+      const cleanEmail = especialistaEmail.trim().toLowerCase();
+      const q = query(turnosRef, where('estado', '==', 'realizado'));
+      const snapshot = await getDocs(q);
+      const historiasClinicas: HistoriaClinica[] = [];
+
+      snapshot.forEach(doc => {
+        const data = doc.data() as Turno;
+       
+        if (data.especialista.mail?.trim().toLowerCase() === cleanEmail) {
+          if (data.historiaClinica) {
+            console.log("Historia clínica encontrada:", data.historiaClinica);
+            data.historiaClinica.datosDinamicos = data.historiaClinica.datosDinamicos || [];
+            historiasClinicas.push(data.historiaClinica);
+          }
+        }
+      });
+
+      return historiasClinicas;
+    }
 
 
       solicitarTurno(turnoData: {
@@ -153,12 +187,6 @@ export class TurnosService implements OnInit{
 
 
 
-
-
-
-
-
-    // Función para obtener las especialidades desde Firebase
     obtenerEspecialidades(): Observable<string[]> {
       const especialidadesCollection = collection(this.firestore, 'Especialidades');
       return collectionData(especialidadesCollection).pipe(
@@ -170,7 +198,7 @@ export class TurnosService implements OnInit{
       );
     }
   
-    // Ejemplo de implementación de 'cargarEspecialidades' en el componente
+
     cargarEspecialidades(): void {
       this.obtenerEspecialidades().subscribe(
         (especialidades: string[]) => {
@@ -224,9 +252,6 @@ obtenerDiasDisponiblesPorEspecialista(especialistaId: string, especialidad: stri
 
 
 
-
-
-  // Función de ayuda para verificar si la fecha está dentro de los próximos 15 días
   private esFechaEnProximos15Dias(fecha: Date): boolean {
     const hoy = new Date();
     const fechaLimite = new Date(hoy);
@@ -287,7 +312,7 @@ obtenerDiasDisponiblesPorEspecialista(especialistaId: string, especialidad: stri
     const endOfDay = new Date(fecha);
     endOfDay.setHours(23, 59, 59, 999);
 
-    // Primero obtenemos la disponibilidad del especialista en DatosUsuarios
+    
     return from(getDoc(especialistaDocRef)).pipe(
         mergeMap(especialistaDocSnap => {
             if (!especialistaDocSnap.exists()) {
@@ -298,7 +323,7 @@ obtenerDiasDisponiblesPorEspecialista(especialistaId: string, especialidad: stri
                 entry.especialidad === especialidad && entry.fechaSeleccionada.startsWith(fecha.toISOString().split('T')[0])
             )?.horarios || [];
 
-            // Ahora obtenemos los turnos ocupados para este día, especialidad y especialista
+            //  turnos ocupados para este día, especialidad y especialista
             const turnosRef = collection(this.firestore, 'turnos');
             const q = query(
                 turnosRef,
@@ -748,6 +773,6 @@ obtenerDiasDisponiblesPorEspecialista(especialistaId: string, especialidad: stri
     );
   }
 
-  
+
   
 }

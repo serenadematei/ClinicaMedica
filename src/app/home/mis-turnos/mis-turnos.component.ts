@@ -4,22 +4,22 @@ import { Observable, catchError, combineLatest, map, of, switchMap } from 'rxjs'
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
 import { Auth,User } from '@angular/fire/auth';
-//import { HistoriaClinica, Turno, TurnosService
 import { TurnosService, Turno } from '../../services/turnos.service';
 import { CommonModule } from '@angular/common';
 import { FilterEspPipe } from "../../pipes/filter-esp.pipe";
-//import { LoadingComponent } from "../../loading/loading.component";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FilterPacPipe } from '../../pipes/filter-pac.pipe';
-//import { FilterPipe } from "../../pipes/filter.pipe";
-import { Timestamp  } from '@angular/fire/firestore';
-//import { HistoriaClinicaService } from '../../services/historia-clinica.service';
+import { HistoriaClinica } from '../../interfaces/historiaClinica';
+import { Timestamp } from 'firebase/firestore';
+
+
+
 
 @Component({
     selector: 'app-mis-turnos',
     standalone: true,
     templateUrl: './mis-turnos.component.html',
-    styleUrl: './mis-turnos.component.css',  /*  FilterEspPipe, LoadingComponent  FilterPipe */
+    styleUrl: './mis-turnos.component.css', 
     imports: [CommonModule, ReactiveFormsModule, FormsModule, FilterEspPipe, FilterPacPipe]
 })
 export class MisTurnosComponent implements OnInit{
@@ -38,16 +38,16 @@ export class MisTurnosComponent implements OnInit{
   ngOnInit(): void {
     this.authService.getCurrentUser().pipe(
       switchMap(user => {
-        const userEmail = user?.email || ''; // Aseguramos que userEmail sea siempre una string
+        const userEmail = user?.email || '';
         if (userEmail) {
           return this.authService.getUserRole().pipe(
             switchMap(role => {
-              this.userRole = role || ''; // Asignamos una cadena vacía si role es null
+              this.userRole = role || ''; 
               return this.turnosService.obtenerTurnosPorUsuario(userEmail, this.userRole);
             })
           );
         } else {
-          return of([]); // Retornamos un Observable vacío si userEmail es null o vacío
+          return of([]); 
         }
       })
     ).subscribe(turnos => {
@@ -161,7 +161,7 @@ export class MisTurnosComponent implements OnInit{
   
         const calificacion = {
           calificacionAtencion: parseInt(calificacionAtencion),
-          tiempoEspera: parseInt(tiempoEspera),  // No hay restricción de rango para minutos
+          tiempoEspera: parseInt(tiempoEspera), 
           satisfaccionGeneral: parseInt(satisfaccionGeneral)
         };
   
@@ -200,8 +200,7 @@ export class MisTurnosComponent implements OnInit{
   }
 
   verEncuesta(turno: Turno): void {
-    console.log("Turno seleccionado:", turno); // Verifica si el objeto turno tiene encuesta
-  
+    console.log("Turno seleccionado:", turno); 
     if (turno.encuesta) {
       const { calificacionAtencion, tiempoEspera, satisfaccionGeneral } = turno.encuesta;
       Swal.fire({
@@ -218,6 +217,112 @@ export class MisTurnosComponent implements OnInit{
       console.log("No se encontró encuesta en el turno:", turno);
       Swal.fire('Encuesta', 'No hay encuesta disponible para este turno.', 'info');
     }
+  }
+
+
+  agregarHistoriaClinica(turno: Turno): void {
+    Swal.fire({
+      title: 'Agregar Historia Clínica',
+      width: '600px',  // Ajusta el ancho del modal
+      html: `
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <div style="flex: 1 1 45%; min-width: 200px;">
+            <label for="altura">Altura (cm):</label>
+            <input type="number" id="altura" class="swal2-input" style="width: 100%; height: 30px;">
+          </div>
+          
+          <div style="flex: 1 1 45%; min-width: 200px;">
+            <label for="peso">Peso (kg):</label>
+            <input type="number" id="peso" class="swal2-input" style="width: 100%; height: 30px;">
+          </div>
+          
+          <div style="flex: 1 1 45%; min-width: 200px;">
+            <label for="temperatura">Temperatura (°C):</label>
+            <input type="number" id="temperatura" class="swal2-input" style="width: 100%; height: 30px;">
+          </div>
+          
+          <div style="flex: 1 1 45%; min-width: 200px;">
+            <label for="presion">Presión (mmHg):</label>
+            <input type="text" id="presion" class="swal2-input" style="width: 100%; height: 30px;">
+          </div>
+          
+          <div style="flex: 1 1 45%; min-width: 200px;">
+            <label for="clave1">Atributo 1:</label>
+            <input type="text" id="clave1" class="swal2-input" style="width: 100%; height: 30px;">
+          </div>
+          
+          <div style="flex: 1 1 45%; min-width: 200px;">
+            <label for="valor1">Valor 1:</label>
+            <input type="text" id="valor1" class="swal2-input" style="width: 100%; height: 30px;">
+          </div>
+          
+          <div style="flex: 1 1 45%; min-width: 200px;">
+            <label for="clave2">Atributo 2:</label>
+            <input type="text" id="clave2" class="swal2-input" style="width: 100%; height: 30px;">
+          </div>
+          
+          <div style="flex: 1 1 45%; min-width: 200px;">
+            <label for="valor2">Valor 2:</label>
+            <input type="text" id="valor2" class="swal2-input" style="width: 100%; height: 30px;">
+          </div>
+          
+          <div style="flex: 1 1 45%; min-width: 200px;">
+            <label for="clave3">Atributo 3:</label>
+            <input type="text" id="clave3" class="swal2-input" style="width: 100%; height: 30px;">
+          </div>
+          
+          <div style="flex: 1 1 45%; min-width: 200px;">
+            <label for="valor3">Valor 3:</label>
+            <input type="text" id="valor3" class="swal2-input" style="width: 100%; height: 30px;">
+          </div>
+        </div>
+      `,
+      showCancelButton: true,
+      confirmButtonText: 'Guardar',
+      cancelButtonText: 'Cancelar',
+      preConfirm: () => {
+        // Obtiene los valores de los inputs y verifica su validez
+        const altura = (document.getElementById('altura') as HTMLInputElement).value;
+        const peso = (document.getElementById('peso') as HTMLInputElement).value;
+        const temperatura = (document.getElementById('temperatura') as HTMLInputElement).value;
+        const presion = (document.getElementById('presion') as HTMLInputElement).value;
+  
+        const datosDinamicos = [
+          { clave: (document.getElementById('clave1') as HTMLInputElement).value, valor: (document.getElementById('valor1') as HTMLInputElement).value },
+          { clave: (document.getElementById('clave2') as HTMLInputElement).value, valor: (document.getElementById('valor2') as HTMLInputElement).value },
+          { clave: (document.getElementById('clave3') as HTMLInputElement).value, valor: (document.getElementById('valor3') as HTMLInputElement).value }
+        ].filter(d => d.clave && d.valor); 
+  
+        if (!altura || !peso || !temperatura || !presion) {
+          Swal.showValidationMessage('Por favor, complete todos los campos fijos.');
+          return null;
+        }
+  
+        return {
+          pacienteEmail: turno.paciente.mail,
+          especialistaEmail: turno.especialista.mail,
+          fecha: turno.fechaHora instanceof Date ? turno.fechaHora : (turno.fechaHora as Timestamp).toDate(),
+          altura: parseInt(altura),
+          peso: parseInt(peso),
+          temperatura: parseFloat(temperatura),
+          presion,
+          datosDinamicos
+        };
+      }
+    }).then(result => {
+      if (result.isConfirmed && result.value) {
+        const historiaClinica = result.value as HistoriaClinica;
+        this.turnosService.agregarHistoriaClinica(turno.id, historiaClinica).then(() => {
+          turno.historiaClinica = historiaClinica;
+          turno.historiaClinicaCargada = true;
+          Swal.fire('Historia Clínica Agregada', 'La historia clínica ha sido guardada en los datos del paciente.', 'success');
+        });
+      }
+    });
+  }
+
+  convertirFecha(fechaHora: any): Date {
+    return fechaHora instanceof Date ? fechaHora : fechaHora.toDate();
   }
 
 

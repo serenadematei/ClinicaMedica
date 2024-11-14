@@ -1,7 +1,6 @@
-<html>
-<body>
+<body class="background">
   <main>
-    <h2>Turnos - Administrador </h2>
+    <h2>Turnos - Administrador</h2>
     <div class="turnos-list-container">
       <!-- Filtro de Búsqueda -->
       <div class="input-container">
@@ -25,7 +24,7 @@
                 <th>Fecha</th>
                 <th>Horario</th>
                 <th>Estado</th>
-                <th *ngIf="tieneTurnoCancelado">Motivo</th>
+                <th *ngIf="tieneTurnoCancelado">Motivo de cancelación</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -37,7 +36,7 @@
                 <td>{{ turno.especialista.nombre }}</td>
                 <td>{{ turno.especialista.apellido }}</td>
                 <td>{{ turno.especialidad }}</td>
-                <td>{{ turno.fechaHora | date:'dd/MM/yy' }}</td>
+                <td>{{ turno.fechaHora | date:'dd/MM/yy' }}</td> 
                 <td>{{ turno.horaInicio }}</td>
                 <td>{{ turno.estado }}</td>
                 <ng-container *ngIf="turno.estado === 'cancelado'">
@@ -63,9 +62,7 @@
     </div>
   </main>
 
-  
   <div class="center-button">
-    <input type="button" [value]="btnVolver" class="btn-success" (click)="onClickHome($event)"/>
+    <input type="button" [value]="btnVolver" class="btn-success" (click)="onClickHome($event)" />
   </div>
 </body>
-</html>
