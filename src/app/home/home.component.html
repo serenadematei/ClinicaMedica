@@ -83,49 +83,4 @@
 
 </body>
 
-<!---    
 
-<body>
-
-
-  <header id="header" class="fixed-top">
-    <div class="container d-flex align-items-center">
-
-      
-      <nav id="navbar" class="navbar order-last order-lg-0">
-        <ul>
-          <li><a class="nav-link scrollto shake-bottom" (click)="misTurnos()">Mis turnos</a></li>
-          <li><a class="nav-link scrollto shake-bottom" (click)="turnos()">Turnos</a></li>
-          <li><a class="nav-link scrollto shake-bottom" (click)="solicitarTurno()">Solicitar turnos</a></li>
-          <li><a class="nav-link scrollto shake-bottom" (click)="disponibilidadHoraria()">Mi Perfil</a></li>
-          <li *ngIf="rolUsuario === 'admin'"><a class="nav-link scrollto shake-bottom" (click)="seccionUsuarios()">Sección usuarios</a></li>
-          <li *ngIf="rolUsuario === 'especialista'"><a class="nav-link scrollto shake-bottom" (click)="seccionPacientes()">Sección pacientes</a></li>
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav>
-
-      <button class="floating-logout-button" (click)="logout()">
-        <i class="fa solid fa-power-off"></i> Cerrar sesión
-      </button>
-
-
-      <div class="navbar-custom">
-        <a class="user-color" (click)="toggleDropdown()" *ngIf="currentUser$ | async as user">
-          <div *ngIf="!showLoading && user">
-            <img *ngIf="user.photoURL" src="{{user.photoURL}}" alt="Foto de perfil de usuario" class="user-photo">
-            {{ user.displayName ? user.displayName : user.email }}
-          </div>
-        </a>
-
-        <div class="dropdown-content" *ngIf="isDropdownOpen">
-          <button class="logout-button" *ngIf="showLogoutButton" (click)="logout()">
-            <i class="fa solid fa-power-off"></i> Cerrar Sesión
-          </button>
-        </div>
-      </div>
-
-    </div>
-  </header>
-
-</body>
---->

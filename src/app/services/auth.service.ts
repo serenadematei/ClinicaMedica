@@ -5,6 +5,7 @@ import { UserCredential, onAuthStateChanged, sendEmailVerification } from '@angu
 import { DatabaseService } from './database.service';
 import { BehaviorSubject, Observable, Subject, from, map, switchMap } from 'rxjs';
 import { Paciente } from './turnos.service';
+import { Timestamp } from '@angular/fire/firestore';
 
 
 @Injectable({
@@ -543,6 +544,25 @@ async obtenerInfoUsuarioActual1(): Promise<any | null> {
     });
   }
 
+  async obtenerUsuarioPorEmail(email: string): Promise<any> {
+    try {
+      const usuariosRef = collection(this.firestore, 'DatosUsuarios'); // Cambia 'DatosUsuarios' al nombre correcto de tu colección
+      const q = query(usuariosRef, where('mail', '==', email));
+      const querySnapshot = await getDocs(q);
+  
+      if (!querySnapshot.empty) {
+        const userDoc = querySnapshot.docs[0];
+        return { id: userDoc.id, ...userDoc.data() }; // Retorna el usuario con su ID
+      } else {
+        console.warn(`No se encontró un usuario con el email: ${email}`);
+        return null;
+      }
+    } catch (error) {
+      console.error(`Error al obtener el usuario por email (${email}):`, error);
+      throw error;
+    }
+  }
+
   getCurrentUserRole(): Observable<string | null> {
     const user = this.auth.currentUser;
     if (!user) {
@@ -583,15 +603,94 @@ async obtenerInfoUsuarioActual1(): Promise<any | null> {
     const snapshot = await getDocs(q);
     return snapshot.docs.map(doc => doc.data());
   }
+  
+
+  async obtenerTurnosPorPaciente(email: string): Promise<any[]> {
+    try {
+      const turnosRef = collection(this.firestore, 'turnos'); // Asegúrate de que el nombre de la colección sea correcto
+      const snapshot = await getDocs(turnosRef);
+  
+      const turnos = snapshot.docs.map(doc => {
+        const turno = doc.data();
+  
+        // Log para depurar el turno original
+        console.log('Turno original:', turno);
+  
+        // Validar y obtener datos del especialista
+        const especialistaNombre = turno['especialista']?.nombre || 'N/A';
+        const especialistaApellido = turno['especialista']?.apellido || 'N/A';
+        const especialistaCompleto = `${especialistaNombre} ${especialistaApellido}`;
+  
+        // Validar y formatear la fecha
+        const fechaHora = turno['fechaHora'] instanceof Timestamp
+          ? turno['fechaHora'].toDate()
+          : turno['fechaHora'] ? new Date(turno['fechaHora']) : null;
+        const fechaFormateada = fechaHora
+          ? fechaHora.toLocaleDateString('es-ES', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            })
+          : 'N/A';
+  
+        // Retornar el turno con todas las propiedades necesarias
+        return {
+          ...turno, // Incluye todas las propiedades originales
+          paciente: turno['paciente'] || {}, // Aseguramos que `paciente` siempre esté definido
+          especialistaCompleto,
+          fechaFormateada,
+          estado: turno['estado'],
+        };
+      });
+  
+      // Log para verificar los turnos obtenidos
+      console.log('Turnos obtenidos de Firebase:', turnos);
+  
+      // Filtrar los turnos por email del paciente y estado "realizado"
+      const turnosPaciente = turnos.filter(turno => {
+        const turnoEmail = turno.paciente?.mail?.toLowerCase() || ''; // Normalizar email del turno
+        const emailNormalizado = email.toLowerCase(); // Normalizar email del paciente
+        const esRealizado = turno.estado === 'realizado'; // Verificar estado del turno
+  
+        console.log('Comparando:', turnoEmail, 'con', emailNormalizado, 'Estado:', turno.estado);
+        return turnoEmail === emailNormalizado && esRealizado; // Comparar ambos filtros
+      });
+  
+      // Log para verificar los turnos filtrados
+      console.log('Turnos filtrados por paciente y estado "realizado":', turnosPaciente);
+  
+      return turnosPaciente;
+    } catch (error) {
+      console.error('Error al obtener turnos:', error);
+      return [];
+    }
+  }
+ 
+  async obtenerTurnosPorPacienteYEspecialidad(email: string): Promise<any[]> {
+    const turnosRef = collection(this.firestore, 'turnos');
+    const q = query(turnosRef, where('paciente.mail', '==', email));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => doc.data());
+  }
+
+  async obtenerDatosUsuarioPorEmail(email: string): Promise<any> {
+    try {
+      const usuariosRef = collection(this.firestore, 'DatosUsuarios');
+      const q = query(usuariosRef, where('mail', '==', email));
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        return querySnapshot.docs[0].data(); // Retorna el primer usuario encontrado
+      } else {
+        console.warn(`No se encontró usuario con el email: ${email}`);
+        return null;
+      }
+    } catch (error) {
+      console.error('Error al obtener datos del usuario por email:', error);
+      throw error;
+    }
+  }
 
 }
-
-
-
-
-
-
-
-
-
-

@@ -10,6 +10,6 @@ export class FechaCustomizadaPipe implements PipeTransform {
   transform(value: Date | string): string {
     if (!value) return '';
     const fecha = typeof value === 'string' ? new Date(value) : value;
-    return format(fecha, "dd 'de' MMMM 'de' yyyy", { locale: es });
+    return format(fecha, "dd 'de' MMMM 'de' yyyy", { locale: es }); //SACAR EL AÑO 
   }
 }

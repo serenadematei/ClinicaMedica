@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+/*import { Pipe, PipeTransform } from '@angular/core';
 import { format, parse } from 'date-fns';
 
 @Pipe({
@@ -14,4 +14,4 @@ export class FormatoHoraPipe implements PipeTransform {
     return `${formattedHours}:${minutes.toString().padStart(2, '0')} ${period}`;
   }
 
-}
+}*/

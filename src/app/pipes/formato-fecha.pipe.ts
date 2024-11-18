@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+/*import { Pipe, PipeTransform } from '@angular/core';
 import { format, isValid, parse } from 'date-fns';
 
 @Pipe({
@@ -12,4 +12,4 @@ export class FormatoFechaPipe implements PipeTransform {
     return format(date, 'yyyy-MM-dd');
   }
 
-}
+}*/

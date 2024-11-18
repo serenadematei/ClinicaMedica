@@ -13,6 +13,8 @@ import { sendEmailVerification } from 'firebase/auth';
 import { ListaUsuariosComponent } from '../../lista-usuarios/lista-usuarios.component';
 import { ChangeDetectorRef } from '@angular/core';
 
+
+
 interface SideNavToggle {
   screenWidth: number;
   collapsed: boolean;

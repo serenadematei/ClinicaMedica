@@ -9,8 +9,8 @@ import { AuthService } from '../../services/auth.service';
 import { PacienteService } from '../../services/paciente.service';
 import { Observable } from 'rxjs';
 import { Auth,User } from '@angular/fire/auth';
-import { FormatoHoraPipe } from "../../pipes/formato-hora.pipe";
-import { FormatoFechaPipe } from '../../pipes/formato-fecha.pipe';
+//import { FormatoHoraPipe } from "../../pipes/formato-hora.pipe";
+//import { FormatoFechaPipe } from '../../pipes/formato-fecha.pipe';
 import { FechaCustomizadaPipe } from '../../pipes/fecha-customizada.pipe';
 import { Firestore, collection, doc, setDoc, collectionData } from '@angular/fire/firestore';
 
@@ -23,7 +23,7 @@ import { Firestore, collection, doc, setDoc, collectionData } from '@angular/fir
     standalone: true,
     templateUrl: './solicitar-turno.component.html',
     styleUrl: './solicitar-turno.component.css',
-    imports: [FechaCustomizadaPipe, CommonModule, FormsModule, ReactiveFormsModule,FormatoHoraPipe, FormatoFechaPipe /*LoadingComponent, , FormatoHoraPipe, SinImagenDirective,ResaltarDirective,FocusDirective*/]
+    imports: [FechaCustomizadaPipe, CommonModule, FormsModule, ReactiveFormsModule, /* FormatoFechaPipe  FormatoHoraPipe LoadingComponent, , FormatoHoraPipe, SinImagenDirective,ResaltarDirective,FocusDirective*/]
 })
 export class SolicitarTurnoComponent implements OnInit{
 
@@ -31,7 +31,6 @@ export class SolicitarTurnoComponent implements OnInit{
   especialidadImagenMap: { [key: string]: string } = {};
   especialidades: string[] = [];
   especialistas: any[] = [];
-  //horariosDisponibles: string[] = [];
   especialidadSeleccionada: string | null = null;
   especialistaSeleccionado: any | null = null;
   diaSeleccionado: string | null = null;
@@ -62,13 +61,7 @@ export class SolicitarTurnoComponent implements OnInit{
     this.currentUser$ = this.authService.getCurrentUser();
   }
 
- /* ngOnInit(): void {
-    this.cargarEspecialidades();
-    this.currentUser$.subscribe(user => {
-      if (!user) this.router.navigate(['/login']);
-    });
 
-  }*/
 
     ngOnInit(): void {
       // Cargar las especialidades al iniciar
@@ -108,24 +101,25 @@ export class SolicitarTurnoComponent implements OnInit{
   
 
 
-    cargarEspecialidades(): void {
-      const especialidadesRef = collection(this.firestore, 'Especialidades');
-      collectionData(especialidadesRef).subscribe(
-        (especialidades: any[]) => {
-          this.especialidades = especialidades.map(e => e.nombre);
-          this.especialidadImagenMap = especialidades.reduce((acc, e) => {
-           
-            const nombreFormateado = e.nombre.toLowerCase().replace(/\s+/g, '');
-            
-            acc[e.nombre] = e.imagen || `assets/${nombreFormateado}.jpg`;
-           
-            return acc;
-          }, {} as { [key: string]: string });
-        },
-        error => console.error('Error al cargar especialidades:', error)
-      );
-    }
-
+  cargarEspecialidades(): void {
+    const especialidadesRef = collection(this.firestore, 'Especialidades');
+    collectionData(especialidadesRef).subscribe(
+      (especialidades: any[]) => {
+        this.especialidades = especialidades.map(e => e.nombre);
+  
+        // Mapa de imágenes para especialidades
+        this.especialidadImagenMap = especialidades.reduce((acc, e) => {
+          const nombreFormateado = e.nombre.toLowerCase().replace(/\s+/g, '');
+          
+          // Usar imagen específica o una genérica
+          acc[e.nombre] = e.imagen || `assets/especialidadGenerica.png`;
+  
+          return acc;
+        }, {} as { [key: string]: string });
+      },
+      error => console.error('Error al cargar especialidades:', error)
+    );
+  }
   seleccionarEspecialidad(especialidad: string): void {
     this.especialidadSeleccionada = especialidad;
     this.especialistaService.obtenerEspecialistasPorEspecialidad(especialidad).subscribe(

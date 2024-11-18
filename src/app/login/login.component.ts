@@ -187,7 +187,7 @@ export class LoginComponent implements OnInit {
   }
 
   loginLoadPaciente2(): void {
-    const email = 'paloma@cj.MintEmail.com';
+    const email = 'luciaperez@cj.MintEmail.com';
     const password = '123456';
     this.cargarUsuario(email, password);
     this.formLogin.setValue({ email, password });

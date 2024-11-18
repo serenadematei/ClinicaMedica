@@ -125,6 +125,38 @@ export class TurnosService implements OnInit{
       return historiasClinicas;
     }
 
+     /* async obtenerPacientesConHistoriasClinicas(especialistaEmail: string): Promise<HistoriaClinica[]> {
+        const historiasRef = collection(this.firestore, 'HistoriasClinicas');
+        const querySnapshot = await getDocs(historiasRef);
+      
+        const historias: HistoriaClinica[] = await Promise.all(
+          querySnapshot.docs.map(async docSnapshot => {
+            const historia = docSnapshot.data() as HistoriaClinica;
+      
+            // Obtener datos adicionales del paciente
+            const pacienteRef = doc(this.firestore, 'DatosUsuarios', historia.pacienteEmail);
+            const pacienteDoc = await getDoc(pacienteRef);
+      
+            return {
+              ...historia,
+              paciente: pacienteDoc.exists() ? pacienteDoc.data() : { nombre: 'Paciente Desconocido' }
+            };
+          })
+        );
+      
+        return historias.filter(historia => historia.especialistaEmail === especialistaEmail);
+      }*/
+
+
+
+
+
+
+
+
+
+
+
 
       solicitarTurno(turnoData: {
         especialidad: string;
@@ -772,6 +804,8 @@ obtenerDiasDisponiblesPorEspecialista(especialistaId: string, especialidad: stri
       })
     );
   }
+
+
 
 
   

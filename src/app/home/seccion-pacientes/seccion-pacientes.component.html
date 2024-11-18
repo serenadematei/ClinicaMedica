@@ -1,24 +1,50 @@
-<div class="background"> 
-<div class="content-wrapper">
-    <h2>Historias Clínicas de Pacientes Atendidos</h2>
-    <div class="historias-carrusel">
-    <div *ngFor="let historia of historiasClinicas" class="card historia-card">
-        <div class="card-body">
-        <p class="card-title"><strong>Paciente:</strong> {{ historia.pacienteEmail }}</p>
-        <p><strong>Fecha de Atención:</strong> {{ historia.fecha | date: 'dd/MM/yyyy, h:mm a' }}</p>
-        <p><strong>Altura:</strong> {{ historia.altura }} cm</p>
-        <p><strong>Peso:</strong> {{ historia.peso }} kg</p>
-        <p><strong>Temperatura:</strong> {{ historia.temperatura }} °C</p>
-        <p><strong>Presión:</strong> {{ historia.presion }}</p>
-        
-        <div *ngIf="historia.datosDinamicos && historia.datosDinamicos.length > 0">
+<div class="background">
+    <div class="content-wrapper">
+      <h2>Pacientes Atendidos</h2>
+      <div class="historias-carrusel">
+        <div *ngFor="let paciente of pacientesConTurnos" class="card paciente-card">
+          <div class="card-body">
+            <h4>{{ paciente.paciente.nombre }} {{ paciente.paciente.apellido }}</h4>
+            <p><strong> DNI: {{paciente.paciente.dni}} </strong></p>
+            <img *ngIf="paciente.paciente.imagenPerfil" [src]="paciente.paciente.imagenPerfil" alt="Imagen del paciente" class="paciente-imagen">
+            <br>
+            <h5>Últimos 3 Turnos:</h5>
+            <ul class="turnos-list">
+              <li *ngFor="let historia of paciente.historias">
+                <span>{{ historia.fecha | date: 'dd/MM/yyyy, h:mm a' }}</span>
+                <button class="btn-ver" (click)="visualizarHistoria(historia)">
+                  {{ historiaSeleccionada === historia && mostrarHistoriaClinica ? 'Ocultar' : 'Visualizar' }}
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Contenedor para la historia clínica seleccionada -->
+      <div class="historia-clinica-container" *ngIf="mostrarHistoriaClinica && historiaSeleccionada">
+        <h3 class="text-center">Historia Clínica</h3>
+        <div class="historia-card fade-in">
+          <p><strong>Fecha de Atención:</strong> {{ historiaSeleccionada.fecha | date: 'dd/MM/yyyy, h:mm a' }}</p>
+          <p><strong>Altura:</strong> {{ historiaSeleccionada.altura }} cm</p>
+          <p><strong>Peso:</strong> {{ historiaSeleccionada.peso }} kg</p>
+          <p><strong>Temperatura:</strong> {{ historiaSeleccionada.temperatura }} °C</p>
+          <p><strong>Presión:</strong> {{ historiaSeleccionada.presion }}</p>
+          <div *ngIf="tieneDatosDinamicos">
             <h5>Datos Adicionales</h5>
             <ul class="list-unstyled">
-            <li *ngFor="let dato of historia.datosDinamicos"> • {{ dato.clave }}: {{ dato.valor }}</li>
+              <li *ngFor="let dato of historiaSeleccionada.datosDinamicos">
+                • {{ dato.clave }}: {{ dato.valor }}
+              </li>
             </ul>
+          </div>
         </div>
-        </div>
+      </div>
     </div>
+
+    <div class="center-button">
+      <input type="button" class="btn-success" (click)="goTo('/home')" value="Volver a inicio" />
     </div>
-  </div>
 </div>
+
+

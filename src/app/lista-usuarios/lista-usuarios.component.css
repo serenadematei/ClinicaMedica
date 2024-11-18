@@ -44,3 +44,65 @@
   border-radius: 5px;
   background-color: #f9f9f9;
 }
+
+.export-container .btn {
+  background-color: #28A745;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.export-container .btn:hover {
+  background-color: #218838;
+}
+
+
+/*  usuarios como fab buttons*/
+
+.fab-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.fab-button {
+  background-color: transparent; /* Fondo transparente ya que la imagen ocupará todo */
+  border: none;
+  border-radius: 50%;
+  width: 120px; /* Tamaño más grande */
+  height: 120px; /* Tamaño más grande */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
+  overflow: hidden; /* Asegura que la imagen no se salga del círculo */
+  margin-right: 30px;
+}
+
+.fab-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.fab-image {
+  width: 120%; /* Ocupa todo el ancho del botón */
+  height: 100%; /* Ocupa todo el alto del botón */
+  object-fit: cover; /* Ajusta la imagen sin deformarla */
+  border-radius: 50%; /* Asegura que siga siendo un círculo */
+}
+
+.fab-label {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  color: rgb(0, 0, 0);
+  margin-top: 10px; /* Espacio entre el botón y el nombre */
+}

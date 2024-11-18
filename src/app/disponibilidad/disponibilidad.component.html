@@ -1,4 +1,194 @@
+<div class="background">
+  <div class="form-container">
+    <h2 class="form-title">Mi Perfil</h2>
+    <div class="profile-info">
+      <p><strong>Nombre:</strong> {{ usuarioActual?.nombre }}</p>
+      <p><strong>Apellido:</strong> {{ usuarioActual?.apellido }}</p>
+      <p><strong>Email:</strong> {{ usuarioActual?.mail }}</p>
+      <p *ngIf="usuarioActual?.obrasocial"><strong>Obra Social:</strong> {{ usuarioActual.obrasocial }}</p>
+      <p *ngIf="usuarioActual?.edad"><strong>Edad:</strong> {{ usuarioActual.edad }}</p>
+  
+      <div class="profile-container">
+        <div *ngIf="esPaciente">
+          <img *ngIf="usuarioActual?.imagenPerfil1" [src]="usuarioActual.imagenPerfil1" alt="Imagen de perfil 1 del paciente" />
+        </div>
+  
+        <div *ngIf="esAdmin">
+          <img *ngIf="usuarioActual?.imagenPerfil" [src]="usuarioActual.imagenPerfil" alt="Imagen de perfil del administrador" />
+        </div>
+  
+        <div *ngIf="esEspecialista">
+          <img *ngIf="usuarioActual?.imagenPerfil" [src]="usuarioActual.imagenPerfil" alt="Imagen de perfil del especialista" />
+        </div>
+      </div>
+    
+      <!--Seccion solo para pacientes-->
+  
+      <button *ngIf="esPaciente" (click)="toggleHistoriaClinica()" class="btn-toggle">
+        {{ mostrarHistoriaClinica ? 'Ocultar Historia Clínica' : 'Ver mi Historia Clínica' }}
+      </button>
+       <button *ngIf="esPaciente" (click)="generarPDF()" class="btn btn-primary">
+        Descargar Historia Clínica en PDF
+      </button>
 
+      
+  
+      <div class="historia-clinica-container" *ngIf="mostrarHistoriaClinica">
+        <h3 class="text-center">Mis Historias Clínicas</h3>
+        <div class="historia-clinicas-carrusel">
+          <div *ngFor="let historia of historiasClinicas" class="historia-card fade-in">
+            <p><strong>Fecha de Atención:</strong> {{ historia.fecha | date: 'dd/MM/yyyy, h:mm a' }}</p>
+            <p><strong>Altura:</strong> {{ historia.altura }} cm</p>
+            <p><strong>Peso:</strong> {{ historia.peso }} kg</p>
+            <p><strong>Temperatura:</strong> {{ historia.temperatura }} °C</p>
+            <p><strong>Presión:</strong> {{ historia.presion }}</p>
+            <div *ngIf="historia.datosDinamicos?.length > 0">
+              <h5>Datos Adicionales</h5>
+              <ul class="list-unstyled">
+                <li *ngFor="let dato of historia.datosDinamicos">• {{ dato.clave }}: {{ dato.valor }}</li>
+              </ul> 
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="especialidad-container" *ngIf="esPaciente">
+        <label for="especialidadSeleccionada"><strong>Seleccionar Especialidad:</strong></label>
+        <select id="especialidadSeleccionada" [(ngModel)]="especialidadSeleccionada" class="form-control">
+          <option *ngFor="let especialidad of especialidadesTurnos" [value]="especialidad">
+            {{ especialidad }}
+          </option>
+        </select>
+        <button 
+          class="btn btn-primary mt-2" 
+          (click)="descargarTurnosPorEspecialidad()" 
+          [disabled]="!especialidadSeleccionada">
+          Descargar Turnos por Especialidad
+        </button>
+      </div> 
+
+      <!--- Seccion solo para especialistas -->
+      <button *ngIf="esEspecialista" (click)="toggleDisponibilidad()" class="btn-toggle">
+        {{ mostrarDisponibilidad ? 'Ocultar Disponibilidad Horaria' : 'Cargar Disponibilidad Horaria' }}
+      </button>
+  
+    
+      <div  *ngIf="mostrarDisponibilidad" class="disponibilidad-container">
+       
+        <div id="snackbar" *ngIf="mostrarSnackbar" class="snackbar" [class.show]="mostrarSnackbar">
+          Disponibilidad horaria cargada exitosamente
+        </div>
+  
+
+        <form [formGroup]="disponibilidadForm" (ngSubmit)="guardarDisponibilidad()" class="fade-in">
+          <label for="especialidadSeleccionada">Seleccione una especialidad:</label>
+          <select formControlName="especialidadSeleccionada" id="especialidadSeleccionada" class="form-control">
+            <option *ngFor="let especialidad of especialidades" [value]="especialidad">{{ especialidad }}</option>
+          </select>
+      
+          <label for="desde">Desde:</label>
+          <select formControlName="desde" id="desde" class="form-control">
+            <option *ngFor="let dia of proximosDias" [value]="dia.fecha.toISOString()">{{ dia.dia }}</option>
+          </select>
+      
+          <label for="hasta">Hasta:</label>
+          <select formControlName="hasta" id="hasta" class="form-control">
+            <option *ngFor="let dia of fechasHasta" [value]="dia.fecha.toISOString()">{{ dia.dia }}</option>
+          </select>
+      
+          <label for="horaInicio">Hora de inicio:</label>
+          <input
+            type="time"
+            formControlName="horaInicio"
+            id="horaInicio"
+            class="form-control"
+            min="08:00"
+            max="19:00"
+          />
+      
+          <label for="horaFin">Hora de fin:</label>
+          <input
+            type="time"
+            formControlName="horaFin"
+            id="horaFin"
+            class="form-control"
+            min="08:00"
+            max="19:00"
+          />
+          <div *ngIf="disponibilidadForm.get('horaInicio')?.hasError('fueraDeRango') && disponibilidadForm.get('horaInicio')?.touched">
+            La hora de inicio debe ser entre las 08:00 y 18:30 hs.
+          </div>
+          
+          <div *ngIf="disponibilidadForm.get('horaFin')?.hasError('fueraDeRango') && disponibilidadForm.get('horaFin')?.touched">
+            La hora de fin no puede exceder las 19:00 hs.
+          </div>
+          
+         
+      
+          <label for="duracionTurno">Duración del turno (min):</label>
+          <input type="number" formControlName="duracionTurno" id="duracionTurno" class="form-control" min="10" step="5" value="30" />
+      
+          <div *ngIf="mostrarInputSabado" class="sabado-container">
+            <h4>Configuración de horarios para sábados</h4>
+            <label for="horaInicioSabado">Hora de inicio:</label>
+            <input
+              type="time"
+              formControlName="horaInicioSabado"
+              id="horaInicioSabado"
+              class="form-control"
+              min="08:00"
+              max="14:00"
+            />
+      
+            <label for="horaFinSabado">Hora de fin:</label>
+            <input
+              type="time"
+              formControlName="horaFinSabado"
+              id="horaFinSabado"
+              class="form-control"
+              min="08:00"
+              max="14:00"
+            />
+
+            <div *ngIf="mostrarInputSabado">
+              <div *ngIf="disponibilidadForm.get('horaInicioSabado')?.hasError('fueraDeRango') && disponibilidadForm.get('horaInicioSabado')?.touched">
+                La hora de inicio de los sábados debe estar entre las 08:00 y 13:30.
+              </div>
+            
+              <div *ngIf="disponibilidadForm.get('horaFinSabado')?.hasError('fueraDeRango') && disponibilidadForm.get('horaFinSabado')?.touched">
+                La hora de fin de los sábados no puede exceder las 14:00 hs.
+              </div>
+            </div>
+          </div>
+      
+          <button type="submit" [disabled]="disponibilidadForm.invalid">Guardar Disponibilidad</button>
+        </form>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+    <button class="floating-logout-button" (click)="logout()">
+      <i class="fa solid fa-power-off"></i> Cerrar sesión
+    </button>
+  
+    <div class="center-button">
+      <input type="button" class="btn-success" (click)="goTo('/home')" value="Volver a inicio" />
+    </div>
+  </div>
+  </div>
+  
+
+
+
+<!---  
 <div class="background">
 <div class="form-container">
   <h2 class="form-title">Mi Perfil</h2>
@@ -12,7 +202,6 @@
     <div class="profile-container">
       <div *ngIf="esPaciente">
         <img *ngIf="usuarioActual?.imagenPerfil1" [src]="usuarioActual.imagenPerfil1" alt="Imagen de perfil 1 del paciente" />
-        <!-- <img *ngIf="usuarioActual?.imagenPerfil2" [src]="usuarioActual.imagenPerfil2" alt="Imagen de perfil 2 del paciente" />-->
       </div>
 
       <div *ngIf="esAdmin">
@@ -24,7 +213,7 @@
       </div>
     </div>
   
-    <!--Seccion solo para pacientes-->
+       Seccion solo para pacientes
 
     <button *ngIf="esPaciente" (click)="toggleHistoriaClinica()" class="btn-toggle">
       {{ mostrarHistoriaClinica ? 'Ocultar Historia Clínica' : 'Ver mi Historia Clínica' }}
@@ -53,7 +242,7 @@
     </div>
     
 
-    <!--- Seccion solo para especialistas -->
+     Seccion solo para especialistas 
     <button *ngIf="esEspecialista" (click)="toggleDisponibilidad()" class="btn-toggle">
       {{ mostrarDisponibilidad ? 'Ocultar Disponibilidad Horaria' : 'Cargar Disponibilidad Horaria' }}
     </button>
@@ -100,3 +289,4 @@
   </div>
 </div>
 </div>
+</div>-->

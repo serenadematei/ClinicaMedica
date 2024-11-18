@@ -1,5 +1,8 @@
 <h2>Lista de Usuarios</h2>
 
+<div class="export-container text-center">
+  <button class="btn btn-success" (click)="exportarUsuariosAExcel()">Exportar Usuarios a Excel</button>
+</div>
 
 <div class="filter-container mb-3 text-center">
   <button class="btn btn-primary m-2" (click)="filterUsers('all')">Todos</button>
@@ -9,7 +12,25 @@
 </div>
 
 
-<div class="user-cards-container">
+
+<div class="fab-container">
+  <div *ngFor="let user of filteredUsuarios" class="fab-item">
+    <button 
+      class="fab-button"
+      (click)="descargarDatosUsuario(user)"
+    >
+      <img 
+        [src]="user.role === 'admin' && user.imagenPerfil ? user.imagenPerfil : (user.role === 'paciente' ? user.imagenPerfil1 : user.imagenPerfil)" 
+        alt="{{ user.nombre }}" 
+        class="fab-image"
+      />
+    </button>
+    <span class="fab-label">{{ user.nombre }} {{user.apellido}}</span>
+  </div>
+</div>
+
+
+<!-- <div class="user-cards-container">
   <div *ngFor="let user of  filteredUsuarios" class="card user-card">
     <img
     [src]="user.role === 'admin' && user.imagenPerfil ? user.imagenPerfil : (user.role === 'paciente' ? user.imagenPerfil1 : user.imagenPerfil)"
@@ -57,7 +78,7 @@
           (click)="inhabilitarUsuario(user.id)"
         >
           Inhabilitar
-        </button>
+        </button>-->
 
          <!-- Clinical History Modal -->
 <div class="modal fade" id="clinicalHistoryModal" tabindex="-1" aria-labelledby="clinicalHistoryModalLabel" aria-hidden="true">
@@ -98,17 +119,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-      </div>
+   <!--    </div>
     </div>
   </div>
-</div> 
+</div> -->

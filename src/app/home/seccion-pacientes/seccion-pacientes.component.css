@@ -1,5 +1,136 @@
 
-  .historias-carrusel {
+.historias-carrusel {
+  height: auto;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 10px;
+}
+
+.paciente-card {
+  flex: 0 0 auto;
+  width: 400px;
+  margin-right: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #80bcb9;
+  font-size: 18px;
+}
+
+.card-body {
+  text-align: left;
+  padding: 20px;
+}
+
+.turnos-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.turnos-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.btn-ver {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-ver:hover {
+  background-color: #0056b3;
+}
+
+
+.historia-clinica-container {
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  background-color:#202c38;
+}
+
+.historia-card {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #9fcfcf;
+  font-size: 20px;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.background {
+  background-image: url('/assets/fondoClinica.jpg');
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+  position: fixed; 
+  overflow: auto;
+}
+
+.text-center{
+  color:white;
+}
+
+.paciente-imagen {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 10px 0;
+}
+
+.btn-success {
+  background-color: #a72892;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-success:hover {
+  background-color: #7f196e;
+}
+
+
+ /* .historias-carrusel {
     height: 440px; 
     display: flex;
     gap: 10px;
@@ -37,4 +168,4 @@
     text-align: center;
     width: 100%; 
     margin-bottom: 20px;
-  }
+  }*/

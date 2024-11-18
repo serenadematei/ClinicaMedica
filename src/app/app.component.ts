@@ -26,17 +26,42 @@ import { trigger, transition, style, animate, query } from '@angular/animations'
         ], { optional: true })
       ]),
 
-      // Transición entre "home" y "disponibilidad-horaria"
-      transition('homePage <=> disponibilidadPage', [
+      transition('* <=> disponibilidadPage', [
         query(':enter, :leave', [
           style({ position: 'absolute', width: '100%' })
         ], { optional: true }),
         query(':enter', [
-          style({ transform: 'translateX(-100%)', opacity: 0 }),
-          animate('1000ms ease-out', style({ transform: 'translateX(0)', opacity: 1 })),
+          style({ transform: 'translateY(100%)', opacity: 0 }),
+          animate('1000ms ease-out', style({ transform: 'translateY(0)', opacity: 1 })),
         ], { optional: true }),
         query(':leave', [
-          animate('1000ms ease-in', style({ transform: 'translateX(100%)', opacity: 0 })),
+          animate('1000ms ease-in', style({ transform: 'translateY(-100%)', opacity: 0 })),
+        ], { optional: true })
+      ]),
+   
+      transition('homePage <=> misTurnosPage', [
+        query(':enter, :leave', [
+          style({ position: 'absolute', width: '100%' })
+        ], { optional: true }),
+        query(':enter', [
+          style({ transform: 'translateY(100%)', opacity: 0 }),
+          animate('1000ms ease-out', style({ transform: 'translateY(0)', opacity: 1 })),
+        ], { optional: true }),
+        query(':leave', [
+          animate('1000ms ease-in', style({ transform: 'translateY(-100%)', opacity: 0 })),
+        ], { optional: true })
+      ]),
+  
+      transition('homePage <=> turnosPage', [
+        query(':enter, :leave', [
+          style({ position: 'absolute', width: '100%' })
+        ], { optional: true }),
+        query(':enter', [
+          style({ transform: 'translateY(100%)', opacity: 0 }),
+          animate('1000ms ease-out', style({ transform: 'translateY(0)', opacity: 1 })),
+        ], { optional: true }),
+        query(':leave', [
+          animate('1000ms ease-in', style({ transform: 'translateY(-100%)', opacity: 0 })),
         ], { optional: true })
       ])
     ])

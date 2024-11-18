@@ -40,12 +40,14 @@ export const routes: Routes = [
     },
     {
         path: 'home/mis-turnos',
-        loadComponent: () => import('./home/mis-turnos/mis-turnos.component').then(m => m.MisTurnosComponent)
+        loadComponent: () => import('./home/mis-turnos/mis-turnos.component').then(m => m.MisTurnosComponent),
+        data: { animation: 'misTurnosPage' }
     },
     {
         path: 'home/turnos',
         loadComponent: () => import('./home/turnos/turnos.component').then(m => m.TurnosComponent),
-        canActivate: [adminGuard]
+        canActivate: [adminGuard],
+        data: { animation: 'turnosPage' }
     },
     {
         path: 'home/solicitar-turno',
