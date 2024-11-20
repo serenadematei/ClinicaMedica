@@ -2,7 +2,7 @@
   <main>
     <h2>Turnos - Administrador</h2>
     <div class="turnos-list-container">
-      <!-- Filtro de Búsqueda -->
+
       <div class="input-container">
         <div class="mb-2 input-width">
           <img src="/assets/lupa.png" alt="Buscar" class="buscar-logo">
@@ -10,7 +10,6 @@
         </div>
       </div>
 
-      <!-- Tabla de Turnos -->
       <div class="table-scroll">
         <div class="table-responsive" *ngIf="(turnosFiltrados | filterEsp:filtro)?.length ?? 0 > 0; else noTurnos">
           <table class="table table-bordered">
@@ -38,6 +37,74 @@
                 <td>{{ turno.especialidad }}</td>
                 <td>{{ turno.fechaHora | date:'dd/MM/yy' }}</td> 
                 <td>{{ turno.horaInicio }}</td>
+                <td [appHighlightStatus]="turno.estado">{{ turno.estado }}</td> <!-- Directiva aplicada -->
+                <ng-container *ngIf="turno.estado === 'cancelado'">
+                  <td>{{ turno.motivoCancelacion }}</td>
+                </ng-container>
+                <ng-container *ngIf="turno.estado !== 'cancelado' && tieneTurnoCancelado">
+                  <td></td>
+                </ng-container>
+                <td>
+                  <button *ngIf="turno.estado === 'pendiente'" (click)="cancelarTurnoComoAdmin(turno)">Cancelar Turno</button>
+                  <button *ngIf="turno.estado === 'cancelado'" class="disabled-button" disabled>Cancelado</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <ng-template #noTurnos>
+        <p>No hay turnos disponibles</p>
+      </ng-template>
+    </div>
+  </main>
+
+  <div class="center-button">
+    <input type="button" [value]="btnVolver" class="btn-success" (click)="onClickHome($event)" />
+  </div>
+</body>
+
+<!-- <body class="background">
+  <main>
+    <h2>Turnos - Administrador</h2>
+    <div class="turnos-list-container">
+  
+      <div class="input-container">
+        <div class="mb-2 input-width">
+          <img src="/assets/lupa.png" alt="Buscar" class="buscar-logo">
+          <input type="text" class="form-control input-styling" placeholder="Buscar por Especialidad o Especialista" [(ngModel)]="filtro">
+        </div>
+      </div>
+
+    
+      <div class="table-scroll">
+        <div class="table-responsive" *ngIf="(turnosFiltrados | filterEsp:filtro)?.length ?? 0 > 0; else noTurnos">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Nombre Paciente</th>
+                <th>Apellido Paciente</th>
+                <th>Nombre Especialista</th>
+                <th>Apellido Especialista</th>
+                <th>Especialidad</th>
+                <th>Fecha</th>
+                <th>Horario</th>
+                <th>Estado</th>
+                <th *ngIf="tieneTurnoCancelado">Motivo de cancelación</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr *ngFor="let turno of turnosFiltrados | filterEsp:filtro">
+                <td>{{ turno.paciente.nombre }}</td>
+                <td>{{ turno.paciente.apellido }}</td>
+                <td>{{ turno.especialista.nombre }}</td>
+                <td>{{ turno.especialista.apellido }}</td>
+                <td>{{ turno.especialidad }}</td>
+                <td>{{ turno.fechaHora | date:'dd/MM/yy' }}</td> 
+                <td>{{ turno.horaInicio }}</td>
                 <td>{{ turno.estado }}</td>
                 <ng-container *ngIf="turno.estado === 'cancelado'">
                   <td>{{ turno.motivoCancelacion }}</td>
@@ -55,7 +122,6 @@
         </div>
       </div>
 
-      <!-- Mensaje cuando no hay turnos -->
       <ng-template #noTurnos>
         <p>No hay turnos disponibles</p>
       </ng-template>
@@ -65,4 +131,4 @@
   <div class="center-button">
     <input type="button" [value]="btnVolver" class="btn-success" (click)="onClickHome($event)" />
   </div>
-</body>
+</body>--->

@@ -7,6 +7,7 @@ import { Auth, User } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import Swal from 'sweetalert2';
 
+
 interface SideNavToggle {
   screenWidth: number;
   collapsed: boolean;
@@ -26,7 +27,6 @@ export class HomeComponent implements OnInit {
   @Output() onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter();
   collapsed = false;
   screenWidth = 0;
-  //navData = navbarData;
   currentUser$: Observable<User | null>;
   isDropdownOpen = false;
   showLogoutButton = false;
@@ -35,9 +35,10 @@ export class HomeComponent implements OnInit {
   rolUsuario: string | null = null;
 
 
+
+
   constructor(private router: Router, private authService: AuthService, private auth: Auth) {
     this.currentUser$ = this.authService.getCurrentUser();
-    //this.rolUsuario = this.authService.getUserRole();
   }
 
 
@@ -54,6 +55,7 @@ export class HomeComponent implements OnInit {
       this.rolUsuario = role;
     });
   }
+
 
   userLogged() {
     this.authService.getCurrentUser().subscribe(
@@ -143,6 +145,11 @@ export class HomeComponent implements OnInit {
   disponibilidadHoraria()
   {
     this.router.navigate(['disponibilidad-horaria']);
+  }
+
+  informes()
+  {
+    this.router.navigate(['home/informes']);
   }
 
 }

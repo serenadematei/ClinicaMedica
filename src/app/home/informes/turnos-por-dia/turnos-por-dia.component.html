@@ -1,0 +1,27 @@
+<div class="background"> 
+<br>
+<div class="container mt-3">
+    <h2 class="text-center">Cantidad de Turnos por Día</h2>
+  
+    <div *ngIf="loading" class="text-center">
+      <p>Cargando datos...</p>
+    </div>
+  
+    <div *ngIf="!loading">
+     
+      <div style="width: 80%; margin: 0 auto;">
+        <canvas id="chartCanvas"></canvas>
+      </div>
+  
+      <div class="text-center mt-3">
+        <button class="btn btn-primary me-2" (click)="descargarPDF()">Descargar PDF</button>
+        <button class="btn btn-primary me-2" (click)="descargarExcel()">Descargar Excel</button>
+      </div>
+    </div>
+
+    <div class="center-button">
+      <input type="button" class="btn-success" (click)="goTo('/home/informes')" value="Atrás" />
+    </div>
+  
+  </div>
+</div>

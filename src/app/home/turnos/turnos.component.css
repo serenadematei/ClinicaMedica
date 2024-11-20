@@ -119,3 +119,28 @@ h2, p {
     }
   }
 }
+
+/* Estilos para los estados del turno */
+.status-realizado {
+  color: white;
+  background-color: green;
+  font-weight: bold;
+  padding: 2px 5px;
+  border-radius: 5px;
+}
+
+.status-pendiente {
+  color: black;
+  background-color: yellow;
+  font-weight: bold;
+  padding: 2px 5px;
+  border-radius: 5px;
+}
+
+.status-cancelado {
+  color: white;
+  background-color: red;
+  font-weight: bold;
+  padding: 2px 5px;
+  border-radius: 5px;
+}

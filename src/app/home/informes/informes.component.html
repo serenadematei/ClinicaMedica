@@ -1,0 +1,33 @@
+<div class="background"> 
+
+<br><br><br>
+<div class="container mt-3">
+  <h2 class="text-center">Informes</h2>
+  <div class="row text-center mt-4">
+    <div class="col-md-4">
+      <button class="btn btn-primary w-100" (click)="navigateTo('/home/informes/log-ingresos')">
+        Log de Ingresos
+      </button>
+    </div>
+    <div class="col-md-4">
+      <button class="btn btn-primary w-100" (click)="navigateTo('home/informes/turnos-especialidad')">Turnos por Especialidad</button>
+    </div>
+    <div class="col-md-4">
+      <button class="btn btn-primary w-100" (click)="navigateTo('home/informes/turnos-dia')">Turnos por Día</button>
+    </div>
+    <div class="col-md-4 mt-3">
+      <button class="btn btn-primary w-100" (click)="navigateTo('home/informes/turnos-solicitados-medico')">Turnos Solicitados por Médico</button>
+    </div>
+    <div class="col-md-4 mt-3">
+      <button class="btn btn-primary w-100" (click)="navigateTo('home/informes/turnosFinalizadosPorMedico')">Turnos Finalizados por Médico</button>
+    </div>
+  </div>
+
+  
+<div class="center-button">
+  <input type="button" class="btn-success" (click)="navigateTo('/home')" value="Volver a inicio" />
+</div>
+
+</div>
+
+</div>

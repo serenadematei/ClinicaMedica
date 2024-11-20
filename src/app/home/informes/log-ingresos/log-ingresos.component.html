@@ -1,0 +1,46 @@
+<div class="background">  
+<br><br><br>
+<div class="container mt-3">
+  <h2 class="text-center">Informes - Log de Ingresos</h2>
+
+  <div *ngIf="loading" class="text-center">
+    <p>Cargando datos...</p>
+  </div>
+
+  <div *ngIf="!loading">
+   <!---  <table class="table table-striped table-bordered mt-3">
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Rol</th>
+          <th>Fecha</th>
+          <th>Hora</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let log of logIngresos">
+          <td>{{ log.Usuario }}</td>
+          <td>{{ log.Role }}</td>
+          <td>{{ log.Fecha }}</td>
+          <td>{{ log.Hora }}</td>
+        </tr>
+      </tbody>
+    </table>--->
+
+    
+    <div class="chart-container mt-4">
+      <canvas id="chartCanvas"></canvas>
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <button class="btn btn-primary me-2" (click)="descargarPDF()">Descargar PDF</button>
+    <button class="btn btn-primary me-2" (click)="descargarExcel()">Descargar Excel</button>
+  </div>
+
+  <div class="center-button">
+    <input type="button" class="btn-success" (click)="goTo('/home/informes')" value="Atrás" />
+  </div>
+
+</div>
+</div>

@@ -1,0 +1,81 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.table {
+  text-align: center;
+}
+
+.btn-success {
+  background-color: #a72892;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin: 28px;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-success:hover {
+  background-color: #7f196e;
+}
+
+.background {
+  background-image: url('/assets/fondoClinica.jpg');
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+  position: fixed; 
+  overflow: auto;
+}
+
+button.btn {
+  padding: 15px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.3s ease-in-out;
+}
+
+button.btn-primary {
+  background-color: #850057;
+  border: none;
+}
+
+button.btn-primary:hover {
+  background-color: #9d377a;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button.btn-primary:active {
+  background-color: #850057;
+  transform: translateY(1px);
+}
+
+.btn-success {
+  background-color: #28a75f;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin: 28px;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-success:hover {
+  background-color: #0c793b;
+}

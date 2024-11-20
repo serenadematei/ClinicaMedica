@@ -754,3 +754,9 @@
   .floating-logout-button i {
     font-size: 1.2rem;
   }
+
+  .nav-link.active {
+    font-weight: bold;
+    color: #007bff; /* Color del enlace activo */
+    border-bottom: 2px solid #007bff; /* Línea decorativa debajo */
+  }

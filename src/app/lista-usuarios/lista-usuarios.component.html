@@ -4,12 +4,36 @@
   <button class="btn btn-success" (click)="exportarUsuariosAExcel()">Exportar Usuarios a Excel</button>
 </div>
 
-<div class="filter-container mb-3 text-center">
+<!-- <div class="filter-container mb-3 text-center">
   <button class="btn btn-primary m-2" (click)="filterUsers('all')">Todos</button>
   <button class="btn btn-secondary m-2" (click)="filterUsers('admin')">Administradores</button>
   <button class="btn btn-success m-2" (click)="filterUsers('especialista')">Especialistas</button>
   <button class="btn btn-info m-2" (click)="filterUsers('paciente')">Pacientes</button>
+</div>-->
+
+<div class="filter-container mb-3 text-center">
+  <button class="btn btn-primary m-2" 
+          appActiveButton
+          [buttonType]="'all'" 
+          [currentFilter]="currentFilter" 
+          (click)="filterUsers('all')">Todos</button>
+  <button class="btn btn-secondary m-2" 
+          appActiveButton
+          [buttonType]="'admin'" 
+          [currentFilter]="currentFilter" 
+          (click)="filterUsers('admin')">Administradores</button>
+  <button class="btn btn-success m-2" 
+          appActiveButton
+          [buttonType]="'especialista'" 
+          [currentFilter]="currentFilter" 
+          (click)="filterUsers('especialista')">Especialistas</button>
+  <button class="btn btn-info m-2" 
+          appActiveButton
+          [buttonType]="'paciente'" 
+          [currentFilter]="currentFilter" 
+          (click)="filterUsers('paciente')">Pacientes</button>
 </div>
+
 
 
 
@@ -80,7 +104,7 @@
           Inhabilitar
         </button>-->
 
-         <!-- Clinical History Modal -->
+        
 <div class="modal fade" id="clinicalHistoryModal" tabindex="-1" aria-labelledby="clinicalHistoryModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">

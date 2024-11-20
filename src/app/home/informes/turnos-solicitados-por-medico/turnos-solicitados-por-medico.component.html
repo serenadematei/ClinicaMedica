@@ -1,0 +1,44 @@
+<div class="background">  
+<br><br>
+<div class="container mt-3">
+    <h2 class="text-center">Turnos Solicitados por Médico</h2>
+  
+    <!-- Entrada para las fechas -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="fechaInicio">Fecha Inicio:</label>
+        <input id="fechaInicio" type="date" [(ngModel)]="fechaInicio" class="form-control" />
+      </div>
+      <div class="col-md-6">
+        <label for="fechaFin">Fecha Fin:</label>
+        <input id="fechaFin" type="date" [(ngModel)]="fechaFin" class="form-control" />
+      </div>
+    </div>
+  
+    <div class="text-center mb-3">
+      <button class="btn btn-primary" (click)="filtrarTurnos()">Filtrar</button>
+    </div>
+  
+    <div *ngIf="loading" class="text-center">
+      <p>Cargando datos...</p>
+    </div>
+  
+    <div *ngIf="!loading">
+     
+      <div style="width: 80%; margin: 0 auto;">
+        <canvas id="chartCanvas"></canvas>
+      </div>
+  
+   
+      <div class="text-center mt-3">
+        <button class="btn btn-primary me-2" (click)="descargarPDF()">Descargar PDF</button>
+        <button class="btn btn-primary me-2" (click)="descargarExcel()">Descargar Excel</button>
+      </div>
+    </div>
+
+    <div class="center-button">
+      <input type="button" class="btn-success" (click)="goTo('/home/informes')" value="Atrás" />
+    </div>
+  
+  </div>
+</div>

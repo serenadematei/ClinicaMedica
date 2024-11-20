@@ -1,0 +1,52 @@
+<div class="background">  
+  <br><br>
+<div class="container mt-3">
+    <h2 class="text-center">Turnos Finalizados por Médico</h2>
+  
+
+    <div class="form-group">
+      <label for="fechaInicio">Fecha Inicio:</label>
+      <input
+        id="fechaInicio"
+        type="date"
+        class="form-control"
+        [(ngModel)]="fechaInicio"
+      />
+    </div>
+  
+    <div class="form-group">
+      <label for="fechaFin">Fecha Fin:</label>
+      <input id="fechaFin" type="date" class="form-control" [(ngModel)]="fechaFin" />
+    </div>
+  
+    <button class="btn btn-primary mt-2 w-100" (click)="filtrarTurnos()">
+      Filtrar
+    </button>
+  
+   
+    <div *ngIf="chartData.length > 0" style="width: 80%; margin: 20px auto;">
+      <canvas id="chartCanvas"></canvas>
+    </div>
+  
+
+    <div *ngIf="loading" class="text-center">
+      <p>Cargando datos...</p>
+    </div>
+  
+ 
+    <div *ngIf="!loading && chartData.length === 0" class="text-center">
+      <p>No se encontraron turnos en el rango seleccionado.</p>
+    </div>
+  
+  
+    <div class="text-center mt-3">
+      <button class="btn btn-primary me-2" (click)="descargarPDF()">Descargar PDF</button>
+      <button class="btn btn-primary me-2" (click)="descargarExcel()">Descargar Excel</button>
+    </div>
+
+    <div class="center-button">
+      <input type="button" class="btn-success" (click)="goTo('/home/informes')" value="Atrás" />
+    </div>
+  
+  </div>
+</div>

@@ -29,7 +29,7 @@
               <td>{{ turno.especialidad }}</td>
               <td>{{ turno.fechaHora | date:'dd/MM/yyyy' }}</td>
               <td>{{ turno.horaInicio }}</td>
-              <td>{{ turno.estado }}</td>
+              <td [appHighlightStatus]="turno.estado">{{ turno.estado }}</td>
               <td>
                 <button *ngIf="turno.estado === 'pendiente'" class="btn-cancel" (click)="cancelarTurno(turno)">Cancelar</button>
                 <button *ngIf="turno.estado === 'realizado' && !turno.encuestaCompletada" class="btn-primary" (click)="completarEncuesta(turno)">Completar Encuesta</button>
@@ -63,7 +63,7 @@
               <td>{{ turno.especialidad }}</td>
               <td>{{ turno.fechaHora | date:'dd/MM/yyyy' }}</td>
               <td>{{ turno.horaInicio }}</td>
-              <td>{{ turno.estado }}</td>
+              <td [appHighlightStatus]="turno.estado">{{ turno.estado }}</td>
               <td>
                 <button *ngIf="turno.estado === 'pendiente'" class="btn-accept" (click)="aceptarTurno(turno)">Aceptar</button>
                 <button *ngIf="turno.estado === 'pendiente'" class="btn-cancel" (click)="cancelarTurno(turno)">Cancelar</button>

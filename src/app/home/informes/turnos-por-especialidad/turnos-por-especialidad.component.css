@@ -1,0 +1,46 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .text-center {
+    margin-top: 20px;
+  }
+  
+  canvas {
+    margin: 20px auto;
+    display: block;
+  }
+
+  .btn-success {
+    background-color: #a72892;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 28px;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-success:hover {
+    background-color: #7f196e;
+   /* background-color: #975b6d;*/
+  }
+
+  .background {
+    background-image: url('/assets/fondoClinica.jpg');
+    background-size: cover;
+    background-position: center;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    position: fixed; 
+    overflow: auto;
+  }
+  

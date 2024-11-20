@@ -130,42 +130,12 @@
 }
 
 
- /* .historias-carrusel {
-    height: 440px; 
-    display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    white-space: nowrap;
-    padding: 10px;
-  }
-  
-  .historia-card {
-    flex: 0 0 auto;
-    width: 400px; 
-    margin-right: 10px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #80bcb9;
-  }
-  
-  .card-body {
-    text-align: left;
-    padding: 20px;
-  }
+.card.paciente-card {
+  transition: all 0.3s ease-in-out;
+}
 
-  .background {
-    background-image: url('/assets/fondoClinica.jpg'); 
-    background-size: cover;
-    background-position: center;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .content-wrapper h2 {
-    text-align: center;
-    width: 100%; 
-    margin-bottom: 20px;
-  }*/
+.card.paciente-card[appHighlightPaciente] {
+  border: 2px solid #7d073a;
+  background-color: #dc327bbc;
+}
+

@@ -27,14 +27,14 @@
 }
 
 .filter-container .btn {
-  background-color: #a72892 !important; 
-  border-color: #a72892 !important; 
+  background-color: #9e4890 ; 
+  border-color: #a72892 ; 
   color: #ffffff;
 }
 
 .filter-container .btn:hover {
-  background-color: #871f72 !important;
-  border-color: #871f72 !important;
+  background-color: #a85197;
+  border-color: #871f72 ;
 }
 
 .historia-card {
@@ -105,4 +105,10 @@
   text-align: center;
   color: rgb(0, 0, 0);
   margin-top: 10px; /* Espacio entre el botón y el nombre */
+}
+
+button.active {
+  background-color: #ff0051 !important; /* Color del botón activo */
+  color: white !important; /* Color del texto del botón activo */
+  border: 2px solid #0056b3; /* Resaltar el borde */
 }

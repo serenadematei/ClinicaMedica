@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FilterPacPipe } from '../../pipes/filter-pac.pipe';
 import { HistoriaClinica } from '../../interfaces/historiaClinica';
 import { Timestamp } from 'firebase/firestore';
+import { HighlightStatusDirective } from '../../directivas/highlight-status.directive';
 
 
 
@@ -20,7 +21,7 @@ import { Timestamp } from 'firebase/firestore';
     standalone: true,
     templateUrl: './mis-turnos.component.html',
     styleUrl: './mis-turnos.component.css', 
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, FilterEspPipe, FilterPacPipe]
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, FilterEspPipe, FilterPacPipe,  HighlightStatusDirective ]
 })
 export class MisTurnosComponent implements OnInit{
 

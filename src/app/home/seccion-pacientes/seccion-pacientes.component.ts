@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { Timestamp } from 'firebase/firestore';
 import { Router } from '@angular/router';
+import { HighlightPacienteDirective } from '../../directivas/highlight-paciente.directive';
 
 interface PacienteConTurnos {
   paciente: {
@@ -20,7 +21,7 @@ interface PacienteConTurnos {
 @Component({
   selector: 'app-seccion-pacientes',
   standalone: true,
-  imports: [NgFor, NgIf, CommonModule],
+  imports: [NgFor, NgIf, CommonModule, HighlightPacienteDirective],
   templateUrl: './seccion-pacientes.component.html',
   styleUrl: './seccion-pacientes.component.css'
 })

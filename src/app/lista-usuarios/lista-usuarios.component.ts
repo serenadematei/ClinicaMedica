@@ -7,12 +7,13 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { ActiveButtonDirective } from '../directivas/active-button.directive';
  
 
 @Component({
   selector: 'app-lista-usuarios',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ActiveButtonDirective ],
   templateUrl: './lista-usuarios.component.html',
   styleUrl: './lista-usuarios.component.css'
 })
@@ -23,6 +24,8 @@ export class ListaUsuariosComponent implements OnInit{
 
   selectedClinicalHistories: any[] = [];
   selectedUserName: string = '';
+
+  currentFilter: string = 'all'; 
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -43,6 +46,8 @@ export class ListaUsuariosComponent implements OnInit{
  
 
   filterUsers(role: string) {
+    this.currentFilter = role; 
+    console.log(`Filtro cambiado a: ${role}`);
     if (role === 'all') {
       this.filteredUsuarios = this.usuarios;
     } else {

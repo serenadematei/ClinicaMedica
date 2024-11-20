@@ -10,13 +10,14 @@ import { Observable } from 'rxjs';
 import Swal from 'sweetalert2';
 import { FilterPipe } from "../../pipes/filter.pipe";
 import { FilterEspPipe } from '../../pipes/filter-esp.pipe';
+import { HighlightStatusDirective } from '../../directivas/highlight-status.directive';
 
 @Component({
-    selector: 'app-turnos',
+    selector: 'app-turnos', 
     standalone: true,
     templateUrl: './turnos.component.html',
-    styleUrl: './turnos.component.css',
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, FilterPipe, FilterEspPipe]
+    styleUrl: './turnos.component.css',   //FilterPipe
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, FilterEspPipe, HighlightStatusDirective ]
 })
 export class TurnosComponent implements OnInit{
 
