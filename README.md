@@ -136,5 +136,22 @@ Los administradores pueden elegir el paciente:
 ![miperfil2esp](https://github.com/user-attachments/assets/c08e9cd6-3320-4f72-bdbb-629f03f41fff)
 ![miperfil3esp](https://github.com/user-attachments/assets/b4c38793-f86b-434c-88dd-bcd64fcc9327)
 
+### Informes
+**Descripción**: El administrador tendrá acceso a diferentes gráficos y estadísticas de datos de nuestro sistema.
+![informes](https://github.com/user-attachments/assets/1b38c32f-8e1a-45f3-b01b-3383403059fa)
+- **Log de ingresos al sistema.**: Indicando el usuario, día y horario que ingreso al sistema.
+- **Cantidad de turnos por especialidad.**
+- **Cantidad de turnos por día.**
+- **Cantidad de turnos solicitado por médico en un lapso de tiempo.**
+- **Cantidad de turnos finalizados por médico en un lapso de tiempo.**
+Todos estos informes pueden descargarse en formato PDF o Excel.
+
+![logIngresos](https://github.com/user-attachments/assets/f397037d-1e89-4f78-bb44-7813dba95147)
+![turnosesp](https://github.com/user-attachments/assets/d2a0524f-baa1-4d65-aaa1-1f1838ec7ba6)
+![turnosdia](https://github.com/user-attachments/assets/bf4835e4-57cd-4f81-91ca-f182a2e41d94)
+![turnosolicitados](https://github.com/user-attachments/assets/80a9f856-e9e2-468b-91e6-0e59c670a67c)
+![turnosfinalizados](https://github.com/user-attachments/assets/975ce33a-3701-4c93-ba47-7e2fa496a77f)
+
+  
 
 Gracias por visitar el repositorio del Proyecto de Clínica Online.
