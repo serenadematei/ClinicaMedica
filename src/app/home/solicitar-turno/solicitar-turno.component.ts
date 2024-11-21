@@ -133,7 +133,7 @@ export class SolicitarTurnoComponent implements OnInit{
     );
   }
 
-      /*seleccionarEspecialista(especialista: any): void  ORISHIANL{
+      /*seleccionarEspecialista(especialista: any): void  ORISHINAL{
         this.especialistaSeleccionado = especialista;
       
         if (this.especialidadSeleccionada) {

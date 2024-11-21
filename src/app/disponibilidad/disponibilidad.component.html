@@ -1,6 +1,8 @@
 <div class="background">
   <div class="form-container">
-    <h2 class="form-title">Mi Perfil</h2>
+    <h2 class="form-title">
+      Mi Perfil <span [innerHTML]="usuarioActual?.role | roleIcon"></span>
+    </h2>
     <div class="profile-info">
       <p><strong>Nombre:</strong> {{ usuarioActual?.nombre }}</p>
       <p><strong>Apellido:</strong> {{ usuarioActual?.apellido }}</p>

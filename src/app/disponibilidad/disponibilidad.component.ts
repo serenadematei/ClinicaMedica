@@ -11,6 +11,7 @@ import { Auth } from '@angular/fire/auth';
 import { Timestamp } from 'firebase/firestore';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RoleIconPipe } from '../pipes/role-icon.pipe';
 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -32,7 +33,7 @@ export function horaEnRangoValidator(min: string, max: string): ValidatorFn {
   templateUrl: './disponibilidad.component.html',
    styleUrl: './disponibilidad.component.css',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, NgFor, CommonModule, FormsModule],
+  imports: [ReactiveFormsModule, NgIf, NgFor, CommonModule, FormsModule, RoleIconPipe],
 })
 
 
