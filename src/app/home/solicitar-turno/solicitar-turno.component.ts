@@ -9,8 +9,6 @@ import { AuthService } from '../../services/auth.service';
 import { PacienteService } from '../../services/paciente.service';
 import { Observable } from 'rxjs';
 import { Auth,User } from '@angular/fire/auth';
-//import { FormatoHoraPipe } from "../../pipes/formato-hora.pipe";
-//import { FormatoFechaPipe } from '../../pipes/formato-fecha.pipe';
 import { FechaCustomizadaPipe } from '../../pipes/fecha-customizada.pipe';
 import { Firestore, collection, doc, setDoc, collectionData } from '@angular/fire/firestore';
 
@@ -23,7 +21,7 @@ import { Firestore, collection, doc, setDoc, collectionData } from '@angular/fir
     standalone: true,
     templateUrl: './solicitar-turno.component.html',
     styleUrl: './solicitar-turno.component.css',
-    imports: [FechaCustomizadaPipe, CommonModule, FormsModule, ReactiveFormsModule, /* FormatoFechaPipe  FormatoHoraPipe LoadingComponent, , FormatoHoraPipe, SinImagenDirective,ResaltarDirective,FocusDirective*/]
+    imports: [FechaCustomizadaPipe, CommonModule, FormsModule, ReactiveFormsModule]
 })
 export class SolicitarTurnoComponent implements OnInit{
 
@@ -45,7 +43,7 @@ export class SolicitarTurnoComponent implements OnInit{
   esAdmin: boolean = false;
   pacientes: any[] = []; // Lista de pacientes para el rol administrador
   pacienteSeleccionadoUID: string = '';
-
+ 
 
 
 
@@ -135,24 +133,64 @@ export class SolicitarTurnoComponent implements OnInit{
     );
   }
 
-      seleccionarEspecialista(especialista: any): void {
+      /*seleccionarEspecialista(especialista: any): void  ORISHIANL{
         this.especialistaSeleccionado = especialista;
       
         if (this.especialidadSeleccionada) {
+          this.diasDisponibles = []; // Limpiar el array antes de llenarlo nuevamente
           this.turnosService.obtenerDiasDisponiblesPorEspecialista(especialista.id, this.especialidadSeleccionada).subscribe(
             (dias) => {
         
               this.diasDisponibles = dias.filter(dia => dia.horarios.some(horario => !horario.ocupado));
+              console.log(this.diasDisponibles);
               this.horariosDisponibles = [];
               this.diaSeleccionado = null;
               this.horarioSeleccionado = null;
+              
             },
+           
             error => console.error('Error al obtener días disponibles:', error)
           );
+          
         } else {
           console.error('No se ha seleccionado una especialidad válida');
         }
-      }
+      }*/
+        seleccionarEspecialista(especialista: any): void {
+          this.especialistaSeleccionado = especialista;
+        
+          if (this.especialidadSeleccionada) {
+            this.diasDisponibles = []; // Limpia el array antes de llenarlo
+        
+            this.turnosService.obtenerDiasDisponiblesPorEspecialista(especialista.id, this.especialidadSeleccionada).subscribe(
+              (dias) => {
+                // Filtrar fechas únicas
+                const fechasUnicas = new Set<string>();
+                this.diasDisponibles = dias.filter(dia => {
+                  const fechaISO = dia.fechaSeleccionada.toISOString();
+        
+                  // Verifica que no se repitan específicamente los sábados
+                  const esSabado = dia.fechaSeleccionada.getDay() === 6;
+                  if (fechasUnicas.has(fechaISO) && esSabado) {
+                    return false; // Ignorar duplicado si es sábado
+                  }
+        
+                  fechasUnicas.add(fechaISO);
+                  return true;
+                });
+        
+                console.log('Días disponibles después del filtrado:', this.diasDisponibles);
+        
+                this.horariosDisponibles = [];
+                this.diaSeleccionado = null;
+                this.horarioSeleccionado = null;
+              },
+              error => console.error('Error al obtener días disponibles:', error)
+            );
+          } else {
+            console.error('No se ha seleccionado una especialidad válida');
+          }
+        }
  
 
           seleccionarDia(dia: Date | null): void {

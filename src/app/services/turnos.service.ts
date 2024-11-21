@@ -241,9 +241,9 @@ export class TurnosService implements OnInit{
     }
 
 
-obtenerDiasDisponiblesPorEspecialista(especialistaId: string, especialidad: string): Observable<{ fechaSeleccionada: Date; especialidad: string; horarios: { horario: string; ocupado: boolean }[] }[]> {
+/*obtenerDiasDisponiblesPorEspecialista(especialistaId: string, especialidad: string): Observable<{ fechaSeleccionada: Date; especialidad: string; horarios: { horario: string; ocupado: boolean }[] }[]> {
   const especialistaDocRef = doc(this.firestore, `DatosUsuarios/${especialistaId}`);
-  
+  ORISHINAL
   return from(getDoc(especialistaDocRef)).pipe(
       mergeMap(docSnap => {
           if (docSnap.exists()) {
@@ -280,7 +280,52 @@ obtenerDiasDisponiblesPorEspecialista(especialistaId: string, especialidad: stri
           return of([]);
       })
   );
+}*/
+
+obtenerDiasDisponiblesPorEspecialista(especialistaId: string, especialidad: string): Observable<{ fechaSeleccionada: Date; especialidad: string; horarios: { horario: string; ocupado: boolean }[] }[]> {
+  const especialistaDocRef = doc(this.firestore, `DatosUsuarios/${especialistaId}`);
+  
+  return from(getDoc(especialistaDocRef)).pipe(
+    map(docSnap => {
+      if (docSnap.exists()) {
+        const disponibilidad = docSnap.data()?.['disponibilidad'] || [];
+        
+        // Asegurar que los días se procesen correctamente y evitar duplicados
+        const fechasProcesadas = new Set<string>();
+        const diasConHorariosDisponibles = disponibilidad
+          .filter((dia: any) => dia.especialidad === especialidad)
+          .map((dia: any) => {
+            const fechaSeleccionada = new Date(dia.fechaSeleccionada);
+
+            // Evitar duplicados específicos para sábados
+            if (fechasProcesadas.has(fechaSeleccionada.toISOString())) {
+              return null; // Ignorar duplicado
+            }
+            fechasProcesadas.add(fechaSeleccionada.toISOString());
+
+            return {
+              fechaSeleccionada,
+              especialidad: dia.especialidad,
+              horarios: dia.horarios.map((horario: string) => ({
+                horario,
+                ocupado: false
+              }))
+            };
+          })
+          .filter((dia: { fechaSeleccionada: Date; especialidad: string; horarios: { horario: string; ocupado: boolean }[] } | null) => dia !== null); // Filtrar los nulos generados por duplicados; // Filtrar los nulos generados por duplicados
+
+        return diasConHorariosDisponibles;
+      } else {
+        throw new Error('Especialista no encontrado');
+      }
+    }),
+    catchError(error => {
+      console.error('Error al obtener días disponibles:', error);
+      return of([]);
+    })
+  );
 }
+
 
 
 
