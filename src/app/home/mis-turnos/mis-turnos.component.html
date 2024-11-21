@@ -5,13 +5,14 @@
 
     <div class="input-container">
       <input type="text" class="form-control input-styling" 
-             placeholder="Buscar por Especialidad o {{ userRole === 'paciente' ? 'Especialista' : 'Paciente' }}" 
+             placeholder="Buscar por Especialidad, {{ userRole === 'paciente' ? 'Especialista' : 'Paciente' }} o cualquier dato del turno" 
              [(ngModel)]="filtro">
     </div>
 
     <!-- Tabla de Turnos para Paciente -->
     <div *ngIf="userRole === 'paciente'">
       <div *ngIf="(turnos$ | async) as turnosFiltradosPaciente">
+        <div class="table-container"> 
         <table class="table turnos-table" *ngIf="turnosFiltradosPaciente.length > 0">
           <thead>
             <tr>
@@ -20,6 +21,7 @@
               <th>Fecha</th>
               <th>Hora</th>
               <th>Estado</th>
+              <th>Historia Clínica</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -30,9 +32,35 @@
               <td>{{ turno.fechaHora | date:'dd/MM/yyyy' }}</td>
               <td>{{ turno.horaInicio }}</td>
               <td [appHighlightStatus]="turno.estado">{{ turno.estado }}</td>
+                <!-- Columna para mostrar datos de la historia clínica -->
+          <td>
+            <div *ngIf="turno.historiaClinica">
+             <!--  <p><strong>Altura:</strong> {{ turno.historiaClinica.altura }} cm</p>
+              <p><strong>Peso:</strong> {{ turno.historiaClinica.peso }} kg</p>
+              <p><strong>Temperatura:</strong> {{ turno.historiaClinica.temperatura }} °C</p>
+              <p><strong>Presión:</strong> {{ turno.historiaClinica.presion }}</p>-->
+              <p>
+                <strong>Altura:</strong> {{ turno.historiaClinica.altura }} cm | 
+                <strong>Peso:</strong> {{ turno.historiaClinica.peso }} kg | 
+                <strong>Temp.:</strong> {{ turno.historiaClinica.temperatura }} °C | 
+                <strong>Presión:</strong> {{ turno.historiaClinica.presion }}
+              </p>
+              
+              <!-- datos dinámicos -->
+              <div *ngIf="turno.historiaClinica.datosDinamicos?.length > 0">
+                <h5>Datos Adicionales:</h5>
+                <ul>
+                  <li *ngFor="let dato of turno.historiaClinica.datosDinamicos">
+                    <strong>{{ dato.clave }}:</strong> {{ dato.valor }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <p *ngIf="!turno.historiaClinica">Sin datos de historia clínica</p>
+          </td>
               <td>
                 <button *ngIf="turno.estado === 'pendiente'" class="btn-cancel" (click)="cancelarTurno(turno)">Cancelar</button>
-                <button *ngIf="turno.estado === 'realizado' && !turno.encuestaCompletada" class="btn-primary" (click)="completarEncuesta(turno)">Completar Encuesta</button>
+                <button *ngIf="turno.estado === 'realizado' && !turno.encuestaCompletada" class="btn-rate" (click)="completarEncuesta(turno)">Completar Encuesta</button>
                 <button *ngIf="turno.estado === 'realizado' && turno.encuestaCompletada" class="btn-view" (click)="verEncuesta(turno)">Ver Encuesta</button>
                 <button *ngIf="turno.estado === 'realizado' && !turno.calificacionCompletada" class="btn-rate" (click)="calificarAtencion(turno)">Calificar Atención</button>
                 <button *ngIf="turno.comentario" class="btn-view" (click)="verResena(turno)">Ver Reseña</button>
@@ -40,11 +68,12 @@
             </tr>
           </tbody>
         </table>
+        </div>
       </div>
     </div>
 
-    <!-- Tabla de Turnos para Especialista -->
-    <div *ngIf="userRole === 'especialista'">
+    <!-- Tabla de Turnos para Especialista  orishinal-->  
+    <!-- <div *ngIf="userRole === 'especialista'">
       <div *ngIf="(turnos$ | async) as turnosFiltradosEspecialista">
         <table class="table turnos-table" *ngIf="turnosFiltradosEspecialista.length > 0">
           <thead>
@@ -53,7 +82,7 @@
               <th>Especialidad</th>
               <th>Fecha</th>
               <th>Hora</th>
-              <th>Estado</th>
+              <th>Estado</th> 
               <th>Acciones</th>
             </tr>
           </thead>
@@ -76,7 +105,73 @@
           </tbody>
         </table>
       </div>
-    </div>
+    </div>-->
+    <!-- Tabla de Turnos para Especialista -->
+<div *ngIf="userRole === 'especialista'">
+  <div *ngIf="(turnos$ | async) as turnosFiltradosEspecialista">
+   <div class="table-container">   <!-- nuevito -->
+    <table class="table turnos-table" *ngIf="turnosFiltradosEspecialista.length > 0">
+      <thead>
+        <tr>
+          <th>Paciente</th>
+          <th>Especialidad</th>
+          <th>Fecha</th>
+          <th>Hora</th>
+          <th>Estado</th>
+          <th>Historia Clínica</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let turno of turnosFiltradosEspecialista | filterPac:filtro">
+          <td>{{ turno.paciente.nombre }} {{ turno.paciente.apellido }}</td>
+          <td>{{ turno.especialidad }}</td>
+          <td>{{ turno.fechaHora | date:'dd/MM/yyyy' }}</td>
+          <td>{{ turno.horaInicio }}</td>
+          <td [appHighlightStatus]="turno.estado">{{ turno.estado }}</td>
+          
+          <!-- Columna para mostrar datos de la historia clínica -->
+          <td>
+            <div *ngIf="turno.historiaClinica">
+             <!--  <p><strong>Altura:</strong> {{ turno.historiaClinica.altura }} cm</p>
+              <p><strong>Peso:</strong> {{ turno.historiaClinica.peso }} kg</p>
+              <p><strong>Temperatura:</strong> {{ turno.historiaClinica.temperatura }} °C</p>
+              <p><strong>Presión:</strong> {{ turno.historiaClinica.presion }}</p>-->
+              <p>
+                <strong>Altura:</strong> {{ turno.historiaClinica.altura }} cm | 
+                <strong>Peso:</strong> {{ turno.historiaClinica.peso }} kg | 
+                <strong>Temp.:</strong> {{ turno.historiaClinica.temperatura }} °C | 
+                <strong>Presión:</strong> {{ turno.historiaClinica.presion }}
+              </p>
+              
+              <!-- datos dinámicos -->
+              <div *ngIf="turno.historiaClinica.datosDinamicos?.length > 0">
+                <h5>Datos Adicionales:</h5>
+                <ul>
+                  <li *ngFor="let dato of turno.historiaClinica.datosDinamicos">
+                    <strong>{{ dato.clave }}:</strong> {{ dato.valor }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <p *ngIf="!turno.historiaClinica">Sin datos de historia clínica</p>
+          </td>
+
+          <!-- Acciones -->
+          <td>
+            <button *ngIf="turno.estado === 'pendiente'" class="btn-accept" (click)="aceptarTurno(turno)">Aceptar</button>
+            <button *ngIf="turno.estado === 'pendiente'" class="btn-cancel" (click)="cancelarTurno(turno)">Cancelar</button>
+            <button *ngIf="turno.estado === 'pendiente'" class="btn-reject" (click)="rechazarTurno(turno)">Rechazar</button>
+            <button *ngIf="turno.estado === 'aceptado'" class="btn-finalize" (click)="finalizarTurno(turno)">Finalizar Turno</button>
+            <button *ngIf="turno.estado === 'realizado' && turno.comentario" class="btn-view" (click)="verResena(turno)">Ver Reseña</button>
+            <button *ngIf="turno.estado === 'realizado' && !turno.historiaClinica" class="btn-add-historia" (click)="agregarHistoriaClinica(turno)">Agregar Historia Clínica</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+</div>
 
     <!-- no hay Turnos -->
     <p *ngIf="(turnos$ | async)?.length === 0">No tienes turnos asignados.</p>

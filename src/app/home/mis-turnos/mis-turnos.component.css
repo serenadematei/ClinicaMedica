@@ -19,8 +19,8 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  max-width: 800px;
-  width: 95%;
+  max-width: 1500px;
+  width: 100%;/*95%;*/
   margin: auto;
   text-align: center;
 }
@@ -48,7 +48,7 @@
 }
 
 /* Tabla */
-.turnos-table {
+/*.turnos-table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
@@ -72,6 +72,53 @@
 
 .turnos-table tr:hover {
   background-color: #f1f1f1;
+}*/
+
+.turnos-table {
+  width: 100%;
+  max-width: 1200px; /* Aumentar el ancho máximo */
+  border-collapse: collapse;
+  margin: auto;
+  background-color: #fff;
+  font-size: 14px; /* Ajustar el tamaño de la fuente */
+  text-align: center; /* Centrar contenido */
+  max-width: 1500px;
+  max-height: 1500px;
+}
+
+.turnos-table th, .turnos-table td {
+  padding: 15px 20px; /* Hacer las celdas más anchas */
+  border: 1px solid #ddd;
+  vertical-align: middle; /* Centrar verticalmente el contenido */
+}
+
+.turnos-table th {
+  background-color: #355b84;
+  color: #fff;
+  text-transform: uppercase; /* Convertir texto a mayúsculas */
+  font-weight: bold;
+}
+
+.turnos-table tr:nth-child(even) {
+  background-color: #f2f2f2; /* Color más claro para filas pares */
+}
+
+.turnos-table tr:hover {
+  background-color: #e0e8f1; /* Cambiar el color al pasar el cursor */
+}
+
+.turnos-table td {
+  word-wrap: break-word; /* Permitir que el texto largo se ajuste */
+}
+
+/* Contenedor de la Tabla */
+.table-container {
+  max-height: 400px; /* Altura máxima de la tabla */
+  overflow-y: auto; /* Scroll vertical si hay muchas filas */
+  margin-bottom: 20px; /* Separar la tabla de otros elementos */
+  border-radius: 8px;
+  border: 1px solid #ccc; /* Borde para el contenedor */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Botones */
@@ -85,6 +132,11 @@ button {
 
 .btn-accept {
   background-color: #4CAF50;
+  color: white;
+}
+
+.btn-view, .btn-rate{
+  background-color: #740640;
   color: white;
 }
 

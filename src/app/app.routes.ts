@@ -64,44 +64,41 @@ export const routes: Routes = [
         path: 'home/informes',
         loadComponent: () => import('./home/informes/informes.component').then((m) => m.InformesComponent),
         canActivate: [adminGuard],
-       // data: { animation: 'informesPage' },
+   
     },
     {
         path: 'home/informes/log-ingresos',
         loadComponent: () =>
           import('./home/informes/log-ingresos/log-ingresos.component').then(
-            (m) => m.LogIngresosComponent
-          ),
+            (m) => m.LogIngresosComponent),
+            canActivate: [adminGuard],
     },
     {
         path: 'home/informes/turnos-especialidad',
         loadComponent: () =>
           import('./home/informes/turnos-por-especialidad/turnos-por-especialidad.component').then(
-            (m) => m.TurnosPorEspecialidadComponent
-          ),
+            (m) => m.TurnosPorEspecialidadComponent),
+            canActivate: [adminGuard],
     },
     {
         path: 'home/informes/turnos-dia',
         loadComponent: () =>
           import('./home/informes/turnos-por-dia/turnos-por-dia.component').then(
-            (m) => m.TurnosPorDiaComponent
-          ),
+            (m) => m.TurnosPorDiaComponent),
+            canActivate: [adminGuard],
     },
     {
         path: 'home/informes/turnos-solicitados-medico',
         loadComponent: () =>
           import('./home/informes/turnos-solicitados-por-medico/turnos-solicitados-por-medico.component').then(
-            (m) => m.TurnosSolicitadosPorMedicoComponent
-          ),
+            (m) => m.TurnosSolicitadosPorMedicoComponent),
+            canActivate: [adminGuard],
     },
     {
       path: 'home/informes/turnosFinalizadosPorMedico',
       loadComponent: () =>
         import('./home/informes/turnos-finalizados-por-medico/turnos-finalizados-por-medico.component').then(
-          (m) => m.TurnosFinalizadosPorMedicoComponent
-        ),
+          (m) => m.TurnosFinalizadosPorMedicoComponent),
+          canActivate: [adminGuard],
     }
-    //AGREGARLES ADMIN GUARD!!
-   // { path: 'home/informes/log-ingresos', component: LogIngresosComponent },
-
 ];

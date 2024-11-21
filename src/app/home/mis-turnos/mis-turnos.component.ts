@@ -149,6 +149,7 @@ export class MisTurnosComponent implements OnInit{
         <input type="number" id="satisfaccionGeneral" class="swal2-input" min="1" max="10" step="1">
       `,
       showCancelButton: true,
+      cancelButtonText: 'Cancelar',
       confirmButtonText: 'Enviar',
       preConfirm: () => {
         const calificacionAtencion = (document.getElementById('calificacionAtencion') as HTMLInputElement).value;
